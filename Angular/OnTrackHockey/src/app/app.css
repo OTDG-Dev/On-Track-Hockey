@@ -1,0 +1,19 @@
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  
+    display: flex;
+    justify-content: center;
+    gap: 16px;          /* spacing between items */
+  
+    padding: 6px;
+    color: #777;
+    font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri,
+                 'DejaVu Sans', source-sans-pro, sans-serif;
+  
+    
+    background-color: #E0E0E0;
+    border-top: 1px solid #ececec;
+  }
