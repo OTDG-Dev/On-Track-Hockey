@@ -1,0 +1,90 @@
+html, body {
+    font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
+    font-weight: normal;
+    padding-bottom: 80px;
+}
+
+img {
+    display: block;
+    margin: 0 auto 16px;
+    width: 120px;      
+    height: auto;
+    padding-bottom: 20px;
+  }
+
+* {
+    box-sizing: border-box;
+  }
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 50vh;
+    padding-top: 32px;
+}
+
+h2 {
+    text-align: center;
+}
+
+input {
+    width: 500px;
+    padding: 12px;
+    justify-content: center;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    border: 0;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+
+#loginButton {
+    color: white;
+    background-color: #27AE60;
+}
+
+#loginButton:hover {
+    background-color: #219150;
+}
+
+.button-wrapper {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: #E6F4EC; /* very light green tint */
+    margin: 24px 0;
+  }
+
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  
+    padding: 6px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  
+    background-color: #E0E0E0;
+    border-top: 1px solid #ececec;
+    color: #777;
+    font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri,
+                 'DejaVu Sans', source-sans-pro, sans-serif;
+    }
