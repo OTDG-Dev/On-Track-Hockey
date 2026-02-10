@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -10,13 +11,13 @@ import (
 func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
-		app.logger.Error(err.Error())
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		app.serverErrorResponse(w, r, err)
+		return
 	}
 
 	// tmp dummy data
 	if id != 1 {
-		w.Write([]byte(`{"status": "error"}`))
+		app.notFoundResponse(w, r)
 		return
 	}
 
@@ -28,7 +29,7 @@ func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request
 		LastName:      "McDavid",
 		SweaterNumber: 97,
 		Position:      data.PositionC,
-		BirthDate: data.Date{
+		BirthDate: data.BirthDate{
 			Time: time.Date(1997, 1, 13, 0, 0, 0, 0, time.UTC),
 		},
 		Headshot: "https://assets/path/to/headshot.png",
@@ -82,7 +83,31 @@ func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request
 
 	err = app.writeJSON(w, http.StatusOK, envelope{"player": skater}, nil)
 	if err != nil {
-		app.logger.Error(err.Error())
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		app.serverErrorResponse(w, r, err)
 	}
+}
+
+func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		IsActive      bool `json:"is_active"`
+		CurrentTeamId int  `json:"current_team_id"`
+
+		FirstName     string             `json:"first_name"`
+		LastName      string             `json:"last_name"`
+		SweaterNumber uint8              `json:"sweater_number"`
+		Position      data.Position      `json:"position"`
+		BirthDate     data.BirthDate     `json:"birth_date"`
+		BirthCountry  string             `json:"birth_country"`
+		Headshot      string             `json:"headshot,omitzero"`
+		ShootsCatches data.ShootsCatches `json:"shoots_catches,omitzero"`
+	}
+
+	err := app.readJSON(w, r, &input)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	fmt.Fprintln(w, "Success!")
+	fmt.Fprintf(w, "%v\n", input)
 }

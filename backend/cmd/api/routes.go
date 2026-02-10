@@ -9,8 +9,12 @@ import (
 func (app *application) routes() http.Handler {
 	router := httprouter.New()
 
+	router.NotFound = http.HandlerFunc(app.notFoundResponse)
+	router.MethodNotAllowed = http.HandlerFunc(app.methodNotAllowedResponse)
+
 	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.healthcheckHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/players/:id", app.showPlayerHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/players", app.createPlayerHandler)
 
-	return router
+	return app.recoverPanic(router)
 }
