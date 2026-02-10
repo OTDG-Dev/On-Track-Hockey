@@ -28,6 +28,10 @@ func (d BirthDate) MarshalJSON() ([]byte, error) {
 	return []byte(`"` + d.Format("2006-01-02") + `"`), nil
 }
 
+func (d BirthDate) Year() int {
+	return d.Time.Year()
+}
+
 var ErrInvalidTimeOnIceFormat = errors.New("invalid time ice format, expected: MM:SS")
 
 type TimeOnIce struct {

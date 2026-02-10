@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data"
+	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
 )
 
 func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request) {
@@ -105,6 +106,26 @@ func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Reque
 	err := app.readJSON(w, r, &input)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	player := &data.Player{
+		IsActive:      input.IsActive,
+		CurrentTeamId: input.CurrentTeamId,
+		FirstName:     input.FirstName,
+		LastName:      input.LastName,
+		SweaterNumber: input.SweaterNumber,
+		Position:      input.Position,
+		BirthDate:     input.BirthDate,
+		BirthCountry:  input.BirthCountry,
+		Headshot:      input.Headshot,
+		ShootsCatches: input.ShootsCatches,
+	}
+
+	v := validator.New()
+
+	if data.ValidatePlayer(v, player); !v.Valid() {
+		app.failedValidationResponse(w, r, v.Errors)
 		return
 	}
 
