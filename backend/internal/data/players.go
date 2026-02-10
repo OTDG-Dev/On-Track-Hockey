@@ -3,6 +3,9 @@ package data
 import (
 	"encoding/json"
 	"errors"
+	"time"
+
+	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
 )
 
 type Player struct {
@@ -20,6 +23,19 @@ type Player struct {
 	ShootsCatches ShootsCatches  `json:"shoots_catches,omitzero"`
 	SkaterStats   *SkaterStatSet `json:"skater_stats,omitzero"`
 	GoalieStats   *GoalieStatSet `json:"goalie_stats,omitzero"`
+}
+
+func ValidatePlayer(v *validator.Validator, player *Player) {
+	// likely needs more guardrails when DB is added
+	v.Check(player.FirstName != "", "first_name", "must be provided")
+	v.Check(player.LastName != "", "last_name", "must be provided")
+
+	v.Check(player.SweaterNumber >= 1, "sweater_number", "must be greater than 0")
+	v.Check(player.SweaterNumber <= 100, "sweater_number", "must be less than 100")
+
+	v.Check(player.BirthDate.Year() <= time.Now().Year(), "birth_year", "cannot be in the future")
+
+	v.Check(len(player.BirthCountry) <= 3, "birth_country", "must only be 3 chars")
 }
 
 type SeasonSplit[T any] struct {
