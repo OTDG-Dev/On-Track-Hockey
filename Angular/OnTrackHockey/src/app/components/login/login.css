@@ -1,90 +1,147 @@
-html, body {
-    font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
-    font-weight: normal;
-    padding-bottom: 80px;
-}
-
-img {
-    display: block;
-    margin: 0 auto 16px;
-    width: 120px;      
-    height: auto;
-    padding-bottom: 20px;
-  }
-
 * {
     box-sizing: border-box;
-  }
+}
+
+html, body {
+    margin: 0;
+    padding-bottom: 80px;
+    font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri,
+                 'DejaVu Sans', source-sans-pro, sans-serif;
+}
 
 body {
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 50vh;
-    padding-top: 32px;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 64px;
+    min-height: 100vh;
 }
 
+/* Main container now uses viewport width */
+.auth-container {
+    width: 20vw;              /* 👈 THIS is the key */
+    min-width: 420px;         /* protects small screens */
+    padding: 0 32px;
+}
+
+/* Heading */
 h2 {
     text-align: center;
+    margin-bottom: 32px;
+    font-size: 30px;
 }
 
+/* Avatar */
+img {
+    display: block;
+    margin: 0 auto 36px;
+    width: 150px;
+}
+
+/* Labels */
+p {
+    margin: 0 0 12px;
+    font-size: 20px;
+    font-weight: 500;
+    text-align: left;
+}
+
+/* Inputs */
 input {
-    width: 500px;
-    padding: 12px;
-    justify-content: center;
+    width: 100%;
+    padding: 24px;
+    margin-bottom: 26px;
+
+    font-size: 17px;
+    font-family: inherit;
+
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #111827;
+
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
+input:focus {
+    border-color: #27AE60;
+    box-shadow: 0 0 0 4px rgba(39, 174, 96, 0.15);
+}
+
+/* Buttons */
 button {
     width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-    border: 0;
-    font-weight: 400;
+    padding: 22px;
+    font-size: 20px;
+    border-radius: 14px;
+    border: none;
     cursor: pointer;
-    transition: background-color 0.1s ease;
+
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 6px,
+                rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+    transition: background-color 0.15s ease;
 }
 
+/* Primary */
 #loginButton {
-    color: white;
     background-color: #27AE60;
+    color: white;
 }
 
 #loginButton:hover {
     background-color: #219150;
 }
 
+/* Button wrapper */
 .button-wrapper {
     display: flex;
-    text-align: center;
     justify-content: center;
+    margin-top: 16px;
 }
 
-hr {
-    border: none;
-    height: 1px;
-    background-color: #E6F4EC; /* very light green tint */
-    margin: 24px 0;
-  }
+/* Secondary actions */
+.secondary-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 44px;
+    font-size: 19px;
+    font-weight: 600;
+}
 
-  footer {
+.secondary-actions p {
+    margin: 0;
+    cursor: pointer;
+    color: #27AE60;
+}
+
+.secondary-actions p:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-  
+
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  
-    padding: 6px;
-    padding-bottom: calc(12px + env(safe-area-inset-bottom));
-  
+    gap: 20px;
+
+    padding: 12px;
     background-color: #E0E0E0;
     border-top: 1px solid #ececec;
     color: #777;
-    font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri,
-                 'DejaVu Sans', source-sans-pro, sans-serif;
-    }
+}
+
+footer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
