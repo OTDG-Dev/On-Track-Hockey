@@ -1,11 +1,10 @@
-package data
+package stats
 
 type BasicStats struct {
-	GamesPlayed int       `json:"games_played"`
-	Assists     int       `json:"assists"`
-	Goals       int       `json:"goals"`
-	PIM         int       `json:"pim"`
-	TOI         TimeOnIce `json:"time_on_ice"`
+	GamesPlayed int `json:"games_played"`
+	Assists     int `json:"assists"`
+	Goals       int `json:"goals"`
+	PIM         int `json:"pim"`
 }
 
 type SkaterStats struct {

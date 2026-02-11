@@ -1,32 +1,32 @@
 package data
 
 import (
-	"encoding/json"
+	"database/sql"
 	"errors"
 	"time"
 
+	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/stats"
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
 )
 
 type Player struct {
-	PlayerID      int  `json:"player_id"`
+	ID            int  `json:"id"`
 	IsActive      bool `json:"is_active"`
 	CurrentTeamId int  `json:"current_team_id"`
 
-	FirstName     string         `json:"first_name"`
-	LastName      string         `json:"last_name"`
-	SweaterNumber uint8          `json:"sweater_number"`
-	Position      Position       `json:"position"`
-	BirthDate     BirthDate      `json:"birth_date"`
-	BirthCountry  string         `json:"birth_country"`
-	Headshot      string         `json:"headshot,omitzero"`
-	ShootsCatches ShootsCatches  `json:"shoots_catches,omitzero"`
-	SkaterStats   *SkaterStatSet `json:"skater_stats,omitzero"`
-	GoalieStats   *GoalieStatSet `json:"goalie_stats,omitzero"`
+	FirstName     string               `json:"first_name"`
+	LastName      string               `json:"last_name"`
+	SweaterNumber uint8                `json:"sweater_number"`
+	Position      Position             `json:"position"`
+	BirthDate     BirthDate            `json:"birth_date"`
+	BirthCountry  string               `json:"birth_country"`
+	Headshot      string               `json:"headshot,omitzero"`
+	ShootsCatches ShootsCatches        `json:"shoots_catches,omitzero"`
+	SkaterStats   *stats.SkaterStatSet `json:"skater_stats,omitzero"`
+	GoalieStats   *stats.GoalieStatSet `json:"goalie_stats,omitzero"`
 }
 
 func ValidatePlayer(v *validator.Validator, player *Player) {
-	// likely needs more guardrails when DB is added
 	v.Check(player.FirstName != "", "first_name", "must be provided")
 	v.Check(player.LastName != "", "last_name", "must be provided")
 
@@ -38,70 +38,115 @@ func ValidatePlayer(v *validator.Validator, player *Player) {
 	v.Check(len(player.BirthCountry) <= 3, "birth_country", "must only be 3 chars")
 }
 
-type SeasonSplit[T any] struct {
-	RegularSeason T `json:"regular_season,omitzero"`
-	Playoffs      T `json:"playoffs,omitzero"`
+// wrap a sql.DB connection pool
+type PlayerModel struct {
+	DB *sql.DB
 }
 
-type SkaterStatSet struct {
-	CurrentStats SeasonSplit[SkaterStats] `json:"current_stats,omitzero"`
-	CareerTotals SeasonSplit[SkaterStats] `json:"career_totals,omitzero"`
+func (m PlayerModel) Insert(player *Player) error {
+	query := `
+		INSERT INTO players (
+			is_active,
+			current_team_id,
+			first_name,
+			last_name,
+			sweater_number,
+			position,
+			birth_date,
+			birth_country,
+			headshot,
+			shoots_catches
+		)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+		RETURNING id`
+
+	args := []any{
+		player.IsActive,
+		player.CurrentTeamId,
+		player.FirstName,
+		player.LastName,
+		player.SweaterNumber,
+		player.Position,
+		player.BirthDate,
+		player.BirthCountry,
+		player.Headshot,
+		player.ShootsCatches,
+	}
+
+	return m.DB.QueryRow(query, args...).Scan(&player.ID)
 }
 
-type GoalieStatSet struct {
-	CurrentStats SeasonSplit[GoalieStats] `json:"current_stats,omitzero"`
-	CareerTotals SeasonSplit[GoalieStats] `json:"career_totals,omitzero"`
+func (m PlayerModel) Get(id int) (*Player, error) {
+	if id < 1 {
+		return nil, ErrRecordNotFound
+	}
+
+	query := `
+		SELECT 
+			id,
+			is_active,
+			current_team_id,
+			first_name,
+			last_name,
+			sweater_number,
+			position,
+			birth_date,
+			birth_country,
+			headshot,
+			shoots_catches
+		FROM players
+		WHERE id = $1`
+
+	var player Player
+
+	err := m.DB.QueryRow(query, id).Scan(
+		&player.ID,
+		&player.IsActive,
+		&player.CurrentTeamId,
+		&player.FirstName,
+		&player.LastName,
+		&player.SweaterNumber,
+		&player.Position,
+		&player.BirthDate,
+		&player.BirthCountry,
+		&player.Headshot,
+		&player.ShootsCatches,
+	)
+
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return nil, ErrRecordNotFound
+		default:
+			return nil, err
+		}
+	}
+
+	return &player, nil
 }
 
-var ErrInvalidPositionFormat = errors.New("invalid position format, expected: C|LW|RW|D|G")
-
-type Position string
-
-const (
-	PositionC  Position = "C"
-	PositionLW Position = "LW"
-	PositionRW Position = "RW"
-	PositionD  Position = "D"
-	PositionG  Position = "G"
-)
-
-func (p *Position) UnmarshalJSON(jsonValue []byte) error {
-	var s string
-	if err := json.Unmarshal(jsonValue, &s); err != nil {
-		return ErrInvalidPositionFormat
+func (m PlayerModel) Delete(id int) error {
+	if id < 1 {
+		return ErrRecordNotFound
 	}
 
-	pos := Position(s)
-	switch pos {
-	case PositionC, PositionLW, PositionRW, PositionD, PositionG:
-		*p = pos
-		return nil
+	query := `
+		DELETE FROM players
+		WHERE id = $1`
+
+	result, err := m.DB.Exec(query, id)
+	if err != nil {
+		return err
 	}
 
-	return ErrInvalidPositionFormat
-}
-
-var ErrInvalidShootCatches = errors.New("invalid position format, expected: L|R")
-
-type ShootsCatches string
-
-const (
-	ShootsCatchesL ShootsCatches = "L"
-	ShootsCatchesR ShootsCatches = "R"
-)
-
-func (sc *ShootsCatches) UnmarshalJSON(jsonValue []byte) error {
-	var s string
-	if err := json.Unmarshal(jsonValue, &s); err != nil {
-		return ErrInvalidPositionFormat
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
 	}
 
-	shct := ShootsCatches(s)
-	switch shct {
-	case ShootsCatchesL, ShootsCatchesR:
-		*sc = shct
-		return nil
+	if rowsAffected == 0 {
+		return err
 	}
 
-	return ErrInvalidShootCatches
+	return nil
 }
