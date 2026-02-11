@@ -40,7 +40,11 @@ export class CreatePlayer {
       "birth_country": "CAN",
       "shoots_catches": "L"
     }
-    console.log(this.http.post<string>('localhost:3000/v1/players', payload))
+
+    this.http
+      .post('http://localhost:3000/v1/players', payload)
+      .pipe(first())
+      .subscribe();
   }
 
 }
