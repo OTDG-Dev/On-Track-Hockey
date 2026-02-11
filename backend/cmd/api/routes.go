@@ -16,5 +16,5 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/v1/players/:id", app.showPlayerHandler)
 	router.HandlerFunc(http.MethodPost, "/v1/players", app.createPlayerHandler)
 
-	return app.recoverPanic(router)
+	return app.cors(app.recoverPanic(router))
 }
