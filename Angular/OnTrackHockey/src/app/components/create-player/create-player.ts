@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { first } from 'rxjs';
+import { PlayerService } from '../../services/player-service';
 
 @Component({
   selector: 'app-create-player',
@@ -11,40 +12,51 @@ import { first } from 'rxjs';
 })
 export class CreatePlayer {
 
-  private http = inject(HttpClient)
-
+  constructor(private playerService: PlayerService) {}
 
   firstName: string = "";
   lastName: string = "";
-  sweaterNumber: number | null = null;
+  sweaterNumber: string = "";
   position: string = "";
   handedness: string = "";
+  birthCountry: string = "";
   dob: string = "";
 
-  onClick() {
+  allowOnlyNumbers(event: any) {
+    const input = event.target;
+    input.value = input.value.replace(/[^0-9]/g, '');
+    this.sweaterNumber = input.value;
+  }
+  private http = inject(HttpClient)
+
+  postPlayer() {
+
     console.log(
       this.firstName,
       this.lastName,
       this.sweaterNumber,
       this.position,
       this.handedness,
+      this.birthCountry,
       this.dob
     );
 
-    const payload = {
-      "first_name": this.firstName,
-      "last_name": this.lastName,
-      "sweater_number": this.sweaterNumber,
-      "position": this.position,
-      "birth_date": "1997-01-13",
-      "birth_country": "CAN",
-      "shoots_catches": "L"
-    }
+    this.playerService.createPlayer(this.firstName,
+                                    this.lastName,
+                                    this.sweaterNumber,
+                                    this.position, 
+                                    this.handedness,
+                                    this.birthCountry,
+                                    this.dob)
+    .subscribe({
+      next: (responseData) => {
+        console.log(responseData);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
 
-    this.http
-      .post('http://localhost:3000/v1/players', payload)
-      .pipe(first())
-      .subscribe();
   }
 
 }

@@ -15,11 +15,19 @@
             </div>
           </div>
         <p>Sweater Number</p>
-        <input [(ngModel)]="sweaterNumber" type="number" min="0"a max="99" name="sweaterNumber" id="sweaterNumber">
+        <input
+          [(ngModel)]="sweaterNumber"
+          type="text"
+          maxlength="2"
+          inputmode="numeric"
+          name="sweaterNumber"
+          id="sweaterNumber"
+          (input)="allowOnlyNumbers($event)"
+        />
     
         <p>Position</p>
         <select [(ngModel)]="position" name="position" id="position" >
-            <option value="" disabled selected>Position</option>
+            <option value="" disabled selected></option>
             <option value="G">G</option>
             <option value="C">C</option>
             <option value="LW">LW</option>
@@ -29,9 +37,17 @@
 
         <p>Handedness</p>
         <select [(ngModel)]="handedness" name="handedness" id="handedness">
-            <option value="" disabled selected>Handedness</option>
-            <option value="Left">Left</option>
-            <option value="Right">Right</option>
+            <option value="" disabled selected></option>
+            <option value="L">Left</option>
+            <option value="R">Right</option>
+        </select>
+
+        <p>Birth Country</p>
+        <select [(ngModel)]="birthCountry" name="birthCountry" id="birthCountry">
+            <option value="" disabled selected></option>
+            <option value="L">USA</option>
+            <option value="R">CAN</option>
+            <option value="R">RUS</option>
         </select>
     
         <p>Date of Birth</p>
@@ -39,7 +55,7 @@
     
     </form>
     <div class="button-wrapper">
-        <button (click)="onClick()" type="button" id="createButton">Create</button>
+        <button (click)="postPlayer()" type="button" id="createButton">Create</button>
     </div>
 </body>
 
