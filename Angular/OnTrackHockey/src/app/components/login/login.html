@@ -1,32 +1,36 @@
 <body>
-    <form id="loginForm">
-        <h2>Login</h2><br>
-        <img src="avatar.png" alt="Avatar">
-        <p>E-mail</p>
-        <input [(ngModel)]="username" type="text" name="username" id="username"><br>
-    
-        <p>Password</p>
-        <input [(ngModel)]="password" type="password" name="password" id="password"><br><br>
-    
-        <div class="button-wrapper">
-            <button type="button" (click)="onClick()" id="loginButton">Sign in</button>
-        </div>
-
-        <hr>
-
-        <div class="button-wrapper">
-            <button type="button" routerLink="/register" id="createAccountButton">Create Account</button>
-        </div><br>
-
-        <div class="button-wrapper">
-            <button id="forgotPasswordButton">Forgot Password</button>
-        </div>
-    </form>
-
+    <div class="page-wrapper">
+      <div class="auth-container">
+        <form id="loginForm">
+          <h2>Login</h2>
+  
+          <img src="avatar.png" alt="Avatar">
+  
+          <p>E-mail</p>
+          <input [(ngModel)]="username" type="text" name="username" id="username">
+  
+          <p>Password</p>
+          <input [(ngModel)]="password" type="password" name="password" id="password">
+  
+          <div class="button-wrapper">
+            <button type="button" (click)="onClick()" id="loginButton">
+              Sign in
+            </button>
+          </div>
+  
+          <div class="secondary-actions">
+            <p routerLink="/register">Create Account</p>
+            <p>Forgot Password</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  
     <footer>
-        <span>OTDG Dev</span>
-        <span><a href="https://github.com/OTDG-Dev/On-Track-Hockey">Github</a></span>
-      </footer> 
-</body>
-
-
+      <span>OTDG Dev</span>
+      <span>
+        <a href="https://github.com/OTDG-Dev/On-Track-Hockey">Github</a>
+      </span>
+    </footer>
+  </body>
+  

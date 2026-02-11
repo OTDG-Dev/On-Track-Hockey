@@ -1,0 +1,45 @@
+<body>
+    <h1>Create Player</h1>
+    <hr>
+    <form>
+        <p>Full Name</p>
+        <div class="name-row">
+            <div class="field">
+              <input [(ngModel)]="firstName" type="text" name="firstName" id="firstName">
+              <p>First Name</p>
+            </div>
+          
+            <div class="field">
+                <input [(ngModel)]="lastName" type="text" name="lastName" id="lastName">
+              <p>Last Name</p>
+            </div>
+          </div>
+        <p>Sweater Number</p>
+        <input [(ngModel)]="sweaterNumber" type="number" min="0"a max="99" name="sweaterNumber" id="sweaterNumber">
+    
+        <p>Position</p>
+        <select [(ngModel)]="position" name="position" id="position" >
+            <option value="" disabled selected>Position</option>
+            <option value="G">G</option>
+            <option value="C">C</option>
+            <option value="LW">LW</option>
+            <option value="RW">RW</option>
+            <option value="D">D</option>
+        </select>
+
+        <p>Handedness</p>
+        <select [(ngModel)]="handedness" name="handedness" id="handedness">
+            <option value="" disabled selected>Handedness</option>
+            <option value="Left">Left</option>
+            <option value="Right">Right</option>
+        </select>
+    
+        <p>Date of Birth</p>
+        <input [(ngModel)]="dob" type="date" name="dob" id="dob">
+    
+    </form>
+    <div class="button-wrapper">
+        <button (click)="onClick()" type="button" id="createButton">Create</button>
+    </div>
+</body>
+

@@ -1,0 +1,164 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    padding-top: 20px;
+    margin: 0px;
+    padding-bottom: 32px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.name-row {
+    display: flex;
+    gap: 5px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+.field p {
+    margin: 4px 1px 0;
+    font-size: 12px;
+    color: #777;
+}
+
+/* Text inputs (name fields) */
+.field input {
+    width: 200px;
+    padding: 18px;
+    font-family: inherit;
+    font-size: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+}
+
+/* Number + date inputs */
+input[type="number"],
+input[type="date"] {
+    width: 200px;
+    padding: 18px;
+    margin-bottom: 14px;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #111827;
+
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Selects */
+select {
+    width: 200px;
+    padding: 18px;
+    margin-bottom: 16px;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+/* Focus states */
+.field input:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #27AE60;
+    box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.15);
+}
+
+/* Remove number spinners */
+/* Chrome / Edge / Safari */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* Date input polish */
+input[type="date"] {
+    cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.6;
+}
+
+input,
+select,
+button {
+    outline: none;
+}
+
+/* Button */
+button {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    border: 0;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#createButton {
+    color: white;
+    background-color: #27AE60;
+    width: 300px;
+    height: 50px;
+
+    font-size: 18px;
+    font-weight: 200;
+    letter-spacing: 0.3px;
+}
+
+#createButton:hover {
+    background-color: #219150;
+}
+
+/* Divider */
+hr {
+    width: 100%;
+    border: none;
+    height: 2px;
+    background-color: #e4e4e4;
+    margin: 24px 0;
+}
+
+/* Select placeholder behavior */
+select:required:invalid {
+    color: gray;
+}
+
+option[value=""][disabled] {
+    display: none;
+}
+
+option {
+    color: black;
+}
