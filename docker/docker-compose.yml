@@ -1,5 +1,15 @@
 name: on-track-hockey
 services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    networks:
+      - oth-net
+    ports:
+      - 8080:8080
+
   api:
     build:
       context: ../backend
