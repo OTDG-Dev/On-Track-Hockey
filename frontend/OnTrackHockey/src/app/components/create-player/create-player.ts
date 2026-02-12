@@ -27,21 +27,9 @@ export class CreatePlayer {
     input.value = input.value.replace(/[^0-9]/g, '');
     this.sweaterNumber = input.value;
   }
-  private http = inject(HttpClient)
 
   postPlayer() {
-
-    console.log(
-      this.firstName,
-      this.lastName,
-      this.sweaterNumber,
-      this.position,
-      this.handedness,
-      this.birthCountry,
-      this.dob
-    );
-
-    this.playerService.createPlayer(this.firstName, this.lastName, this.sweaterNumber, this.position, 
+    this.playerService.createPlayer(this.firstName, this.lastName, parseInt(this.sweaterNumber), this.position, 
                                     this.handedness, this.birthCountry, this.dob)
     .subscribe({
       next: (responseData) => {
