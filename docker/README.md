@@ -1,11 +1,13 @@
 # OnTrackHockey Docker
 
-## Building Images
-
-### Backend
-
-Run from the repo root
+Bring up containers, rebuild images
 
 ```bash
-docker build -f docker/Dockerfile.backend -t myapp:backend .
+docker compose up --build -d  
+```
+
+Stop containers, remove volumes
+
+```bash
+docker compose down -v
 ```
