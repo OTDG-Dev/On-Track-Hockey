@@ -1,5 +1,10 @@
-# -- Build --
-FROM golang:1.26-alpine AS builder
+ARG GOLANG_VERSION=1.26-alpine
+ARG ALPINE_VERSION=3.23
+
+# =====================
+# Stage 1: Build
+# =====================
+FROM golang:${GOLANG_VERSION} AS builder
 
 WORKDIR /app
 
@@ -16,8 +21,10 @@ COPY . .
 # build exe
 RUN go build -trimpath -ldflags="-s -w" -o oth ./cmd/api/
 
-# -- Runtime --
-FROM alpine:latest
+# =====================
+# Stage 2: Runtime
+# =====================
+FROM alpine:${ALPINE_VERSION}
 
 WORKDIR /app
 COPY --from=builder /app/oth .
