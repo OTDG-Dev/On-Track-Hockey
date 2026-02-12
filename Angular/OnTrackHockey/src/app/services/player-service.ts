@@ -15,13 +15,8 @@ export class PlayerService {
     return this.httpClient.get<PlayerData[]>("http://localhost:3000/v1/players");
   }
 
-  createPlayer(firstName: string,
-               lastName: string,
-               sweaterNumber: string,
-               position: string,
-               handedness: string,
-               birth_country: string,
-               dob: string) {
+  createPlayer(firstName: string,lastName: string,sweaterNumber: string,position: string, handedness: string,
+               birth_country: string, dob: string) {
     const body = {
       "first_name": firstName,
       "last_name": lastName,

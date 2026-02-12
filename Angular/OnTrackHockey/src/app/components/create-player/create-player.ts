@@ -41,13 +41,8 @@ export class CreatePlayer {
       this.dob
     );
 
-    this.playerService.createPlayer(this.firstName,
-                                    this.lastName,
-                                    this.sweaterNumber,
-                                    this.position, 
-                                    this.handedness,
-                                    this.birthCountry,
-                                    this.dob)
+    this.playerService.createPlayer(this.firstName, this.lastName, this.sweaterNumber, this.position, 
+                                    this.handedness, this.birthCountry, this.dob)
     .subscribe({
       next: (responseData) => {
         console.log(responseData);
