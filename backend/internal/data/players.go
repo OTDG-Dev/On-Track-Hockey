@@ -125,6 +125,55 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 	return &player, nil
 }
 
+func (m PlayerModel) GetAll() ([]Player, error) {
+	// WIP need to catch err no rows exception!
+	query := `
+	SELECT 
+		id,
+		is_active,
+		current_team_id,
+		first_name,
+		last_name,
+		sweater_number,
+		position,
+		birth_date,
+		birth_country,
+		headshot,
+		shoots_catches
+	FROM players`
+
+	rows, err := m.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	var players []Player
+
+	for rows.Next() {
+		var p Player
+		err = rows.Scan(
+			&p.ID,
+			&p.IsActive,
+			&p.CurrentTeamId,
+			&p.FirstName,
+			&p.LastName,
+			&p.SweaterNumber,
+			&p.Position,
+			&p.BirthDate,
+			&p.BirthCountry,
+			&p.Headshot,
+			&p.ShootsCatches,
+		)
+		players = append(players, p)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return players, err
+}
+
 func (m PlayerModel) Delete(id int) error {
 	if id < 1 {
 		return ErrRecordNotFound
