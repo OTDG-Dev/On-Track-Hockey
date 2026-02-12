@@ -16,7 +16,7 @@ export class CreatePlayer {
 
   firstName: string = "";
   lastName: string = "";
-  sweaterNumber: string = "";
+  sweaterNumber: number = 99;
   position: string = "";
   handedness: string = "";
   birthCountry: string = "";
