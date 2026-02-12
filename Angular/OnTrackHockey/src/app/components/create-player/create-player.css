@@ -40,6 +40,7 @@ h1 {
 }
 
 /* Number + date inputs */
+input[type="text"],
 input[type="number"],
 input[type="date"] {
     width: 200px;

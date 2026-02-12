@@ -1,23 +1,26 @@
 <body>
-    <form id="loginForm">
-        <h2>Register</h2><br>
-        <img src="avatar.png" alt="Avatar">
-        <p>E-mail</p>
-        <input [(ngModel)]="email" type="text" name="email" id="email"><br>
-    
-        <p>Password</p>
-        <input [(ngModel)]="password" type="password" name="password" id="password"><br><br>
-    
-        <div class="button-wrapper">
-            <button type="button" (click)="onClick()" id="loginButton">Create</button>
+    <div class="page-wrapper">
+        <div class="auth-container">
+            <form id="loginForm">
+                <h2>Register</h2><br>
+                <img src="avatar.png" alt="Avatar">
+                <p>E-mail</p>
+                <input [(ngModel)]="email" type="text" name="email" id="email"><br>
+            
+                <p>Password</p>
+                <input [(ngModel)]="password" type="password" name="password" id="password"><br><br>
+            
+                <div class="button-wrapper">
+                    <button type="button" (click)="onClick()" id="loginButton">Create</button>
+                </div>
+        
+                <div class="secondary-actions">
+                    <p routerLink="/">Login</p>
+                </div>
+            </form>
         </div>
-
-        <hr>
-
-        <div class="button-wrapper">
-            <button type="button" routerLink="/" id="signInButton">Sign in</button>
-        </div><br>
-    </form>
+    </div>
+    
 
     <footer>
         <span>OTDG Dev</span>
