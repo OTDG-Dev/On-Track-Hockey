@@ -33,6 +33,20 @@ func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
+func (app *application) showAllPlayerHandler(w http.ResponseWriter, r *http.Request) {
+	players, err := app.models.Players.GetAll()
+	if err != nil {
+		// need switch case for errrowsnull
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"players": players}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
 func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		IsActive      bool `json:"is_active"`
