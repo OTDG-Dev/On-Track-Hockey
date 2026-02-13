@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { first } from 'rxjs';
 import { PlayerService } from '../../services/player-service';
 
 @Component({

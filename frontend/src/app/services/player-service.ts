@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from '@angular/core';
 import { PlayerData } from "../interfaces/player-data";
-import { environment } from "../../environments/environment.development";
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +20,7 @@ export class PlayerService {
 
   createPlayer(firstName: string, lastName: string, sweaterNumber: number, position: string, handedness: string,
     birth_country: string, dob: string) {
+
     const body = {
       "first_name": firstName,
       "last_name": lastName,
