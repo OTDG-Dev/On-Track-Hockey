@@ -1,18 +1,21 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from '@angular/core';
 import { PlayerData } from "../interfaces/player-data";
+import { environment } from "../../environments/environment.development";
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlayerService {
 
+  private baseUrl = environment.apiUrl;
+
   constructor(private httpClient: HttpClient) {
 
   }
 
   getPlayers() {
-    return this.httpClient.get<PlayerData[]>("http://localhost:3000/v1/players");
+    return this.httpClient.get<PlayerData[]>(this.baseUrl);
   }
 
   createPlayer(firstName: string, lastName: string, sweaterNumber: number, position: string, handedness: string,
@@ -27,6 +30,6 @@ export class PlayerService {
       "shoots_catches": handedness
     }
 
-    return this.httpClient.post<PlayerData>(`http://localhost:3000/v1/players`, body)
+    return this.httpClient.post<PlayerData>(this.baseUrl, body)
   }
 }
