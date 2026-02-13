@@ -12,5 +12,6 @@ CREATE TABLE IF NOT EXISTS players (
     birth_country text NOT NULL,
     headshot text NOT NULL,
     shoots_catches text NOT NULL
-        CHECK (shoots_catches IN ('L', 'R'))
+        CHECK (shoots_catches IN ('L', 'R')),
+    version integer NOT NULL DEFAULT 1
 )

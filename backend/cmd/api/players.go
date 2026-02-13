@@ -103,6 +103,96 @@ func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Reque
 	}
 }
 
+func (app *application) updatePlayerHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.notFoundResponse(w, r)
+		return
+	}
+
+	player, err := app.models.Players.Get(id)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	var input struct {
+		IsActive      *bool `json:"is_active"`
+		CurrentTeamId *int  `json:"current_team_id"`
+
+		FirstName     *string             `json:"first_name"`
+		LastName      *string             `json:"last_name"`
+		SweaterNumber *uint8              `json:"sweater_number"`
+		Position      *data.Position      `json:"position"`
+		BirthDate     *data.BirthDate     `json:"birth_date"`
+		BirthCountry  *string             `json:"birth_country"`
+		Headshot      *string             `json:"headshot,omitzero"`
+		ShootsCatches *data.ShootsCatches `json:"shoots_catches,omitzero"`
+	}
+
+	err = app.readJSON(w, r, &input)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	if input.IsActive != nil {
+		player.IsActive = *input.IsActive
+	}
+	if input.CurrentTeamId != nil {
+		player.CurrentTeamId = *input.CurrentTeamId
+	}
+	if input.FirstName != nil {
+		player.FirstName = *input.FirstName
+	}
+	if input.LastName != nil {
+		player.LastName = *input.LastName
+	}
+	if input.SweaterNumber != nil {
+		player.SweaterNumber = *input.SweaterNumber
+	}
+	if input.Position != nil {
+		player.Position = *input.Position
+	}
+	if input.BirthDate != nil {
+		player.BirthDate = *input.BirthDate
+	}
+	if input.BirthCountry != nil {
+		player.BirthCountry = *input.BirthCountry
+	}
+	if input.Headshot != nil {
+		player.Headshot = *input.Headshot
+	}
+	if input.ShootsCatches != nil {
+		player.ShootsCatches = *input.ShootsCatches
+	}
+
+	v := validator.New()
+
+	data.ValidatePlayer(v, player)
+
+	err = app.models.Players.Update(player)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrEditConflict):
+			app.editConflictResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"player": player}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
 func (app *application) deletePlayerHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {

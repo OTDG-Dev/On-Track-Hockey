@@ -3,6 +3,7 @@ package data
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/stats"
@@ -24,6 +25,8 @@ type Player struct {
 	ShootsCatches ShootsCatches        `json:"shoots_catches,omitzero"`
 	SkaterStats   *stats.SkaterStatSet `json:"skater_stats,omitzero"`
 	GoalieStats   *stats.GoalieStatSet `json:"goalie_stats,omitzero"`
+
+	Version int `json:"version"`
 }
 
 func ValidatePlayer(v *validator.Validator, player *Player) {
@@ -93,7 +96,8 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 			birth_date,
 			birth_country,
 			headshot,
-			shoots_catches
+			shoots_catches,
+			version
 		FROM players
 		WHERE id = $1`
 
@@ -111,6 +115,7 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 		&player.BirthCountry,
 		&player.Headshot,
 		&player.ShootsCatches,
+		&player.Version,
 	)
 
 	if err != nil {
@@ -172,6 +177,54 @@ func (m PlayerModel) GetAll() ([]Player, error) {
 	}
 
 	return players, err
+}
+
+func (m PlayerModel) Update(player *Player) error {
+	query := `
+		UPDATE players
+		SET
+			is_active = $1,
+			current_team_id = $2,
+			first_name = $3,
+			last_name = $4,
+			sweater_number = $5,
+			position = $6,
+			birth_date = $7,
+			birth_country = $8,
+			headshot = $9,
+			shoots_catches = $10,
+			version = version + 1
+		WHERE id = $11 AND version = $12
+		RETURNING version`
+
+	args := []any{
+		player.IsActive,
+		player.CurrentTeamId,
+		player.FirstName,
+		player.LastName,
+		player.SweaterNumber,
+		player.Position,
+		player.BirthDate,
+		player.BirthCountry,
+		player.Headshot,
+		player.ShootsCatches,
+		player.ID,
+		player.Version,
+	}
+
+	fmt.Println(player.ID, player.Version)
+
+	err := m.DB.QueryRow(query, args...).Scan(&player.Version)
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return ErrEditConflict
+		default:
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (m PlayerModel) Delete(id int) error {
