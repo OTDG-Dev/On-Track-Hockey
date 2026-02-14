@@ -1,12 +1,14 @@
-body {
+.page-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     min-height: 50vh;
     padding-top: 20px;
-    margin: 0px;
     padding-bottom: 32px;
+
+    margin: 0;
 }
 
 h1 {
@@ -162,4 +164,67 @@ option[value=""][disabled] {
 
 option {
     color: black;
+}
+
+/* Success + Error Messages */
+.success-message,
+.error-message {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 320px;
+    padding: 14px 18px;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 6px 16px;
+
+    z-index: 1000;
+
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -10px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+.fade-out {
+    animation: slideUp 0.25s ease forwards;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+    to {
+        opacity: 0;
+        transform: translate(-50%, -10px);
+    }
+}
+
+/* Success */
+.success-message {
+    background-color: #e9f7ef;   /* solid light green */
+    border: 1px solid #27AE60;
+    color: #1e7e34;
+}
+
+/* Error */
+.error-message {
+    background-color: #fdecea;   /* solid light red */
+    border: 1px solid #dc2626;
+    color: #b91c1c;
 }

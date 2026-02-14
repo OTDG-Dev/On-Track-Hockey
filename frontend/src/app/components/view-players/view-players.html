@@ -1,0 +1,29 @@
+<h1>View Players</h1>
+<hr>
+
+<table>
+    <thead>
+        <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Sweater Number</th>
+        <th>Position</th>
+        <th>Birth Date</th>
+        <th>Birth Country</th>
+        <th>Shoots/Catches</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        <tr *ngFor="let player of players()">
+        <td>{{ player.first_name }}</td>
+        <td>{{ player.last_name }}</td>
+        <td>{{ player.sweater_number }}</td>
+        <td>{{ player.position }}</td>
+        <td>{{ player.birth_date }}</td>
+        <td>{{ player.birth_country }}</td>
+        <td>{{ player.shoots_catches }}</td>
+        </tr>
+    </tbody>
+</table>
+

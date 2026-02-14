@@ -15,7 +15,7 @@ export class PlayerService {
   }
 
   getPlayers() {
-    return this.httpClient.get<PlayerData[]>(this.baseUrl);
+    return this.httpClient.get<{ players: PlayerData[] }>(this.baseUrl);
   }
 
   createPlayer(firstName: string, lastName: string, sweaterNumber: number, position: string, handedness: string,

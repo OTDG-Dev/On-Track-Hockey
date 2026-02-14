@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Login } from './components/login/login';
 import { Register } from './components/register/register';
 import { CreatePlayer } from './components/create-player/create-player';
+import { ViewPlayers } from './components/view-players/view-players';
 
 export const routes: Routes = [
     {
@@ -15,6 +16,9 @@ export const routes: Routes = [
     {
         path: 'create-player',
         component: CreatePlayer
+    },
+    {
+        path: 'view-players',
+        component: ViewPlayers
     }
-
 ];
