@@ -22,7 +22,7 @@ services:
       - 3000:3000
 
   db:
-    image: "postgres:18.1"
+    image: "postgres:18.1-alpine"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -34,8 +34,10 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
       interval: 5s
-      timeout: 5s
+      timeout: 1s
       retries: 5
+      start_period: 20s
+
   migrate:
     image: migrate/migrate:v4.19.1
     networks:
