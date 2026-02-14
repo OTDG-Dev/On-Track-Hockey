@@ -2,14 +2,12 @@
     box-sizing: border-box;
 }
 
-html, body {
+.page-container {
     margin: 0;
     padding-bottom: 80px;
     font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri,
                  'DejaVu Sans', source-sans-pro, sans-serif;
-}
 
-body {
     display: flex;
     flex-direction: column;
     align-items: center;

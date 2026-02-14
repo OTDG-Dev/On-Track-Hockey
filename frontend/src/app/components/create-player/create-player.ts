@@ -1,16 +1,15 @@
-import { Component, inject } from '@angular/core';
+import { Component, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PlayerService } from '../../services/player-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-create-player',
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './create-player.html',
   styleUrl: './create-player.css',
 })
 export class CreatePlayer {
-
-  constructor(private playerService: PlayerService) {}
 
   firstName: string = "";
   lastName: string = "";
@@ -19,6 +18,12 @@ export class CreatePlayer {
   handedness: string = "";
   birthCountry: string = "";
   dob: string = "";
+
+  successMessage: WritableSignal<string> = signal('');
+  errorMessage: WritableSignal<string> = signal('');
+  isFading = signal(false);
+
+  constructor(private playerService: PlayerService) {}
 
   allowOnlyNumbers(event: any) {
     const input = event.target;
@@ -31,13 +36,34 @@ export class CreatePlayer {
                                     this.handedness, this.birthCountry, this.dob)
     .subscribe({
       next: (responseData) => {
-        console.log(responseData);
+        this.successMessage.set(
+          `Player Created`
+        );
+      
+        setTimeout(() => {
+          this.isFading.set(true);
+        }, 2500);
+      
+        setTimeout(() => {
+          this.successMessage.set('');
+          this.isFading.set(false);
+        }, 2750);
       },
       error: (err) => {
-        console.log(err);
+        this.errorMessage.set(
+          `Failed to Create Player`
+        );
+
+        setTimeout(() => {
+          this.isFading.set(true);
+        }, 2500);
+      
+        setTimeout(() => {
+          this.errorMessage.set('');
+          this.isFading.set(false);
+        }, 2750);
       }
     })
-
   }
 
 }
