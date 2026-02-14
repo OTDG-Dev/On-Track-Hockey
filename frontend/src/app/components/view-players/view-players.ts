@@ -21,17 +21,12 @@ export class ViewPlayers {
   
     this.playerService.getPlayers().subscribe({
       next: (responseData) => {
-        console.log('API response:', responseData);
         this.players.set(responseData.players);
-        console.log('After assignment:', this.players);
-        console.log('Length after assignment:', this.players.length);
       },
       error: (err) => {
         console.log(err);
       }
     });
-  
-    console.log('After subscribe call:', this.players);
   }
 
 }
