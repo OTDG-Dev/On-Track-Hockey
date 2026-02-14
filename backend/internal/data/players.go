@@ -11,22 +11,24 @@ import (
 )
 
 type Player struct {
-	ID            int  `json:"id"`
+	ID        int       `json:"id"`
+	CreatedAt time.Time `json:"-"`
+	Version   int       `json:"version"`
+
 	IsActive      bool `json:"is_active"`
 	CurrentTeamId int  `json:"current_team_id"`
 
-	FirstName     string               `json:"first_name"`
-	LastName      string               `json:"last_name"`
-	SweaterNumber uint8                `json:"sweater_number"`
-	Position      Position             `json:"position"`
-	BirthDate     BirthDate            `json:"birth_date"`
-	BirthCountry  string               `json:"birth_country"`
-	Headshot      string               `json:"headshot,omitzero"`
-	ShootsCatches ShootsCatches        `json:"shoots_catches,omitzero"`
-	SkaterStats   *stats.SkaterStatSet `json:"skater_stats,omitzero"`
-	GoalieStats   *stats.GoalieStatSet `json:"goalie_stats,omitzero"`
+	FirstName     string        `json:"first_name"`
+	LastName      string        `json:"last_name"`
+	SweaterNumber uint8         `json:"sweater_number"`
+	Position      Position      `json:"position"`
+	BirthDate     BirthDate     `json:"birth_date"`
+	BirthCountry  string        `json:"birth_country"`
+	Headshot      string        `json:"headshot,omitzero"`
+	ShootsCatches ShootsCatches `json:"shoots_catches,omitzero"`
 
-	Version int `json:"version"`
+	SkaterStats *stats.SkaterStatSet `json:"skater_stats,omitzero"`
+	GoalieStats *stats.GoalieStatSet `json:"goalie_stats,omitzero"`
 }
 
 func ValidatePlayer(v *validator.Validator, player *Player) {
@@ -39,6 +41,9 @@ func ValidatePlayer(v *validator.Validator, player *Player) {
 	v.Check(player.BirthDate.Year() <= time.Now().Year(), "birth_year", "cannot be in the future")
 
 	v.Check(len(player.BirthCountry) <= 3, "birth_country", "must only be 3 chars")
+
+	v.Check(validator.PermittedValue(player.Position, "C", "LW", "RW", "D", "G"), "position", "must be 'C|LW|RW|D|G'")
+	v.Check(validator.PermittedValue(player.ShootsCatches, "L", "R"), "shoots_catches", "must be 'L|R'")
 }
 
 // wrap a sql.DB connection pool
