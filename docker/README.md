@@ -18,5 +18,11 @@ Rebuild select images
 # rebuild frontend
 docker compose up -d --build frontend
 # rebuild backend
-docker compose up -d --build backend
+docker compose up -d --build api
+```
+
+Enter database container
+
+```bash
+docker compose exec db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"'
 ```
