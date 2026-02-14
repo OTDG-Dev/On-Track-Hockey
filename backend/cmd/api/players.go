@@ -33,18 +33,27 @@ func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (app *application) showAllPlayerHandler(w http.ResponseWriter, r *http.Request) {
-	players, err := app.models.Players.GetAll()
-	if err != nil {
-		// need switch case for errrowsnull
-		app.serverErrorResponse(w, r, err)
+func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		Name string
+		data.Filters
+	}
+
+	v := validator.New()
+	qs := r.URL.Query()
+
+	input.Name = app.readString(qs, "name", "")
+
+	input.Filters.Page = app.readInt(qs, "page", 1, v)
+	input.Filters.PageSize = app.readInt(qs, "page_size", 20, v) // default page size = 20
+	input.Filters.Sort = app.readString(qs, "sort", "id")        // fallback to id
+
+	if !v.Valid() {
+		app.failedValidationResponse(w, r, v.Errors)
 		return
 	}
 
-	err = app.writeJSON(w, http.StatusOK, envelope{"players": players}, nil)
-	if err != nil {
-		app.serverErrorResponse(w, r, err)
-	}
+	fmt.Fprintf(w, "%+v\n", input)
 }
 
 func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Request) {
