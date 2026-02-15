@@ -31,6 +31,11 @@ type Player struct {
 	GoalieStats *stats.GoalieStatSet `json:"goalie_stats,omitzero"`
 }
 
+// wrap a sql.DB connection pool
+type PlayerModel struct {
+	DB *sql.DB
+}
+
 func ValidatePlayer(v *validator.Validator, player *Player) {
 	v.Check(player.FirstName != "", "first_name", "must be provided")
 	v.Check(player.LastName != "", "last_name", "must be provided")
@@ -44,11 +49,6 @@ func ValidatePlayer(v *validator.Validator, player *Player) {
 
 	v.Check(validator.PermittedValue(player.Position, "C", "LW", "RW", "D", "G"), "position", "must be 'C|LW|RW|D|G'")
 	v.Check(validator.PermittedValue(player.ShootsCatches, "L", "R"), "shoots_catches", "must be 'L|R'")
-}
-
-// wrap a sql.DB connection pool
-type PlayerModel struct {
-	DB *sql.DB
 }
 
 func (m PlayerModel) Insert(player *Player) error {
@@ -135,10 +135,12 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 	return &player, nil
 }
 
-func (m PlayerModel) GetAll() ([]Player, error) {
-	// WIP need to catch err no rows exception!
-	query := `
-	SELECT 
+func (m PlayerModel) GetAll(FirstName string, filters Filters) ([]*Player, Metadata, error) {
+	// WIP need to use like and also combine first/lastname into the query
+	// https://niallburkley.com/blog/index-columns-for-like-in-postgres/
+	query := fmt.Sprintf(`
+	SELECT
+		count(*) OVER(),
 		id,
 		is_active,
 		current_team_id,
@@ -149,19 +151,28 @@ func (m PlayerModel) GetAll() ([]Player, error) {
 		birth_date,
 		birth_country,
 		headshot,
-		shoots_catches
-	FROM players`
+		shoots_catches,
+		version
+	FROM players
+	WHERE (LOWER(first_name) = LOWER($1) OR $1 = '')
+	ORDER BY %s %s, id ASC
+	LIMIT $2 OFFSET $3`, filters.sortColumn(), filters.SortDirection())
 
-	rows, err := m.DB.Query(query)
+	args := []any{FirstName, filters.limit(), filters.offset()}
+
+	rows, err := m.DB.Query(query, args...)
 	if err != nil {
-		return nil, err
+		return nil, Metadata{}, err
 	}
+	defer rows.Close()
 
-	var players []Player
+	totalRecords := 0
+	players := []*Player{}
 
 	for rows.Next() {
 		var p Player
 		err = rows.Scan(
+			&totalRecords,
 			&p.ID,
 			&p.IsActive,
 			&p.CurrentTeamId,
@@ -173,15 +184,22 @@ func (m PlayerModel) GetAll() ([]Player, error) {
 			&p.BirthCountry,
 			&p.Headshot,
 			&p.ShootsCatches,
+			&p.Version,
 		)
-		players = append(players, p)
+		if err != nil {
+			return nil, Metadata{}, err
+		}
+
+		players = append(players, &p)
 	}
 
 	if err = rows.Err(); err != nil {
-		return nil, err
+		return nil, Metadata{}, err
 	}
 
-	return players, err
+	metadata := calculateMetadata(totalRecords, filters.Page, filters.PageSize)
+
+	return players, metadata, err
 }
 
 func (m PlayerModel) Update(player *Player) error {

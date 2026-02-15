@@ -33,15 +33,36 @@ func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (app *application) showAllPlayerHandler(w http.ResponseWriter, r *http.Request) {
-	players, err := app.models.Players.GetAll()
+func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		FirstName string
+		// WIP build this out & combine first/lastname search
+		data.Filters
+	}
+
+	v := validator.New()
+	qs := r.URL.Query()
+
+	input.FirstName = app.readString(qs, "first_name", "")
+
+	input.Filters.Page = app.readInt(qs, "page", 1, v)
+	input.Filters.PageSize = app.readInt(qs, "page_size", 20, v) // default page size = 20
+	input.Filters.Sort = app.readString(qs, "sort", "id")        // fallback to id
+
+	input.Filters.SortSafeList = []string{"id", "first_name", "-id", "-first_name"} // WIP build this out
+
+	if data.ValidateFilters(v, input.Filters); !v.Valid() {
+		app.failedValidationResponse(w, r, v.Errors)
+		return
+	}
+
+	players, metadata, err := app.models.Players.GetAll(input.FirstName, input.Filters)
 	if err != nil {
-		// need switch case for errrowsnull
 		app.serverErrorResponse(w, r, err)
 		return
 	}
 
-	err = app.writeJSON(w, http.StatusOK, envelope{"players": players}, nil)
+	err = app.writeJSON(w, http.StatusOK, envelope{"players": players, "metadata": metadata}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
