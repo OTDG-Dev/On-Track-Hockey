@@ -52,7 +52,7 @@ func ValidatePlayer(v *validator.Validator, player *Player) {
 }
 
 func (m PlayerModel) Insert(player *Player) error {
-	query := `
+	query := /* sql */ `
 		INSERT INTO players (
 			is_active,
 			current_team_id,
@@ -135,11 +135,11 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 	return &player, nil
 }
 
-func (m PlayerModel) GetAll(FirstName string, filters Filters) ([]*Player, Metadata, error) {
+func (m PlayerModel) GetAll(FirstName, LastName, Position string, filters Filters) ([]*Player, Metadata, error) {
 	// WIP need to use like and also combine first/lastname into the query
 	// https://niallburkley.com/blog/index-columns-for-like-in-postgres/
-	query := fmt.Sprintf(`
-	SELECT
+	query := fmt.Sprintf( /* sql */ `
+	SELECT/dockerindexing
 		count(*) OVER(),
 		id,
 		is_active,
@@ -154,11 +154,13 @@ func (m PlayerModel) GetAll(FirstName string, filters Filters) ([]*Player, Metad
 		shoots_catches,
 		version
 	FROM players
-	WHERE (LOWER(first_name) = LOWER($1) OR $1 = '')
+	WHERE (first_name ILIKE $1 OR $1 = '')  -- switch to indexes with scale & combine last + first
+	AND (last_name ILIKE $2 OR $2 = '')
+	AND (position = $3 OR $3 = '')
 	ORDER BY %s %s, id ASC
-	LIMIT $2 OFFSET $3`, filters.sortColumn(), filters.SortDirection())
+	LIMIT $4 OFFSET $5`, filters.sortColumn(), filters.SortDirection())
 
-	args := []any{FirstName, filters.limit(), filters.offset()}
+	args := []any{FirstName, LastName, Position, filters.limit(), filters.offset()}
 
 	rows, err := m.DB.Query(query, args...)
 	if err != nil {
@@ -203,7 +205,7 @@ func (m PlayerModel) GetAll(FirstName string, filters Filters) ([]*Player, Metad
 }
 
 func (m PlayerModel) Update(player *Player) error {
-	query := `
+	query := /* sql */ `
 		UPDATE players
 		SET
 			is_active = $1,
@@ -255,7 +257,7 @@ func (m PlayerModel) Delete(id int) error {
 		return ErrRecordNotFound
 	}
 
-	query := `
+	query := /* sql */ `
 		DELETE FROM players
 		WHERE id = $1`
 
