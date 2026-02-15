@@ -139,7 +139,7 @@ func (m PlayerModel) GetAll(FirstName, LastName, Position string, filters Filter
 	// WIP need to use like and also combine first/lastname into the query
 	// https://niallburkley.com/blog/index-columns-for-like-in-postgres/
 	query := fmt.Sprintf( /* sql */ `
-	SELECT/dockerindexing
+	SELECT
 		count(*) OVER(),
 		id,
 		is_active,
