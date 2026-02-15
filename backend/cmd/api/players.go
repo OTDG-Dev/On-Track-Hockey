@@ -49,7 +49,7 @@ func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Reques
 
 	input.FirstName = app.readString(qs, "first_name", "")
 	input.LastName = app.readString(qs, "last_name", "")
-	input.LastName = strings.ToUpper(app.readString(qs, "position", ""))
+	input.Position = strings.ToUpper(app.readString(qs, "position", ""))
 
 	input.Filters.Page = app.readInt(qs, "page", 1, v)
 	input.Filters.PageSize = app.readInt(qs, "page_size", 20, v)
