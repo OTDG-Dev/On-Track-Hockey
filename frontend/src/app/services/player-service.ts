@@ -12,9 +12,19 @@ export class PlayerService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getPlayers() 
-  {
-    return this.httpClient.get<{ players: PlayerData[] }>(this.baseUrl);
+  
+
+  getPlayers(position?: string) {
+    const params: any = {};
+
+    if (position) {
+      params.position = position;
+    }
+
+    return this.httpClient.get<{ players: PlayerData[] }>(
+      this.baseUrl,
+      { params }
+    );
   }
 
   createPlayer(firstName: string, lastName: string, sweaterNumber: number, position: string, 

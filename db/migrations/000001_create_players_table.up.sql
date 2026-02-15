@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS players (
     id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    created_at timestamp(0) with time zone NOT NULL DEFAULT NOW(),
     is_active boolean NOT NULL DEFAULT false,
     current_team_id bigint NOT NULL,
     first_name text NOT NULL,

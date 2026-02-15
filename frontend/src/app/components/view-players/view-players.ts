@@ -14,17 +14,28 @@ export class ViewPlayers {
 
   players: WritableSignal<PlayerData[]> = signal([]);
 
-  constructor(private playerService: PlayerService) {}
+  constructor(private playerService: PlayerService) { }
 
   ngOnInit() {
     console.log('Before request:', this.players);
-  
+
     this.playerService.getPlayers().subscribe({
       next: (responseData) => {
         this.players.set(responseData.players);
       },
       error: (err) => {
         console.log(err);
+      }
+    });
+  }
+
+  onPositionChange(position: string) {
+    this.playerService.getPlayers(position).subscribe({
+      next: (responseData) => {
+        this.players.set(responseData.players);
+      },
+      error: (err) => {
+        console.error(err);
       }
     });
   }

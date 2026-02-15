@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data"
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
@@ -33,15 +34,46 @@ func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (app *application) showAllPlayerHandler(w http.ResponseWriter, r *http.Request) {
-	players, err := app.models.Players.GetAll()
+func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		FirstName     string
+		LastName      string
+		Position      string
+		CurrentTeamId int
+		// WIP build this out & combine first/lastname search
+		data.Filters
+	}
+
+	v := validator.New()
+	qs := r.URL.Query()
+
+	input.FirstName = app.readString(qs, "first_name", "")
+	input.LastName = app.readString(qs, "last_name", "")
+	input.Position = strings.ToUpper(app.readString(qs, "position", ""))
+
+	input.Filters.Page = app.readInt(qs, "page", 1, v)
+	input.Filters.PageSize = app.readInt(qs, "page_size", 20, v)
+	input.Filters.Sort = app.readString(qs, "sort", "id") // fallback to id
+
+	input.Filters.SortSafeList = []string{
+		"id", "-id",
+		"first_name", "-first_name",
+		"last_name", "-last_name",
+		"position", "-position",
+	}
+
+	if data.ValidateFilters(v, input.Filters); !v.Valid() {
+		app.failedValidationResponse(w, r, v.Errors)
+		return
+	}
+
+	players, metadata, err := app.models.Players.GetAll(input.FirstName, input.LastName, input.Position, input.Filters)
 	if err != nil {
-		// need switch case for errrowsnull
 		app.serverErrorResponse(w, r, err)
 		return
 	}
 
-	err = app.writeJSON(w, http.StatusOK, envelope{"players": players}, nil)
+	err = app.writeJSON(w, http.StatusOK, envelope{"players": players, "metadata": metadata}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
