@@ -3,6 +3,7 @@ package data
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 )
 
 var ErrInvalidPositionFormat = errors.New("invalid position format, expected: C|LW|RW|D|G")
@@ -23,7 +24,7 @@ func (p *Position) UnmarshalJSON(jsonValue []byte) error {
 		return ErrInvalidPositionFormat
 	}
 
-	pos := Position(s)
+	pos := Position(strings.ToUpper(s)) // force uppercase
 	switch pos {
 	case PositionC, PositionLW, PositionRW, PositionD, PositionG:
 		*p = pos
