@@ -17,14 +17,13 @@ export class TeamService {
     return this.httpClient.get<{ teams: TeamData[] }>(this.baseUrl);
   }
 
-  createTeam(name: string, short_name: string, is_active: boolean, division_id: string, league_id: string)
+  createTeam(name: string, short_name: string, is_active: boolean, division_id: string)
   {
     const body = {
       "name": name,
       "short_name": short_name,
       "is_active": is_active,
-      "division_id": division_id,
-      "league_id": league_id
+      "division_id": division_id
     };
 
     return this.httpClient.post<{team: TeamData}>(this.baseUrl, body);
