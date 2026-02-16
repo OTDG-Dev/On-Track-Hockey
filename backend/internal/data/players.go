@@ -16,7 +16,7 @@ type Player struct {
 	Version   int       `json:"version"`
 
 	IsActive      bool `json:"is_active"`
-	CurrentTeamID int  `json:"current_team_id"`
+	CurrentTeamID *int `json:"current_team_id"`
 
 	FirstName     string        `json:"first_name"`
 	LastName      string        `json:"last_name"`
