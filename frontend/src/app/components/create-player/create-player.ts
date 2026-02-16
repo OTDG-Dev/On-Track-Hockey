@@ -37,7 +37,7 @@ export class CreatePlayer {
     .subscribe({
       next: (responseData) => {
         this.successMessage.set(
-          `Player Created`
+          `Player ${responseData.player.first_name} ${responseData.player.last_name} Created`
         );
       
         setTimeout(() => {

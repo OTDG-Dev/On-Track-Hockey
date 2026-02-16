@@ -1,0 +1,67 @@
+<div class="page-container">
+    <h1>Create Team</h1>
+    <hr>
+  
+    <form>
+        <p>Team</p>
+  
+        <div class="name-row">
+            <div class="field">
+                <input [(ngModel)]="name" type="text" name="name" id="name">
+                <p>Team Name</p>
+            </div>
+            <div class="field">
+                <input [(ngModel)]="short_name" type="text" name="short_name" id="short_name">
+                <p>Abbreviation</p>
+            </div>
+        </div>
+
+        <div class="identification-row">
+          <p>Identification</p>
+          <div class="name-row">
+              <div class="field">
+                  <input [(ngModel)]="division_id" type="text" name="division_id" id="division_id">
+                  <p>Division ID</p>
+              </div>
+          </div>
+        </div>
+
+
+      <div class="checkbox-field">
+        <input
+          [(ngModel)]="is_active"
+          type="checkbox"
+          name="is_active"
+          id="is_active"
+        />
+        <label for="is_active">Active</label>
+      </div>
+  
+    </form>
+  
+    <div class="button-wrapper">
+      <button (click)="postTeam()" type="button" id="createButton">
+        Create
+      </button>
+    </div>
+  
+    @if (successMessage()) {
+      <div
+        class="success-message"
+        [class.fade-out]="isFading()"
+      >
+        {{ successMessage() }}
+      </div>
+    }
+    
+    @if (errorMessage()) {
+      <div
+        class="error-message"
+        [class.fade-out]="isFading()"
+      >
+        {{ errorMessage() }}
+      </div>
+    }
+  
+  </div> 
+  

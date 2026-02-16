@@ -8,11 +8,11 @@ import { environment } from "../../environments/environment";
 })
 export class PlayerService {
 
-  private baseUrl = environment.apiUrl;
+  private baseUrl = environment.apiUrl + "/v1/players";
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient) {}
 
-  }
+  
 
   getPlayers(position?: string) {
     const params: any = {};
@@ -27,8 +27,9 @@ export class PlayerService {
     );
   }
 
-  createPlayer(firstName: string, lastName: string, sweaterNumber: number, position: string, handedness: string,
-    birth_country: string, dob: string) {
+  createPlayer(firstName: string, lastName: string, sweaterNumber: number, position: string, 
+    handedness: string, birth_country: string, dob: string) 
+  {
 
     const body = {
       "first_name": firstName,
@@ -38,8 +39,8 @@ export class PlayerService {
       "birth_date": dob,
       "birth_country": birth_country,
       "shoots_catches": handedness
-    }
+    };
 
-    return this.httpClient.post<PlayerData>(this.baseUrl, body)
+    return this.httpClient.post<{player: PlayerData}>(this.baseUrl, body);
   }
 }
