@@ -102,7 +102,7 @@ func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Reque
 
 	player := &data.Player{
 		IsActive:      input.IsActive,
-		CurrentTeamId: input.CurrentTeamId,
+		CurrentTeamID: input.CurrentTeamId,
 		FirstName:     input.FirstName,
 		LastName:      input.LastName,
 		SweaterNumber: input.SweaterNumber,
@@ -177,7 +177,7 @@ func (app *application) updatePlayerHandler(w http.ResponseWriter, r *http.Reque
 		player.IsActive = *input.IsActive
 	}
 	if input.CurrentTeamId != nil {
-		player.CurrentTeamId = *input.CurrentTeamId
+		player.CurrentTeamID = *input.CurrentTeamId
 	}
 	if input.FirstName != nil {
 		player.FirstName = *input.FirstName
