@@ -12,6 +12,7 @@ type Team struct {
 	FullName   string `json:"full_name"`
 	ShortName  string `json:"short_name"`
 	DivisionID int    `json:"division_id"`
+	IsActive   bool   `json:"is_active"`
 }
 
 type TeamModel struct {
@@ -59,12 +60,13 @@ func (m TeamModel) Insert(team *Team) error {
 	INSERT INTO teams (
 		full_name,
 		short_name,
-		division_id
+		division_id,
+		is_active
 	)
-	VALUES ($1, $2, $3)
+	VALUES ($1, $2, $3, $4)
 	RETURNING ID`
 
-	args := []any{team.FullName, team.ShortName, team.DivisionID}
+	args := []any{team.FullName, team.ShortName, team.DivisionID, team.IsActive}
 
 	return m.DB.QueryRow(query, args...).Scan(&team.ID)
 }

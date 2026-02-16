@@ -38,6 +38,7 @@ func (app *application) createTeamHandler(w http.ResponseWriter, r *http.Request
 		FullName   string `json:"full_name"`
 		ShortName  string `json:"short_name"`
 		DivisionID int    `json:"division_id"`
+		IsActive   bool   `json:"is_active"`
 	}
 
 	err := app.readJSON(w, r, &input)
@@ -50,6 +51,7 @@ func (app *application) createTeamHandler(w http.ResponseWriter, r *http.Request
 		FullName:   input.FullName,
 		ShortName:  input.ShortName,
 		DivisionID: input.DivisionID,
+		IsActive:   input.IsActive,
 	}
 
 	v := validator.New()
