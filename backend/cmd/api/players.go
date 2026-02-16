@@ -82,7 +82,7 @@ func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Reques
 func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		IsActive      bool `json:"is_active"`
-		CurrentTeamId int  `json:"current_team_id"`
+		CurrentTeamId *int `json:"current_team_id"`
 
 		FirstName     string             `json:"first_name"`
 		LastName      string             `json:"last_name"`
@@ -177,7 +177,7 @@ func (app *application) updatePlayerHandler(w http.ResponseWriter, r *http.Reque
 		player.IsActive = *input.IsActive
 	}
 	if input.CurrentTeamId != nil {
-		player.CurrentTeamID = *input.CurrentTeamId
+		player.CurrentTeamID = input.CurrentTeamId
 	}
 	if input.FirstName != nil {
 		player.FirstName = *input.FirstName
