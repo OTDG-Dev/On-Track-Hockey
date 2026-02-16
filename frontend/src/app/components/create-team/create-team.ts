@@ -10,11 +10,10 @@ import { FormsModule } from '@angular/forms';
 })
 export class CreateTeam {
 
-  name: string = "";
+  full_name: string = "";
   short_name: string = "";
   is_active: boolean = false;
-  division_id: string = "";
-  league_id: string = "";
+  division_id: number = 1;
 
   successMessage: WritableSignal<string> = signal('');
   errorMessage: WritableSignal<string> = signal('');
@@ -23,7 +22,7 @@ export class CreateTeam {
   constructor(private teamService: TeamService) { }
 
   postTeam() {
-    this.teamService.createTeam(this.name, this.short_name, this.is_active, this.division_id)
+    this.teamService.createTeam(this.full_name, this.short_name, this.is_active, this.division_id)
       .subscribe({
         next: (responseData) => {
           this.successMessage.set(

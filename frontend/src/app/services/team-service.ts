@@ -10,23 +10,21 @@ export class TeamService {
 
   private baseUrl = environment.apiUrl + "/v1/teams"
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
-  getTeams() 
-  {
+  getTeams() {
     return this.httpClient.get<{ teams: TeamData[] }>(this.baseUrl);
   }
 
-  createTeam(name: string, short_name: string, is_active: boolean, division_id: string)
-  {
+  createTeam(full_name: string, short_name: string, is_active: boolean, division_id: number) {
     const body = {
-      "name": name,
+      "full_name": full_name,
       "short_name": short_name,
       "is_active": is_active,
       "division_id": division_id
     };
 
-    return this.httpClient.post<{team: TeamData}>(this.baseUrl, body);
+    return this.httpClient.post<{ team: TeamData }>(this.baseUrl, body);
   }
-  
+
 }
