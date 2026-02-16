@@ -20,5 +20,10 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/v1/players/:id", app.showPlayerHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/players/:id", app.deletePlayerHandler)
 
+	router.HandlerFunc(http.MethodPost, "/v1/teams", app.createTeamHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/teams", app.listTeamsHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/teams/:id", app.showTeamHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/teams/:id", app.deleteTeamHandler)
+
 	return app.cors(app.recoverPanic(router))
 }

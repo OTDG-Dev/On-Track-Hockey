@@ -16,7 +16,7 @@ type Player struct {
 	Version   int       `json:"version"`
 
 	IsActive      bool `json:"is_active"`
-	CurrentTeamId int  `json:"current_team_id"`
+	CurrentTeamID int  `json:"current_team_id"`
 
 	FirstName     string        `json:"first_name"`
 	LastName      string        `json:"last_name"`
@@ -70,7 +70,7 @@ func (m PlayerModel) Insert(player *Player) error {
 
 	args := []any{
 		player.IsActive,
-		player.CurrentTeamId,
+		player.CurrentTeamID,
 		player.FirstName,
 		player.LastName,
 		player.SweaterNumber,
@@ -111,7 +111,7 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 	err := m.DB.QueryRow(query, id).Scan(
 		&player.ID,
 		&player.IsActive,
-		&player.CurrentTeamId,
+		&player.CurrentTeamID,
 		&player.FirstName,
 		&player.LastName,
 		&player.SweaterNumber,
@@ -177,7 +177,7 @@ func (m PlayerModel) GetAll(FirstName, LastName, Position string, filters Filter
 			&totalRecords,
 			&p.ID,
 			&p.IsActive,
-			&p.CurrentTeamId,
+			&p.CurrentTeamID,
 			&p.FirstName,
 			&p.LastName,
 			&p.SweaterNumber,
@@ -224,7 +224,7 @@ func (m PlayerModel) Update(player *Player) error {
 
 	args := []any{
 		player.IsActive,
-		player.CurrentTeamId,
+		player.CurrentTeamID,
 		player.FirstName,
 		player.LastName,
 		player.SweaterNumber,

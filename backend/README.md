@@ -2,16 +2,15 @@
 
 ## API Status
 
-### Endpoints
+### Players
 
-| Method | URL                                  | Action            | Status | Example                                                                |
-|--------|--------------------------------------|-------------------|--------|------------------------------------------------------------------------|
-| GET    | /v1/healthcheck                      | app healthcheck   |        | `curl localhost:3000/v1/healtcheck`                                    |
-| GET    | [/v1/players](#endpoint-get-players) | Show all players  | WIP    | `curl "localhost:3000/v1/players?page=4&page_size=40&sort=first_name"` |
-| POST   | /v1/players                          | Create new player |        |                                                                        |
-| PATCH  | /v1/players/:id                      | Update a player   |        |                                                                        |
-| GET    | /v1/players/:id                      | Show a player     |        |                                                                        |
-| DELETE | /v1/players/:id                      | Delete a player   |        |                                                                        |
+| Method | URL                                    | Action            | Status |
+|--------|----------------------------------------|-------------------|--------|
+| GET    | [`/v1/players`](#endpoint-get-players) | Show all players  |        |
+| POST   | `/v1/players `                         | Create new player |        |
+| PATCH  | `/v1/players/:id`                      | Update a player   |        |
+| GET    | `/v1/players/:id`                      | Show a player     |        |
+| DELETE | `/v1/players/:id`                      | Delete a player   |        |
 
 
 
@@ -46,3 +45,11 @@ Prefix any search term with `-` to reverse the order
 /v1/players?first_name=sydney&last_name=crosby&sort=-position
 ```
 
+### Teams
+
+| Method | URL             | Action          | Status |
+|--------|-----------------|-----------------|--------|
+| GET    | `/v1/teams`     | Show all teams  | WIP    |
+| POST   | `/v1/teams`     | Create new team |        |
+| GET    | `/v1/teams/:id` | Show a team     |        |
+| DELETE | `/v1/teams/:id` | Delete a team   |        |
