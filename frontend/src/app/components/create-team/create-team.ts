@@ -20,40 +20,40 @@ export class CreateTeam {
   errorMessage: WritableSignal<string> = signal('');
   isFading = signal(false);
 
-  constructor(private teamService: TeamService) {}
+  constructor(private teamService: TeamService) { }
 
   postTeam() {
-    this.teamService.createTeam(this.name, this.short_name, this.is_active, this.division_id, this.league_id)
-    .subscribe({
-      next: (responseData) => {
-        this.successMessage.set(
-          `Team ${responseData.team.name} Created`
-        );
+    this.teamService.createTeam(this.name, this.short_name, this.is_active, this.division_id)
+      .subscribe({
+        next: (responseData) => {
+          this.successMessage.set(
+            `Team ${responseData.team.name} Created`
+          );
 
-        setTimeout(() => {
-          this.isFading.set(true);
-        }, 2500);
-      
-        setTimeout(() => {
-          this.successMessage.set('');
-          this.isFading.set(false);
-        }, 2750);
-      },
-      error: (err) => {
-        this.errorMessage.set(
-          `Failed to Create Team`
-        );
+          setTimeout(() => {
+            this.isFading.set(true);
+          }, 2500);
 
-        setTimeout(() => {
-          this.isFading.set(true);
-        }, 2500);
-      
-        setTimeout(() => {
-          this.errorMessage.set('');
-          this.isFading.set(false);
-        }, 2750);
-      }
-    })
+          setTimeout(() => {
+            this.successMessage.set('');
+            this.isFading.set(false);
+          }, 2750);
+        },
+        error: (err) => {
+          this.errorMessage.set(
+            `Failed to Create Team`
+          );
+
+          setTimeout(() => {
+            this.isFading.set(true);
+          }, 2500);
+
+          setTimeout(() => {
+            this.errorMessage.set('');
+            this.isFading.set(false);
+          }, 2750);
+        }
+      })
   }
-  
+
 }
