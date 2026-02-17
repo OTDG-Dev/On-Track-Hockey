@@ -17,7 +17,7 @@ func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	player, err := app.models.Players.Get(id)
+	player, err := app.models.Players.GetWithTeam(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -67,13 +67,19 @@ func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	players, metadata, err := app.models.Players.GetAll(input.FirstName, input.LastName, input.Position, input.Filters)
+	// players, metadata, err := app.models.Players.GetAll(input.FirstName, input.LastName, input.Position, input.Filters)
+	// if err != nil {
+	// 	app.serverErrorResponse(w, r, err)
+	// 	return
+	// }
+
+	players, err := app.models.Players.GetAllWithTeam()
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
 	}
 
-	err = app.writeJSON(w, http.StatusOK, envelope{"players": players, "metadata": metadata}, nil)
+	err = app.writeJSON(w, http.StatusOK, envelope{"players": players}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
@@ -82,7 +88,7 @@ func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Reques
 func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		IsActive      bool `json:"is_active"`
-		CurrentTeamId *int `json:"current_team_id"`
+		CurrentTeamId int  `json:"current_team_id"`
 
 		FirstName     string             `json:"first_name"`
 		LastName      string             `json:"last_name"`
@@ -177,7 +183,7 @@ func (app *application) updatePlayerHandler(w http.ResponseWriter, r *http.Reque
 		player.IsActive = *input.IsActive
 	}
 	if input.CurrentTeamId != nil {
-		player.CurrentTeamID = input.CurrentTeamId
+		player.CurrentTeamID = *input.CurrentTeamId
 	}
 	if input.FirstName != nil {
 		player.FirstName = *input.FirstName

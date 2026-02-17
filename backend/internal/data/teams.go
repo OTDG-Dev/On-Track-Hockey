@@ -72,10 +72,13 @@ func (m TeamModel) Insert(team *Team) error {
 }
 
 func (m TeamModel) Delete(id int) error {
+	if id < 1 {
+		return ErrRecordNotFound
+	}
+
 	query := /* sql */ `
 		DELETE FROM teams
-		WHERE id = $1
-	`
+		WHERE id = $1`
 
 	result, err := m.DB.Exec(query, id)
 	if err != nil {
@@ -88,7 +91,7 @@ func (m TeamModel) Delete(id int) error {
 	}
 
 	if rowsAffected == 0 {
-		return err
+		return ErrRecordNotFound
 	}
 
 	return nil
@@ -101,7 +104,8 @@ func (m TeamModel) GetAll() ([]*Team, error) {
 			id,
 			full_name,
 			short_name,
-			division_id
+			division_id,
+			is_active
 		FROM teams;`
 
 	rows, err := m.DB.Query(query)
@@ -119,6 +123,7 @@ func (m TeamModel) GetAll() ([]*Team, error) {
 			&t.FullName,
 			&t.ShortName,
 			&t.DivisionID,
+			&t.IsActive,
 		)
 		if err != nil {
 			return nil, err
