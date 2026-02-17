@@ -18,15 +18,8 @@
     </div>
 
     <p>Sweater Number</p>
-    <input
-      [(ngModel)]="sweaterNumber"
-      type="text"
-      maxlength="2"
-      inputmode="numeric"
-      name="sweaterNumber"
-      id="sweaterNumber"
-      (input)="allowOnlyNumbers($event)"
-    />
+    <input [(ngModel)]="sweaterNumber" type="text" maxlength="2" inputmode="numeric" name="sweaterNumber"
+      id="sweaterNumber" (input)="allowOnlyNumbers($event)" />
 
     <p>Position</p>
     <select [(ngModel)]="position" name="position" id="position">
@@ -53,6 +46,10 @@
       <option value="RUS">RUS</option>
     </select>
 
+    <p>Team ID</p>
+    <input [(ngModel)]="current_team_id" type="text" inputmode="numeric" name="current_team_id" id="sweaterNumber"
+      (input)="allowOnlyNumbers($event)" />
+
     <p>Date of Birth</p>
     <input [(ngModel)]="dob" type="date" name="dob" id="dob">
   </form>
@@ -64,21 +61,15 @@
   </div>
 
   @if (successMessage()) {
-    <div
-      class="success-message"
-      [class.fade-out]="isFading()"
-    >
-      {{ successMessage() }}
-    </div>
-  }
-  
-  @if (errorMessage()) {
-    <div
-      class="error-message"
-      [class.fade-out]="isFading()"
-    >
-      {{ errorMessage() }}
-    </div>
+  <div class="success-message" [class.fade-out]="isFading()">
+    {{ successMessage() }}
+  </div>
   }
 
-</div> 
+  @if (errorMessage()) {
+  <div class="error-message" [class.fade-out]="isFading()">
+    {{ errorMessage() }}
+  </div>
+  }
+
+</div>

@@ -26,7 +26,7 @@ export class CreateTeam {
       .subscribe({
         next: (responseData) => {
           this.successMessage.set(
-            `Team ${responseData.team.name} Created`
+            `Team ${responseData.team.full_name} Created`
           );
 
           setTimeout(() => {
