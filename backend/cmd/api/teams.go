@@ -62,8 +62,15 @@ func (app *application) createTeamHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	err = app.models.Teams.Insert(team)
+
 	if err != nil {
-		app.serverErrorResponse(w, r, err)
+		switch {
+		case errors.Is(err, data.ErrNotFound):
+			v.AddError("division_id", "division not found")
+			app.failedValidationResponse(w, r, v.Errors)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
 		return
 	}
 
