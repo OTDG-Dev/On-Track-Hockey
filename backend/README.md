@@ -4,13 +4,13 @@
 
 ### Players
 
-| Method | URL                                    | Action            | Status |
-|--------|----------------------------------------|-------------------|--------|
-| GET    | `/v1/players` | Show all players  |        |
-| POST   | [`/v1/players`](#POST-v1players)                         | Create new player |        |
-| PATCH  | `/v1/players/:id`                      | Update a player   |        |
-| GET    | `/v1/players/:id`                      | Show a player     |        |
-| DELETE | `/v1/players/:id`                      | Delete a player   |        |
+| Method | URL                              | Action            | Status |
+|--------|----------------------------------|-------------------|--------|
+| GET    | `/v1/players`                    | Show all players  |        |
+| POST   | [`/v1/players`](#POST-v1players) | Create new player |        |
+| PATCH  | `/v1/players/:id`                | Update a player   |        |
+| GET    | `/v1/players/:id`                | Show a player     |        |
+| DELETE | `/v1/players/:id`                | Delete a player   |        |
 
 #### `POST /v1/players`
 
@@ -33,12 +33,12 @@ body:
 
 ### Teams
 
-| Method | URL             | Action          | Status |
-|--------|-----------------|-----------------|--------|
-| GET    | `/v1/teams`     | Show all teams  | WIP    |
-| POST   | [`/v1/teams`](#post-v1teams)     | Create new team |        |
-| GET    | `/v1/teams/:id` | Show a team     |        |
-| DELETE | `/v1/teams/:id` | Delete a team   |        |
+| Method | URL                          | Action          | Status |
+|--------|------------------------------|-----------------|--------|
+| GET    | `/v1/teams`                  | Show all teams  | WIP    |
+| POST   | [`/v1/teams`](#post-v1teams) | Create new team |        |
+| GET    | `/v1/teams/:id`              | Show a team     |        |
+| DELETE | `/v1/teams/:id`              | Delete a team   |        |
 
 #### `POST /v1/teams`
 
@@ -55,9 +55,9 @@ body:
 
 ### Divisions
 
-| Method | URL             | Action              | Status |
-|--------|-----------------|---------------------|--------|
-| GET    |  `/v1/divisions`| Show all divisions  |        |
+| Method | URL                                  | Action              | Status |
+|--------|--------------------------------------|---------------------|--------|
+| GET    | `/v1/divisions`                      | Show all divisions  |        |
 | POST   | [`/v1/divisions`](#post-v1divisions) | Create new division |        |
 
 #### `POST /v1/divisions`
@@ -73,9 +73,9 @@ body:
 
 ### Leagues
 
-| Method | URL           | Action            | Status |
-|--------|---------------|-------------------|--------|
-| GET    | `/v1/leagues` | Show all leagues  |        |
+| Method | URL                              | Action            | Status |
+|--------|----------------------------------|-------------------|--------|
+| GET    | `/v1/leagues`                    | Show all leagues  |        |
 | POST   | [`/v1/leagues`](#post-v1leagues) | Create new league |        |
 
 

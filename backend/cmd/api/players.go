@@ -67,19 +67,13 @@ func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	// players, metadata, err := app.models.Players.GetAll(input.FirstName, input.LastName, input.Position, input.Filters)
-	// if err != nil {
-	// 	app.serverErrorResponse(w, r, err)
-	// 	return
-	// }
-
-	players, err := app.models.Players.GetAllWithTeam()
+	players, metadata, err := app.models.Players.GetAllWithTeam(input.FirstName, input.LastName, input.Position, input.Filters)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
 	}
 
-	err = app.writeJSON(w, http.StatusOK, envelope{"players": players}, nil)
+	err = app.writeJSON(w, http.StatusOK, envelope{"players": players, "metadata": metadata}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
