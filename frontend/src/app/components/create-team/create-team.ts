@@ -23,36 +23,34 @@ export class CreateTeam {
 
   postTeam() {
     this.teamService.createTeam(this.full_name, this.short_name, this.is_active, this.division_id)
-      .subscribe({
+    .subscribe({
         next: (responseData) => {
-          this.successMessage.set(
-            `Team ${responseData.team.full_name} Created`
-          );
-
-          setTimeout(() => {
-            this.isFading.set(true);
-          }, 2500);
-
-          setTimeout(() => {
-            this.successMessage.set('');
-            this.isFading.set(false);
-          }, 2750);
-        },
-        error: (err) => {
-          this.errorMessage.set(
-            `Failed to Create Team`
-          );
-
-          setTimeout(() => {
-            this.isFading.set(true);
-          }, 2500);
-
-          setTimeout(() => {
-            this.errorMessage.set('');
-            this.isFading.set(false);
-          }, 2750);
+            this.successMessage.set(`Team ${responseData.team.full_name} Created`);
+  
+            setTimeout(() => {
+              this.isFading.set(true);
+            }, 2500);
+  
+            setTimeout(() => {
+              this.successMessage.set('');
+              this.isFading.set(false);
+            }, 2750);
+          },
+          error: (err) => {
+            this.errorMessage.set(
+              `Failed to Create Team`
+            );
+  
+            setTimeout(() => {
+              this.isFading.set(true);
+            }, 2500);
+  
+            setTimeout(() => {
+              this.errorMessage.set('');
+              this.isFading.set(false);
+            }, 2750);
         }
-      })
+    })
   }
 
 }

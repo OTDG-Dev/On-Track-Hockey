@@ -1,5 +1,22 @@
-
-<router-outlet />
+<nav class="main-nav">
+    <div class="nav-inner">
+  
+      <div class="nav-logo">
+        OnTrack Hockey
+      </div>
+  
+      <div class="nav-links">
+        <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Login</a>
+        <a routerLink="/register" routerLinkActive="active">Register</a>
+        <a routerLink="/create-player" routerLinkActive="active">Create Player</a>
+        <a routerLink="/view-players" routerLinkActive="active">View Players</a>
+        <a routerLink="/create-team" routerLinkActive="active">Create Team</a>
+        <a routerLink="/create-division" routerLinkActive="active">Create Division</a>
+      </div>
+  
+    </div>
+</nav>
+<router-outlet></router-outlet>
 
 
 
