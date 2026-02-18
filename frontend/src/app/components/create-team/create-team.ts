@@ -14,7 +14,6 @@ export class CreateTeam {
   short_name: string = "";
   is_active: boolean = false;
   division_id: string = "";
-  league_id: string = "";
 
   successMessage: WritableSignal<string> = signal('');
   errorMessage: WritableSignal<string> = signal('');
@@ -23,7 +22,7 @@ export class CreateTeam {
   constructor(private teamService: TeamService) {}
 
   postTeam() {
-    this.teamService.createTeam(this.name, this.short_name, this.is_active, this.division_id, this.league_id)
+    this.teamService.createTeam(this.name, this.short_name, this.is_active, this.division_id)
     .subscribe({
       next: (responseData) => {
         this.successMessage.set(
@@ -55,5 +54,4 @@ export class CreateTeam {
       }
     })
   }
-  
 }
