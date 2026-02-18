@@ -1,0 +1,37 @@
+<div class="page-container">
+    <h1>Create Division</h1>
+    <hr>
+    <form>
+      <p>Division</p>
+      <div class="name-row">
+        <div class="field">
+          <input [(ngModel)]="name" type="text" name="name" id="name">
+          <p>Name</p>
+        </div>
+        <div class="field">
+          <input [(ngModel)]="league_id" type="text" name="league_id" id="league_id">
+          <p>League ID</p>
+        </div>
+      </div>
+    </form>
+  
+    <div class="button-wrapper">
+      <button (click)="postDivision()" type="button" id="createButton">
+        Create
+      </button>
+    </div>
+  
+    @if (successMessage()) {
+    <div class="success-message" [class.fade-out]="isFading()">
+      {{ successMessage() }}
+    </div>
+    }
+  
+    @if (errorMessage()) {
+    <div class="error-message" [class.fade-out]="isFading()">
+      {{ errorMessage() }}
+    </div>
+    }
+  
+  </div>
+  

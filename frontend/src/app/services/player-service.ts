@@ -12,9 +12,8 @@ export class PlayerService {
 
   constructor(private httpClient: HttpClient) {}
 
-  
-
-  getPlayers(position?: string) {
+  getPlayers(position?: string) 
+  {
     const params: any = {};
 
     if (position) {

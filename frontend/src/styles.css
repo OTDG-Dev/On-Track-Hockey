@@ -3,5 +3,19 @@
 html, body {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 400;
-  margin: 0px
+  margin: 0px;
+}
+
+body {
+  padding-top: 70px;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 40px 0 32px 0;
+
+  min-height: calc(100vh - 70px); /* adjust if navbar height changes */
 }

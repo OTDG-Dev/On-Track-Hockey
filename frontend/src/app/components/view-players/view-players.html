@@ -1,49 +1,51 @@
-<h1>View Players</h1>
+<div class="page-container">
+    <h1>View Players</h1>
+    <hr>
 
-<hr>
-
-<div class="content-container">
-    <div class="filters">
-        <div class="single-filter">
-            <label for="position">Position</label>
-            <select id="position" name="position" #positionSelect (change)="onPositionChange(positionSelect.value)">
-                <option value="">All Positions</option>
-                <option value="C">Center</option>
-                <option value="LW">Left Wing</option>
-                <option value="RW">Right Wing</option>
-                <option value="D">Defense</option>
-                <option value="G">Goalie</option>
-            </select>
+    <div class="content-container">
+        <div class="filters">
+            <div class="single-filter">
+                <label for="position">Position</label>
+                <select id="position" name="position" #positionSelect (change)="onPositionChange(positionSelect.value)">
+                    <option value="">All Positions</option>
+                    <option value="C">Center</option>
+                    <option value="LW">Left Wing</option>
+                    <option value="RW">Right Wing</option>
+                    <option value="D">Defense</option>
+                    <option value="G">Goalie</option>
+                </select>
+            </div>
         </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Sweater Number</th>
+                    <th>Position</th>
+                    <th>Birth Date</th>
+                    <th>Birth Country</th>
+                    <th>Shoots/Catches</th>
+                    <th>Team</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let player of players()">
+                    <td>
+                        <a href=""> <!-- need to route to a GET /v1/player/player.id -->
+                            {{ player.first_name }} {{ player.last_name }}
+                        </a>
+                    </td>
+                    <td>{{ player.sweater_number }}</td>
+                    <td>{{ player.position }}</td>
+                    <td>{{ player.birth_date }}</td>
+                    <td>{{ player.birth_country }}</td>
+                    <td>{{ player.shoots_catches }}</td>
+                    <td>{{ player.team_short_name }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Player</th>
-                <th>Sweater Number</th>
-                <th>Position</th>
-                <th>Birth Date</th>
-                <th>Birth Country</th>
-                <th>Shoots/Catches</th>
-                <th>Team</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr *ngFor="let player of players()">
-                <td>
-                    <a href=""> <!-- need to route to a GET /v1/player/player.id -->
-                        {{ player.first_name }} {{ player.last_name }}
-                    </a>
-                </td>
-                <td>{{ player.sweater_number }}</td>
-                <td>{{ player.position }}</td>
-                <td>{{ player.birth_date }}</td>
-                <td>{{ player.birth_country }}</td>
-                <td>{{ player.shoots_catches }}</td>
-                <td>{{ player.team_short_name }}</td>
-            </tr>
-        </tbody>
-    </table>
 </div>
+
