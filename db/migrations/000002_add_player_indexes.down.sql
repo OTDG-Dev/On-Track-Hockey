@@ -1,1 +1,0 @@
-DROP INDEX IF EXISTS players_position_idx;

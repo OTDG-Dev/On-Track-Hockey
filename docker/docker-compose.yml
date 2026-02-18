@@ -14,8 +14,8 @@ services:
     build:
       context: ../backend
     restart: unless-stopped
-    environment:
-      OTH_DB_DSN: ${OTH_DB_DSN}
+    env_file:
+      - .env
     networks:
       - oth-net
     ports:

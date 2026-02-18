@@ -28,9 +28,8 @@ export class PlayerService {
     );
   }
 
-  createPlayer(firstName: string, lastName: string, sweaterNumber: number, position: string, 
-    handedness: string, birth_country: string, dob: string) 
-  {
+  createPlayer(firstName: string, lastName: string, sweaterNumber: number, position: string,
+    handedness: string, birth_country: string, dob: string, current_team_id: number) {
 
     const body = {
       "first_name": firstName,
@@ -39,9 +38,10 @@ export class PlayerService {
       "position": position,
       "birth_date": dob,
       "birth_country": birth_country,
-      "shoots_catches": handedness
+      "shoots_catches": handedness,
+      "current_team_id": current_team_id,
     };
 
-    return this.httpClient.post<{player: PlayerData}>(this.baseUrl, body);
+    return this.httpClient.post<{ player: PlayerData }>(this.baseUrl, body);
   }
 }

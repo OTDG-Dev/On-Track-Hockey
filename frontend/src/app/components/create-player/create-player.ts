@@ -18,12 +18,13 @@ export class CreatePlayer {
   handedness: string = "";
   birthCountry: string = "";
   dob: string = "";
+  current_team_id: number = 1;
 
   successMessage: WritableSignal<string> = signal('');
   errorMessage: WritableSignal<string> = signal('');
   isFading = signal(false);
 
-  constructor(private playerService: PlayerService) {}
+  constructor(private playerService: PlayerService) { }
 
   allowOnlyNumbers(event: any) {
     const input = event.target;
@@ -32,38 +33,38 @@ export class CreatePlayer {
   }
 
   postPlayer() {
-    this.playerService.createPlayer(this.firstName, this.lastName, parseInt(this.sweaterNumber), this.position, 
-                                    this.handedness, this.birthCountry, this.dob)
-    .subscribe({
-      next: (responseData) => {
-        this.successMessage.set(
-          `Player ${responseData.player.first_name} ${responseData.player.last_name} Created`
-        );
-      
-        setTimeout(() => {
-          this.isFading.set(true);
-        }, 2500);
-      
-        setTimeout(() => {
-          this.successMessage.set('');
-          this.isFading.set(false);
-        }, 2750);
-      },
-      error: (err) => {
-        this.errorMessage.set(
-          `Failed to Create Player`
-        );
+    this.playerService.createPlayer(this.firstName, this.lastName, parseInt(this.sweaterNumber), this.position,
+      this.handedness, this.birthCountry, this.dob, this.current_team_id)
+      .subscribe({
+        next: (responseData) => {
+          this.successMessage.set(
+            `Player ${responseData.player.first_name} ${responseData.player.last_name} Created`
+          );
 
-        setTimeout(() => {
-          this.isFading.set(true);
-        }, 2500);
-      
-        setTimeout(() => {
-          this.errorMessage.set('');
-          this.isFading.set(false);
-        }, 2750);
-      }
-    })
+          setTimeout(() => {
+            this.isFading.set(true);
+          }, 2500);
+
+          setTimeout(() => {
+            this.successMessage.set('');
+            this.isFading.set(false);
+          }, 2750);
+        },
+        error: (err) => {
+          this.errorMessage.set(
+            `Failed to Create Player`
+          );
+
+          setTimeout(() => {
+            this.isFading.set(true);
+          }, 2500);
+
+          setTimeout(() => {
+            this.errorMessage.set('');
+            this.isFading.set(false);
+          }, 2750);
+        }
+      })
   }
 
 }

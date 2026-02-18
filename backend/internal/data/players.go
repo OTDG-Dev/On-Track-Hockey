@@ -16,7 +16,7 @@ type Player struct {
 	Version   int       `json:"version"`
 
 	IsActive      bool `json:"is_active"`
-	CurrentTeamId int  `json:"current_team_id"`
+	CurrentTeamID int  `json:"current_team_id"`
 
 	FirstName     string        `json:"first_name"`
 	LastName      string        `json:"last_name"`
@@ -70,7 +70,7 @@ func (m PlayerModel) Insert(player *Player) error {
 
 	args := []any{
 		player.IsActive,
-		player.CurrentTeamId,
+		player.CurrentTeamID,
 		player.FirstName,
 		player.LastName,
 		player.SweaterNumber,
@@ -89,7 +89,7 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 		return nil, ErrRecordNotFound
 	}
 
-	query := `
+	query := /* sql */ `
 		SELECT 
 			id,
 			is_active,
@@ -111,7 +111,7 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 	err := m.DB.QueryRow(query, id).Scan(
 		&player.ID,
 		&player.IsActive,
-		&player.CurrentTeamId,
+		&player.CurrentTeamID,
 		&player.FirstName,
 		&player.LastName,
 		&player.SweaterNumber,
@@ -177,7 +177,7 @@ func (m PlayerModel) GetAll(FirstName, LastName, Position string, filters Filter
 			&totalRecords,
 			&p.ID,
 			&p.IsActive,
-			&p.CurrentTeamId,
+			&p.CurrentTeamID,
 			&p.FirstName,
 			&p.LastName,
 			&p.SweaterNumber,
@@ -224,7 +224,7 @@ func (m PlayerModel) Update(player *Player) error {
 
 	args := []any{
 		player.IsActive,
-		player.CurrentTeamId,
+		player.CurrentTeamID,
 		player.FirstName,
 		player.LastName,
 		player.SweaterNumber,
@@ -236,8 +236,6 @@ func (m PlayerModel) Update(player *Player) error {
 		player.ID,
 		player.Version,
 	}
-
-	fmt.Println(player.ID, player.Version)
 
 	err := m.DB.QueryRow(query, args...).Scan(&player.Version)
 	if err != nil {
@@ -272,8 +270,130 @@ func (m PlayerModel) Delete(id int) error {
 	}
 
 	if rowsAffected == 0 {
-		return err
+		return ErrRecordNotFound
 	}
 
 	return nil
+}
+
+type PlayerWithTeam struct {
+	Player
+	TeamFullName  string `json:"team_full_name"`
+	TeamShortName string `json:"team_short_name"`
+}
+
+func (m PlayerModel) GetWithTeam(id int) (*PlayerWithTeam, error) {
+	query := /* sql */ `
+		SELECT
+			p.id,
+			p.is_active,
+			p.current_team_id,
+			p.first_name,
+			p.last_name,
+			p.sweater_number,
+			p.position,
+			p.birth_date,
+			p.birth_country,
+			p.headshot,
+			p.shoots_catches,
+			p.version,
+			t.full_name,
+			t.short_name
+		FROM players p
+		INNER JOIN teams t
+			ON p.current_team_id = t.id
+		WHERE p.id = $1
+	`
+
+	var p PlayerWithTeam
+
+	err := m.DB.QueryRow(query, id).Scan(
+		&p.ID,
+		&p.IsActive,
+		&p.CurrentTeamID,
+		&p.FirstName,
+		&p.LastName,
+		&p.SweaterNumber,
+		&p.Position,
+		&p.BirthDate,
+		&p.BirthCountry,
+		&p.Headshot,
+		&p.ShootsCatches,
+		&p.Version,
+		&p.TeamFullName,
+		&p.TeamShortName,
+	)
+
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return nil, ErrRecordNotFound
+		default:
+			return nil, err
+		}
+	}
+
+	return &p, nil
+}
+
+func (m PlayerModel) GetAllWithTeam() ([]*PlayerWithTeam, error) {
+	query := /* sql */ `
+		SELECT
+			p.id,
+			p.is_active,
+			p.current_team_id,
+			p.first_name,
+			p.last_name,
+			p.sweater_number,
+			p.position,
+			p.birth_date,
+			p.birth_country,
+			p.headshot,
+			p.shoots_catches,
+			p.version,
+			t.full_name,
+			t.short_name
+		FROM players p
+		INNER JOIN teams t
+			ON p.current_team_id = t.id
+	`
+
+	rows, err := m.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	players := []*PlayerWithTeam{}
+
+	for rows.Next() {
+		var p PlayerWithTeam
+		err = rows.Scan(
+			&p.ID,
+			&p.IsActive,
+			&p.CurrentTeamID,
+			&p.FirstName,
+			&p.LastName,
+			&p.SweaterNumber,
+			&p.Position,
+			&p.BirthDate,
+			&p.BirthCountry,
+			&p.Headshot,
+			&p.ShootsCatches,
+			&p.Version,
+			&p.TeamFullName,
+			&p.TeamShortName,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		players = append(players, &p)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return players, err
 }
