@@ -68,7 +68,7 @@ func (app *application) createTeamHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	headers := make(http.Header)
-	headers.Set("Location", fmt.Sprintf("/v1/players/%d", team.ID))
+	headers.Set("Location", fmt.Sprintf("/v1/teams/%d", team.ID))
 
 	err = app.writeJSON(w, http.StatusCreated, envelope{"team": team}, headers)
 	if err != nil {

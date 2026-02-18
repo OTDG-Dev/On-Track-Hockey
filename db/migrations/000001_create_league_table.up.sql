@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS leagues (
+    id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    name text NOT NULL
+)
