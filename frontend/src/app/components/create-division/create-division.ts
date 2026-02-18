@@ -37,7 +37,7 @@ export class CreateDivision {
           }, 2750);
         },
         error: (err) => {
-          this.errorMessage.set(`Failed to Create Division`)
+          this.errorMessage.set(`Failed to Create Division`);
 
           setTimeout(() => {
             this.isFading.set(true);
@@ -51,7 +51,4 @@ export class CreateDivision {
       }
     )
   }
-
-
-
 }
