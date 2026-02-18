@@ -2,8 +2,10 @@ package data
 
 import (
 	"database/sql"
+	"errors"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
+	"github.com/lib/pq"
 )
 
 type Division struct {
@@ -29,7 +31,19 @@ func (m DivisonModel) Insert(div *Division) error {
 		VALUES ($1, $2)
 		RETURNING ID`
 
-	return m.DB.QueryRow(query, []any{div.Name, div.LeagueID}...).Scan(&div.ID)
+	err := m.DB.QueryRow(query, []any{div.Name, div.LeagueID}...).Scan(&div.ID)
+
+	if err != nil {
+		var pqErr *pq.Error
+		if errors.As(err, &pqErr) {
+			if pqErr.Code.Name() == "foreign_key_violation" {
+				return ErrNotFound
+			}
+		}
+		return err
+	}
+
+	return nil
 }
 
 func (m DivisonModel) GetAll() ([]*Division, error) {

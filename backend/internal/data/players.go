@@ -8,6 +8,7 @@ import (
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/stats"
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
+	"github.com/lib/pq"
 )
 
 type Player struct {
@@ -83,7 +84,18 @@ func (m PlayerModel) Insert(player *Player) error {
 		player.ShootsCatches,
 	}
 
-	return m.DB.QueryRow(query, args...).Scan(&player.ID)
+	err := m.DB.QueryRow(query, args...).Scan(&player.ID)
+	if err != nil {
+		var pqErr *pq.Error
+		if errors.As(err, &pqErr) {
+			if pqErr.Code.Name() == "foreign_key_violation" {
+				return ErrNotFound
+			}
+		}
+		return err
+	}
+
+	return nil
 }
 
 func (m PlayerModel) Get(id int) (*Player, error) {
