@@ -22,8 +22,15 @@ func (app *application) routes() http.Handler {
 
 	router.HandlerFunc(http.MethodPost, "/v1/teams", app.createTeamHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/teams", app.listTeamsHandler)
+	// need patch
 	router.HandlerFunc(http.MethodGet, "/v1/teams/:id", app.showTeamHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/teams/:id", app.deleteTeamHandler)
+
+	router.HandlerFunc(http.MethodPost, "/v1/divisions", app.createDivisionHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/divisions", app.listDivisionsHandler)
+
+	router.HandlerFunc(http.MethodPost, "/v1/leagues", app.createLeagueHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/leagues", app.listLeaguesHandler)
 
 	return app.recoverPanic(app.rateLimit(app.cors(router)))
 }

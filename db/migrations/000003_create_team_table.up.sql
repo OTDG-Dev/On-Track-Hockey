@@ -4,5 +4,7 @@ CREATE TABLE IF NOT EXISTS teams (
     full_name text NOT NULL,
     short_name text NOT NULL
         CHECK (char_length(short_name) = 3),
-    division_id bigint NOT NULL -- reference div table later
+    division_id bigint NOT NULL
+        REFERENCES leagues(id)
+        ON DELETE RESTRICT
 )

@@ -11,13 +11,17 @@ var (
 )
 
 type Models struct {
-	Players PlayerModel
-	Teams   TeamModel
+	Players  PlayerModel
+	Teams    TeamModel
+	Division DivisonModel
+	League   LeagueModel
 }
 
 func NewModel(db *sql.DB) Models {
 	return Models{
-		Players: PlayerModel{DB: db},
-		Teams:   TeamModel{DB: db},
+		Players:  PlayerModel{DB: db},
+		Teams:    TeamModel{DB: db},
+		Division: DivisonModel{DB: db},
+		League:   LeagueModel{DB: db},
 	}
 }
