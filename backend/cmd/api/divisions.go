@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -34,7 +35,13 @@ func (app *application) createDivisionHandler(w http.ResponseWriter, r *http.Req
 
 	err = app.models.Division.Insert(div)
 	if err != nil {
-		app.serverErrorResponse(w, r, err)
+		switch {
+		case errors.Is(err, data.ErrNotFound):
+			v.AddError("league_id", "league does not exist")
+			app.failedValidationResponse(w, r, v.Errors)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
 		return
 	}
 

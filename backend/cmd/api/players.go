@@ -122,7 +122,13 @@ func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Reque
 
 	err = app.models.Players.Insert(player)
 	if err != nil {
-		app.serverErrorResponse(w, r, err)
+		switch {
+		case errors.Is(err, data.ErrNotFound):
+			v.AddError("current_team_id", "team not found")
+			app.failedValidationResponse(w, r, v.Errors)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
 		return
 	}
 
