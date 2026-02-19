@@ -12,6 +12,10 @@ export class DivisionService {
 
   constructor(private httpClient: HttpClient) {}
 
+  getDivisions() {
+    return this.httpClient.get<{ divisions: DivisionData[] }>(this.baseUrl);
+  }
+
   createDivision(league_id: number, name: string)
   {
     const body = {

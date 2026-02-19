@@ -20,5 +20,9 @@ export class LeagueService {
 
     return this.httpClient.post<{ league: LeagueData }>(this.baseUrl, body);
   }
+
+  getLeagues() {
+    return this.httpClient.get<{ leagues: LeagueData[] }>(this.baseUrl);
+  }
   
 }

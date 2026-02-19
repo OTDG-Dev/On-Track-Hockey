@@ -2,6 +2,8 @@ import { Component, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PlayerService } from '../../services/player-service';
 import { CommonModule } from '@angular/common';
+import { TeamService } from '../../services/team-service';
+import { TeamData } from '../../interfaces/team-data';
 
 @Component({
   selector: 'app-create-player',
@@ -20,11 +22,24 @@ export class CreatePlayer {
   dob: string = "";
   current_team_id: number = 1;
 
+  teams: WritableSignal<TeamData[]> = signal([]);
+
   successMessage: WritableSignal<string> = signal('');
   errorMessage: WritableSignal<string> = signal('');
   isFading = signal(false);
 
-  constructor(private playerService: PlayerService) { }
+  constructor(private playerService: PlayerService, private teamService: TeamService) { }
+
+  ngOnInit() {
+    this.teamService.getTeams().subscribe({
+      next: (responseData) => {
+        this.teams.set(responseData.teams);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
 
   allowOnlyNumbers(event: any) {
     const input = event.target;

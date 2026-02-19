@@ -1,3 +1,4 @@
 export interface LeagueData {
-    name: string
+    name: string,
+    id: number
 }
