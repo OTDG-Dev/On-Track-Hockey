@@ -3,13 +3,17 @@ package data
 import (
 	"database/sql"
 	"errors"
+	"time"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
 	"github.com/lib/pq"
 )
 
 type Team struct {
-	ID         int    `json:"id"`
+	ID        int       `json:"id"`
+	CreatedAt time.Time `json:"-"`
+	Version   int       `json:"version"`
+
 	FullName   string `json:"full_name"`
 	ShortName  string `json:"short_name"`
 	DivisionID int    `json:"division_id"`
@@ -31,7 +35,7 @@ func (m TeamModel) Get(id int) (*Team, error) {
 	}
 
 	query := /* sql */ `
-		SELECT id, full_name, short_name, division_id
+		SELECT id, full_name, short_name, division_id, version
 		FROM teams
 		WHERE id = $1;`
 
@@ -42,6 +46,7 @@ func (m TeamModel) Get(id int) (*Team, error) {
 		&t.FullName,
 		&t.ShortName,
 		&t.DivisionID,
+		&t.Version,
 	)
 
 	if err != nil {
@@ -79,6 +84,40 @@ func (m TeamModel) Insert(team *Team) error {
 			}
 		}
 		return err
+	}
+
+	return nil
+}
+
+func (m TeamModel) Update(team *Team) error {
+	query := /* sql */ `
+		UPDATE teams
+		SET
+			full_name = $1,
+			short_name = $2,
+			division_id = $3,
+			is_active = $4,
+			version = version + 1
+		WHERE id = $5 AND version = $6
+		RETURNING version`
+
+	args := []any{
+		team.FullName,
+		team.ShortName,
+		team.DivisionID,
+		team.IsActive,
+		team.ID,
+		team.Version,
+	}
+
+	err := m.DB.QueryRow(query, args...).Scan(&team.Version)
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return ErrEditConflict
+		default:
+			return err
+		}
 	}
 
 	return nil
