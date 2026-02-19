@@ -46,6 +46,32 @@ func (m DivisonModel) Insert(div *Division) error {
 	return nil
 }
 
+func (m DivisonModel) Delete(id int) error {
+	if id < 1 {
+		return ErrRecordNotFound
+	}
+
+	query := /* sql */ `
+		DELETE FROM divisions
+		WHERE id = $1`
+
+	result, err := m.DB.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return ErrRecordNotFound
+	}
+
+	return nil
+}
+
 func (m DivisonModel) GetAll() ([]*Division, error) {
 	// should query league_id for divs
 	query := /* sql */ `
