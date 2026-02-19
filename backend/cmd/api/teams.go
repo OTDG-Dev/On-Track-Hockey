@@ -84,6 +84,67 @@ func (app *application) createTeamHandler(w http.ResponseWriter, r *http.Request
 
 }
 
+func (app *application) updateTeamHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.notFoundResponse(w, r)
+		return
+	}
+
+	team, err := app.models.Teams.Get(id)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	var input struct {
+		FullName   *string `json:"full_name"`
+		ShortName  *string `json:"short_name"`
+		DivisionID *int    `json:"division_id"`
+		IsActive   *bool   `json:"is_active"`
+	}
+
+	err = app.readJSON(w, r, &input)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	if input.FullName != nil {
+		team.FullName = *input.FullName
+	}
+	if input.ShortName != nil {
+		team.ShortName = *input.ShortName
+	}
+	if input.DivisionID != nil {
+		team.DivisionID = *input.DivisionID
+	}
+	if input.IsActive != nil {
+		team.IsActive = *input.IsActive
+	}
+
+	err = app.models.Teams.Update(team)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrEditConflict):
+			app.editConflictResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"team": team}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
 func (app *application) deleteTeamHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
