@@ -15,12 +15,15 @@
     </div>
 
     <div class="identification-row">
-      <p>Identification</p>
-      <div class="name-row">
-        <div class="field">
-          <input [(ngModel)]="division_id" type="number" name="division_id" id="division_id">
-          <p>Division ID</p>
-        </div>
+      <div class="field">
+        <select [(ngModel)]="division_id" name="division_id">
+          @for (division of divisions(); track division.name) {
+            <option [ngValue]="division.id">
+              {{ division.name }}
+            </option>
+          }
+        </select>
+        <p>Division</p>
       </div>
     </div>
 

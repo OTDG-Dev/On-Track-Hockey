@@ -4,15 +4,25 @@
     <form>
       <p>Division</p>
       <div class="name-row">
+
         <div class="field">
           <input [(ngModel)]="name" type="text" name="name" id="name">
           <p>Name</p>
         </div>
+
         <div class="field">
-          <input [(ngModel)]="league_id" type="text" name="league_id" id="league_id">
-          <p>League ID</p>
+          <select [(ngModel)]="league_id" name="league_id">
+            @for (league of leagues(); track league.name) {
+              <option [ngValue]="league.id">
+                {{ league.name }}
+              </option>
+            }
+          </select>
+          <p>League</p>
         </div>
       </div>
+
+
     </form>
   
     <div class="button-wrapper">

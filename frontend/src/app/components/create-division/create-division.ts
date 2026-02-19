@@ -1,6 +1,9 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { DivisionService } from '../../services/division-service';
 import { FormsModule } from '@angular/forms';
+import { LeagueService } from '../../services/league-service';
+import { LeagueData } from '../../interfaces/league-data';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-create-division',
@@ -13,11 +16,28 @@ export class CreateDivision {
   league_id: number = 1;
   name: string = "";
 
+  leagues: WritableSignal<LeagueData[]> = signal([]);
+
   successMessage: WritableSignal<string> = signal('');
   errorMessage: WritableSignal<string> = signal('');
   isFading = signal(false);
 
-  constructor(private divisionService: DivisionService) {}
+  constructor(private divisionService: DivisionService, private leageService: LeagueService) {}
+
+  ngOnInit()
+  {
+    this.leageService.getLeagues()
+    .subscribe(
+      {
+        next: (responseData) => {
+          this.leagues.set(responseData.leagues);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      }
+    )
+  }
 
   postDivision() 
   {

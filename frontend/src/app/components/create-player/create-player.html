@@ -47,8 +47,13 @@
     </select>
 
     <p>Team ID</p>
-    <input [(ngModel)]="current_team_id" type="text" inputmode="numeric" name="current_team_id" id="sweaterNumber"
-      (input)="allowOnlyNumbers($event)" />
+    <select [(ngModel)]="current_team_id" name="current_team_id">
+      @for (team of teams(); track team.full_name) {
+        <option [ngValue]="team.id">
+          {{ team.full_name }}
+        </option>
+      }
+    </select>
 
     <p>Date of Birth</p>
     <input [(ngModel)]="dob" type="date" name="dob" id="dob">

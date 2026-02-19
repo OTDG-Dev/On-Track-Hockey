@@ -1,6 +1,8 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { TeamService } from '../../services/team-service';
 import { FormsModule } from '@angular/forms';
+import { DivisionService } from '../../services/division-service';
+import { DivisionData } from '../../interfaces/division-data';
 
 @Component({
   selector: 'app-create-team',
@@ -15,11 +17,28 @@ export class CreateTeam {
   is_active: boolean = false;
   division_id: number = 1;
 
+  divisions: WritableSignal<DivisionData[]> = signal([]);
+
   successMessage: WritableSignal<string> = signal('');
   errorMessage: WritableSignal<string> = signal('');
   isFading = signal(false);
 
-  constructor(private teamService: TeamService) { }
+  constructor(private teamService: TeamService, private divisionService: DivisionService) { }
+
+  ngOnInit()
+  {
+    this.divisionService.getDivisions()
+    .subscribe(
+      {
+        next: (responseData) => {
+          this.divisions.set(responseData.divisions);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      }
+    )
+  }
 
   postTeam() {
     this.teamService.createTeam(this.full_name, this.short_name, this.is_active, this.division_id)
