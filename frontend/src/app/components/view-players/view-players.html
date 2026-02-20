@@ -33,7 +33,7 @@
             <tbody>
                 <tr *ngFor="let player of players()">
                     <td>
-                        <a href=""> <!-- need to route to a GET /v1/player/player.id -->
+                        <a [routerLink]="['/view-player', player.id]">
                             {{ player.first_name }} {{ player.last_name }}
                         </a>
                     </td>

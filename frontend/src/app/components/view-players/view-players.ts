@@ -2,11 +2,12 @@ import { Component, signal, WritableSignal } from '@angular/core';
 import { PlayerService } from '../../services/player-service';
 import { PlayerData } from '../../interfaces/player-data';
 import { CommonModule } from '@angular/common';
+import { RouterLink, RouterModule } from "@angular/router";
 
 @Component({
   selector: 'app-view-players',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './view-players.html',
   styleUrl: './view-players.css',
 })

@@ -26,6 +26,11 @@ export class PlayerService {
     );
   }
 
+  getPlayer(id: number)
+  {
+    return this.httpClient.get<{ player: PlayerData}>(`${this.baseUrl}/${id}`);
+  }
+
   createPlayer(firstName: string, lastName: string, sweaterNumber: number, position: string,
     handedness: string, birth_country: string, dob: string, current_team_id: number) {
 
