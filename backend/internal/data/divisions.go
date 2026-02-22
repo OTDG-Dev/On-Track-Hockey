@@ -1,6 +1,7 @@
 package data
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"time"
@@ -35,13 +36,16 @@ func (m DivisonModel) Insert(div *Division) error {
 		VALUES ($1, $2)
 		RETURNING ID`
 
-	err := m.DB.QueryRow(query, []any{div.Name, div.LeagueID}...).Scan(&div.ID)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, []any{div.Name, div.LeagueID}...).Scan(&div.ID)
 
 	if err != nil {
 		var pqErr *pq.Error
 		if errors.As(err, &pqErr) {
 			if pqErr.Code.Name() == "foreign_key_violation" {
-				return ErrNotFound
+				return ErrRecordNotFound
 			}
 		}
 		return err
@@ -62,7 +66,10 @@ func (m DivisonModel) Get(id int) (*Division, error) {
 
 	var d Division
 
-	err := m.DB.QueryRow(query, id).Scan(
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, id).Scan(
 		&d.ID,
 		&d.LeagueID,
 		&d.Name,
@@ -90,7 +97,10 @@ func (m DivisonModel) Delete(id int) error {
 		DELETE FROM divisions
 		WHERE id = $1`
 
-	result, err := m.DB.Exec(query, id)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	result, err := m.DB.ExecContext(ctx, query, id)
 	if err != nil {
 		return err
 	}
@@ -119,7 +129,10 @@ func (m DivisonModel) Update(division *Division) error {
 
 	args := []any{division.Name, division.LeagueID, division.ID, division.Version}
 
-	err := m.DB.QueryRow(query, args...).Scan(&division.Version)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, args...).Scan(&division.Version)
 	if err != nil {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
@@ -141,7 +154,10 @@ func (m DivisonModel) GetAll() ([]*Division, error) {
 			league_id
 		FROM divisions`
 
-	rows, err := m.DB.Query(query)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.DB.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}

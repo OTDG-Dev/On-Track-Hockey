@@ -1,6 +1,7 @@
 package data
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"time"
@@ -32,7 +33,10 @@ func (m LeagueModel) Get(id int) (*League, error) {
 
 	var l League
 
-	err := m.DB.QueryRow(query, id).Scan(&l.ID, &l.Name, &l.Version)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, id).Scan(&l.ID, &l.Name, &l.Version)
 	if err != nil {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
@@ -53,13 +57,19 @@ func (m LeagueModel) Insert(league *League) error {
 		VALUES ($1)
 		RETURNING ID`
 
-	return m.DB.QueryRow(query, []any{league.Name}...).Scan(&league.ID)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	return m.DB.QueryRowContext(ctx, query, []any{league.Name}...).Scan(&league.ID)
 }
 
 func (m LeagueModel) GetAll() ([]*League, error) {
 	query := /* sql */ `SELECT id, name FROM leagues`
 
-	rows, err := m.DB.Query(query)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.DB.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +103,10 @@ func (m LeagueModel) Update(league *League) error {
 
 	args := []any{league.Name, league.ID, league.Version}
 
-	err := m.DB.QueryRow(query, args...).Scan(&league.Version)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, args...).Scan(&league.Version)
 	if err != nil {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
@@ -115,7 +128,10 @@ func (m LeagueModel) Delete(id int) error {
 		DELETE FROM leagues
 		WHERE id = $1`
 
-	result, err := m.DB.Exec(query, id)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	result, err := m.DB.ExecContext(ctx, query, id)
 	if err != nil {
 		return err
 	}
