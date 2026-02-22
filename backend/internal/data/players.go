@@ -307,6 +307,13 @@ type PlayerWithTeam struct {
 	TeamShortName string `json:"team_short_name"`
 }
 
+type PlayerQuery struct {
+	FirstName     string
+	LastName      string
+	Position      string
+	CurrentTeamID int
+}
+
 func (m PlayerModel) GetWithTeam(id int) (*PlayerWithTeam, error) {
 	query := /* sql */ `
 		SELECT
@@ -364,7 +371,7 @@ func (m PlayerModel) GetWithTeam(id int) (*PlayerWithTeam, error) {
 	return &p, nil
 }
 
-func (m PlayerModel) GetAllWithTeam(FirstName, LastName, Position string, filters Filters) ([]*PlayerWithTeam, Metadata, error) {
+func (m PlayerModel) GetAllWithTeam(pq PlayerQuery, filters Filters) ([]*PlayerWithTeam, Metadata, error) {
 	query := fmt.Sprintf( /* sql */ `
 		SELECT
 			count(*) OVER(),
@@ -388,10 +395,18 @@ func (m PlayerModel) GetAllWithTeam(FirstName, LastName, Position string, filter
 		WHERE (first_name ILIKE $1 OR $1 = '')  -- switch to indexes with scale & combine last + first
 		AND (last_name ILIKE $2 OR $2 = '')
 		AND (position = $3 OR $3 = '')
+		AND (current_team_id = $4 OR $4 = 0)
 		ORDER BY %s %s, id ASC
-		LIMIT $4 OFFSET $5`, filters.sortColumn(), filters.SortDirection())
+		LIMIT $5 OFFSET $6`, filters.sortColumn(), filters.SortDirection())
 
-	args := []any{FirstName, LastName, Position, filters.limit(), filters.offset()}
+	args := []any{
+		pq.FirstName,
+		pq.LastName,
+		pq.Position,
+		pq.CurrentTeamID,
+		filters.limit(),
+		filters.offset(),
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
