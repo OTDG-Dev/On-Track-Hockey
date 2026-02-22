@@ -104,13 +104,16 @@ td:nth-child(3) {
 select {
     width: 150px;
     padding: 5px;
-
     font-family: inherit;
     font-size: 14px;
-
     border: 1px solid #d1d5db;
     border-radius: 6px;
     background-color: #fff;
+    cursor: pointer;
+}
+
+select option {
+    cursor: pointer;
 }
 
 .single-filter {
