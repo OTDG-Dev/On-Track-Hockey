@@ -4,15 +4,29 @@
 
     <div class="content-container">
         <div class="filters">
+
             <div class="single-filter">
                 <label for="position">Position</label>
-                <select id="position" name="position" #positionSelect (change)="onPositionChange(positionSelect.value)">
+                <select id="position" name="position" [(ngModel)]="selectedPosition" (change)="applyFilters()">
                     <option value="">All Positions</option>
                     <option value="C">Center</option>
                     <option value="LW">Left Wing</option>
                     <option value="RW">Right Wing</option>
                     <option value="D">Defense</option>
                     <option value="G">Goalie</option>
+                </select>
+            </div>
+
+            <div class="single-filter">
+                <label for="team">Team</label>
+                <select [(ngModel)]="current_team_id" (change)="applyFilters()" name="current_team_id">
+                    <option [ngValue]="null">All Teams</option>
+
+                    @for (team of teams(); track team.id) {
+                    <option [ngValue]="team.id">
+                        {{ team.full_name }}
+                    </option>
+                    }
                 </select>
             </div>
         </div>
@@ -48,4 +62,3 @@
         </table>
     </div>
 </div>
-
