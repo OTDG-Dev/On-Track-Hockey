@@ -60,7 +60,7 @@ func (app *application) createDivisionHandler(w http.ResponseWriter, r *http.Req
 	err = app.models.Division.Insert(div)
 	if err != nil {
 		switch {
-		case errors.Is(err, data.ErrNotFound):
+		case errors.Is(err, data.ErrRecordNotFound):
 			v.AddError("league_id", "league does not exist")
 			app.failedValidationResponse(w, r, v.Errors)
 		default:

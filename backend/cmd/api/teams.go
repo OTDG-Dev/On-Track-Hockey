@@ -65,7 +65,7 @@ func (app *application) createTeamHandler(w http.ResponseWriter, r *http.Request
 
 	if err != nil {
 		switch {
-		case errors.Is(err, data.ErrNotFound):
+		case errors.Is(err, data.ErrRecordNotFound):
 			v.AddError("division_id", "division not found")
 			app.failedValidationResponse(w, r, v.Errors)
 		default:

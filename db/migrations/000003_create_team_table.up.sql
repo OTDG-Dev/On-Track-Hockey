@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS teams (
     short_name text NOT NULL
         CHECK (char_length(short_name) = 3),
     division_id bigint NOT NULL
-        REFERENCES leagues(id)
+        REFERENCES divisions(id)
         ON DELETE RESTRICT,
     version integer NOT NULL DEFAULT 1
 )

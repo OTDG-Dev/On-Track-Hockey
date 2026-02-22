@@ -1,8 +1,10 @@
 package data
 
 import (
+	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
@@ -41,7 +43,10 @@ func (m TeamModel) Get(id int) (*Team, error) {
 
 	var t Team
 
-	err := m.DB.QueryRow(query, id).Scan(
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, id).Scan(
 		&t.ID,
 		&t.FullName,
 		&t.ShortName,
@@ -62,6 +67,8 @@ func (m TeamModel) Get(id int) (*Team, error) {
 }
 
 func (m TeamModel) Insert(team *Team) error {
+	fmt.Println(team)
+
 	query := /* sql */ `
 	INSERT INTO teams (
 		full_name,
@@ -74,13 +81,16 @@ func (m TeamModel) Insert(team *Team) error {
 
 	args := []any{team.FullName, team.ShortName, team.DivisionID, team.IsActive}
 
-	err := m.DB.QueryRow(query, args...).Scan(&team.ID)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, args...).Scan(&team.ID)
 
 	if err != nil {
 		var pqErr *pq.Error
 		if errors.As(err, &pqErr) {
 			if pqErr.Code.Name() == "foreign_key_violation" {
-				return ErrNotFound
+				return ErrRecordNotFound
 			}
 		}
 		return err
@@ -110,7 +120,10 @@ func (m TeamModel) Update(team *Team) error {
 		team.Version,
 	}
 
-	err := m.DB.QueryRow(query, args...).Scan(&team.Version)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, args...).Scan(&team.Version)
 	if err != nil {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
@@ -132,7 +145,10 @@ func (m TeamModel) Delete(id int) error {
 		DELETE FROM teams
 		WHERE id = $1`
 
-	result, err := m.DB.Exec(query, id)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	result, err := m.DB.ExecContext(ctx, query, id)
 	if err != nil {
 		return err
 	}
@@ -160,7 +176,10 @@ func (m TeamModel) GetAll() ([]*Team, error) {
 			is_active
 		FROM teams;`
 
-	rows, err := m.DB.Query(query)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.DB.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
