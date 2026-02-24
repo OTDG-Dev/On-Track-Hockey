@@ -1,6 +1,7 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { PlayerService } from '../../services/player-service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-player',
@@ -10,6 +11,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 })
 export class ViewPlayer {
 
+  playerId: number = -1;
   first_name: WritableSignal<string> = signal("");
   last_name: WritableSignal<string> = signal("");
   sweater_number: WritableSignal<number> = signal(-1);
@@ -21,13 +23,13 @@ export class ViewPlayer {
   team_short_name: WritableSignal<string> = signal("");
   avatarUrl: WritableSignal<string> = signal("https://a.espncdn.com/combiner/i?img=/i/headshots/nhl/players/full/5149125.png&w=350&h=254");
 
-  constructor(private playerService: PlayerService, private route: ActivatedRoute) {}
+  constructor(private playerService: PlayerService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(){
     const id = this.route.snapshot.paramMap.get('id');
-    const playerId = Number(id);
+    this.playerId = Number(id);
 
-    this.getPlayer(playerId);
+    this.getPlayer(this.playerId);
   }
 
   getPlayer(id: number) {
@@ -47,9 +49,21 @@ export class ViewPlayer {
         },
         error: (err) => {
           console.log(err);
+          this.router.navigate(['/view-players']);
         }
       }
     )
+  }
+
+  deletePlayer() {
+    this.playerService.deletePlayer(this.playerId).subscribe({
+      next: () => {
+        this.router.navigate(['/view-players']);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
 }

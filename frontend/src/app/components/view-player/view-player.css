@@ -121,3 +121,52 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     margin-bottom: 20px;
 }
+
+/* ---------- Top Right Buttons ---------- */
+/* ---------- Top Right Buttons ---------- */
+.top-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-self: stretch;
+    gap: 12px;
+    margin-top: 12px;
+    margin-bottom: 20px;
+    margin-right: 30px;
+}
+
+/* Smaller, subtle base */
+.action-button {
+    padding: 6px 14px;
+    height: auto;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+/* Subtle outlined Edit */
+.edit-button {
+    color: #27AE60;
+    border: 1px solid #27AE60;
+}
+
+.edit-button:hover {
+    background-color: rgba(39, 174, 96, 0.08);
+}
+
+/* Subtle outlined Delete */
+.delete-button {
+    color: #dc2626;
+    border: 1px solid #dc2626;
+}
+
+.delete-button:hover {
+    background-color: rgba(220, 38, 38, 0.08);
+}
+
+/* Light click feedback */
+.action-button:active {
+    transform: scale(0.96);
+}

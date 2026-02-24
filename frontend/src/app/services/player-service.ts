@@ -47,4 +47,8 @@ export class PlayerService {
 
     return this.httpClient.post<{ player: PlayerData }>(this.baseUrl, body);
   }
+
+  deletePlayer(id: number) {
+    return this.httpClient.delete<{ player: PlayerData}>(`${this.baseUrl}/${id}`);
+  }
 }

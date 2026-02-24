@@ -1,7 +1,18 @@
 
 <div class="page-container">
   <h1>View Player</h1>
-    <hr>
+  <hr>
+  
+  <div class="top-actions">
+    <button class="action-button edit-button">
+      Edit Player
+    </button>
+
+    <button (click)="deletePlayer()" class="action-button delete-button">
+      Delete Player
+    </button>
+  </div>
+
   <!-- Avatar -->
   <div class="avatar-wrapper">
     <img class="player-avatar" [src]="avatarUrl()" alt="{{ first_name() }} {{ last_name() }} Headshot">
