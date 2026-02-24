@@ -2,6 +2,7 @@ import { Component, signal, WritableSignal } from '@angular/core';
 import { PlayerService } from '../../services/player-service';
 import { PlayerData } from '../../interfaces/player-data';
 import { CommonModule } from '@angular/common';
+import { RouterLink, RouterModule } from "@angular/router";
 import { TeamService } from '../../services/team-service';
 import { TeamData } from '../../interfaces/team-data';
 import { FormsModule } from '@angular/forms';
@@ -9,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-view-players',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './view-players.html',
   styleUrl: './view-players.css',
 })

@@ -1,0 +1,80 @@
+<div class="page-container">
+    <h1>Edit Player</h1>
+    <hr>
+  
+    <form>
+      <p>Full Name</p>
+  
+      <div class="name-row">
+        <div class="field">
+          <input [(ngModel)]="firstName" type="text" name="firstName" id="firstName">
+          <p>First Name</p>
+        </div>
+  
+        <div class="field">
+          <input [(ngModel)]="lastName" type="text" name="lastName" id="lastName">
+          <p>Last Name</p>
+        </div>
+      </div>
+  
+      <p>Sweater Number</p>
+      <input [(ngModel)]="sweaterNumber" type="text" maxlength="2" inputmode="numeric" name="sweaterNumber"
+        id="sweaterNumber" (input)="allowOnlyNumbers($event)" />
+  
+      <p>Position</p>
+      <select [(ngModel)]="position" name="position" id="position">
+        <option value="" disabled selected></option>
+        <option value="G">G</option>
+        <option value="C">C</option>
+        <option value="LW">LW</option>
+        <option value="RW">RW</option>
+        <option value="D">D</option>
+      </select>
+  
+      <p>Handedness</p>
+      <select [(ngModel)]="handedness" name="handedness" id="handedness">
+        <option value="" disabled selected></option>
+        <option value="L">Left</option>
+        <option value="R">Right</option>
+      </select>
+  
+      <p>Birth Country</p>
+      <select [(ngModel)]="birthCountry" name="birthCountry" id="birthCountry">
+        <option value="" disabled selected></option>
+        <option value="USA">USA</option>
+        <option value="CAN">CAN</option>
+        <option value="RUS">RUS</option>
+      </select>
+  
+      <p>Team ID</p>
+      <select [(ngModel)]="current_team_id" name="current_team_id">
+        @for (team of teams(); track team.full_name) {
+          <option [ngValue]="team.id">
+            {{ team.full_name }}
+          </option>
+        }
+      </select>
+  
+      <p>Date of Birth</p>
+      <input [(ngModel)]="dob" type="date" name="dob" id="dob">
+    </form>
+  
+    <div class="button-wrapper">
+      <button (click)="patchPlayer()" type="button" id="createButton">
+        Create
+      </button>
+    </div>
+  
+    @if (successMessage()) {
+    <div class="success-message" [class.fade-out]="isFading()">
+      {{ successMessage() }}
+    </div>
+    }
+  
+    @if (errorMessage()) {
+    <div class="error-message" [class.fade-out]="isFading()">
+      {{ errorMessage() }}
+    </div>
+    }
+  
+  </div>

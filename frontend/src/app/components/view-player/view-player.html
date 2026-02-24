@@ -1,0 +1,60 @@
+
+<div class="page-container">
+  <h1>View Player</h1>
+  <hr>
+  
+  <div class="top-actions">
+    <button [routerLink]="['/edit-player', playerId]" class="action-button edit-button">
+      Edit Player
+    </button>
+
+    <button (click)="deletePlayer()" class="action-button delete-button">
+      Delete Player
+    </button>
+  </div>
+
+  <!-- Avatar -->
+  <div class="avatar-wrapper">
+    <img class="player-avatar" [src]="avatarUrl()" alt="{{ first_name() }} {{ last_name() }} Headshot">
+  </div>
+
+  <div class="info-columns">
+    <!-- Left Column: Personal Info -->
+    <div class="column personal-column">
+      <p class="section-label">Personal</p>
+      <div class="field">
+        <p>Name</p>
+        <div class="value-pill">{{ first_name() }} {{ last_name() }}</div>
+      </div>
+      <div class="field">
+        <p>Birth Country</p>
+        <div class="value-pill">{{ birth_country() }}</div>
+      </div>
+      <div class="field">
+        <p>Date of Birth</p>
+        <div class="value-pill">{{ birth_date() }}</div>
+      </div>
+    </div>
+
+    <!-- Right Column: Player Info -->
+    <div class="column player-column">
+      <p class="section-label">Player</p>
+      <div class="field">
+        <p>Sweater Number</p>
+        <div class="value-pill">{{ sweater_number() }}</div>
+      </div>
+      <div class="field">
+        <p>Position</p>
+        <div class="value-pill">{{ position() }}</div>
+      </div>
+      <div class="field">
+        <p>Handedness</p>
+        <div class="value-pill">{{ shoots_catches() }}</div>
+      </div>
+      <div class="field">
+        <p>Team</p>
+        <div class="value-pill">{{ team_full_name() }} ({{ team_short_name() }})</div>
+      </div>
+    </div>
+  </div>
+</div>

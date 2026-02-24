@@ -9,4 +9,5 @@ export interface PlayerData {
     shoots_catches: string
     team_full_name: string
     team_short_name: string,
+    current_team_id: number
 }
