@@ -13,15 +13,15 @@ import { TeamService } from '../../services/team-service';
 })
 export class EditPlayer {
 
-  playerId: number = -1
-  firstName: string = "";
-  lastName: string = "";
-  sweaterNumber: number = -1
-  position: string = "";
-  handedness: string = "";
-  birthCountry: string = "";
-  dob: string = "";
-  current_team_id: number = -1;
+  playerId: number = -1;
+  firstName: WritableSignal<string> = signal("");
+  lastName: WritableSignal<string> = signal("");
+  sweaterNumber: WritableSignal<number> = signal(-1);
+  position: WritableSignal<string> = signal("");
+  handedness: WritableSignal<string> = signal("");
+  birthCountry: WritableSignal<string> = signal("");
+  dob: WritableSignal<string> = signal("");
+  current_team_id: WritableSignal<number> = signal(-1);
 
   teams: WritableSignal<TeamData[]> = signal([]);
 
@@ -50,7 +50,7 @@ export class EditPlayer {
   allowOnlyNumbers(event: any) {
     const input = event.target;
     input.value = input.value.replace(/[^0-9]/g, '');
-    this.sweaterNumber = Number(input.value);
+    this.sweaterNumber.set(Number(input.value));
   }
 
   getPlayer(id: number) {
@@ -58,14 +58,14 @@ export class EditPlayer {
     .subscribe(
       {
         next: (responseData) => {
-          this.firstName = responseData.player.first_name;
-          this.lastName = responseData.player.last_name;
-          this.sweaterNumber = responseData.player.sweater_number;
-          this.position = responseData.player.position;
-          this.dob = responseData.player.birth_date;
-          this.birthCountry = responseData.player.birth_country;
-          this.handedness = responseData.player.shoots_catches;
-          this.current_team_id = responseData.player.current_team_id;
+          this.firstName.set(responseData.player.first_name);
+          this.lastName.set(responseData.player.last_name);
+          this.sweaterNumber.set(responseData.player.sweater_number);
+          this.position.set(responseData.player.position);
+          this.dob.set(responseData.player.birth_date);
+          this.birthCountry .set(responseData.player.birth_country);
+          this.handedness.set(responseData.player.shoots_catches);
+          this.current_team_id.set(responseData.player.current_team_id);
         },
         error: (err) => {
           console.log(err);
@@ -76,8 +76,8 @@ export class EditPlayer {
   }
 
   patchPlayer() {
-    this.playerService.patchPlayer(this.firstName, this.lastName, this.sweaterNumber, this.position,
-      this.handedness, this.birthCountry, this.dob, this.current_team_id, this.playerId)
+    this.playerService.patchPlayer(this.firstName(), this.lastName(), this.sweaterNumber(), this.position(),
+      this.handedness(), this.birthCountry(), this.dob(), this.current_team_id(), this.playerId)
       .subscribe({
         next: (responseData) => {
           this.successMessage.set(
