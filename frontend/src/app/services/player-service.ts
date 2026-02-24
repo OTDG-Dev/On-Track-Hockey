@@ -48,6 +48,23 @@ export class PlayerService {
     return this.httpClient.post<{ player: PlayerData }>(this.baseUrl, body);
   }
 
+  patchPlayer(firstName: string, lastName: string, sweaterNumber: number, position: string,
+    handedness: string, birth_country: string, dob: string, current_team_id: number, id: number){
+      
+      const body = {
+        "first_name": firstName,
+        "last_name": lastName,
+        "sweater_number": sweaterNumber,
+        "position": position,
+        "birth_date": dob,
+        "birth_country": birth_country,
+        "shoots_catches": handedness,
+        "current_team_id": current_team_id,
+      };
+
+      return this.httpClient.patch<{ player: PlayerData }>(`${this.baseUrl}/${id}`, body);
+    }
+
   deletePlayer(id: number) {
     return this.httpClient.delete<{ player: PlayerData}>(`${this.baseUrl}/${id}`);
   }
