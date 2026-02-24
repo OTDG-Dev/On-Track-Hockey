@@ -1,15 +1,21 @@
 package data
 
 import (
+	"context"
 	"database/sql"
 	"errors"
+	"fmt"
+	"time"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
 	"github.com/lib/pq"
 )
 
 type Team struct {
-	ID         int    `json:"id"`
+	ID        int       `json:"id"`
+	CreatedAt time.Time `json:"-"`
+	Version   int       `json:"version"`
+
 	FullName   string `json:"full_name"`
 	ShortName  string `json:"short_name"`
 	DivisionID int    `json:"division_id"`
@@ -31,17 +37,21 @@ func (m TeamModel) Get(id int) (*Team, error) {
 	}
 
 	query := /* sql */ `
-		SELECT id, full_name, short_name, division_id
+		SELECT id, full_name, short_name, division_id, version
 		FROM teams
 		WHERE id = $1;`
 
 	var t Team
 
-	err := m.DB.QueryRow(query, id).Scan(
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, id).Scan(
 		&t.ID,
 		&t.FullName,
 		&t.ShortName,
 		&t.DivisionID,
+		&t.Version,
 	)
 
 	if err != nil {
@@ -57,6 +67,8 @@ func (m TeamModel) Get(id int) (*Team, error) {
 }
 
 func (m TeamModel) Insert(team *Team) error {
+	fmt.Println(team)
+
 	query := /* sql */ `
 	INSERT INTO teams (
 		full_name,
@@ -69,16 +81,56 @@ func (m TeamModel) Insert(team *Team) error {
 
 	args := []any{team.FullName, team.ShortName, team.DivisionID, team.IsActive}
 
-	err := m.DB.QueryRow(query, args...).Scan(&team.ID)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, args...).Scan(&team.ID)
 
 	if err != nil {
 		var pqErr *pq.Error
 		if errors.As(err, &pqErr) {
 			if pqErr.Code.Name() == "foreign_key_violation" {
-				return ErrNotFound
+				return ErrRecordNotFound
 			}
 		}
 		return err
+	}
+
+	return nil
+}
+
+func (m TeamModel) Update(team *Team) error {
+	query := /* sql */ `
+		UPDATE teams
+		SET
+			full_name = $1,
+			short_name = $2,
+			division_id = $3,
+			is_active = $4,
+			version = version + 1
+		WHERE id = $5 AND version = $6
+		RETURNING version`
+
+	args := []any{
+		team.FullName,
+		team.ShortName,
+		team.DivisionID,
+		team.IsActive,
+		team.ID,
+		team.Version,
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, args...).Scan(&team.Version)
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return ErrEditConflict
+		default:
+			return err
+		}
 	}
 
 	return nil
@@ -93,7 +145,10 @@ func (m TeamModel) Delete(id int) error {
 		DELETE FROM teams
 		WHERE id = $1`
 
-	result, err := m.DB.Exec(query, id)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	result, err := m.DB.ExecContext(ctx, query, id)
 	if err != nil {
 		return err
 	}
@@ -121,7 +176,10 @@ func (m TeamModel) GetAll() ([]*Team, error) {
 			is_active
 		FROM teams;`
 
-	rows, err := m.DB.Query(query)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.DB.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}

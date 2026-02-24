@@ -40,7 +40,6 @@ func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Reques
 		LastName      string
 		Position      string
 		CurrentTeamId int
-		// WIP build this out & combine first/lastname search
 		data.Filters
 	}
 
@@ -50,6 +49,7 @@ func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Reques
 	input.FirstName = app.readString(qs, "first_name", "")
 	input.LastName = app.readString(qs, "last_name", "")
 	input.Position = strings.ToUpper(app.readString(qs, "position", ""))
+	input.CurrentTeamId = app.readInt(qs, "current_team_id", 0, v)
 
 	input.Filters.Page = app.readInt(qs, "page", 1, v)
 	input.Filters.PageSize = app.readInt(qs, "page_size", 20, v)
@@ -60,6 +60,7 @@ func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Reques
 		"first_name", "-first_name",
 		"last_name", "-last_name",
 		"position", "-position",
+		"current_team_id", "-current_team_id",
 	}
 
 	if data.ValidateFilters(v, input.Filters); !v.Valid() {
@@ -67,7 +68,14 @@ func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	players, metadata, err := app.models.Players.GetAllWithTeam(input.FirstName, input.LastName, input.Position, input.Filters)
+	pq := data.PlayerQuery{
+		FirstName:     input.FirstName,
+		LastName:      input.LastName,
+		Position:      input.Position,
+		CurrentTeamID: input.CurrentTeamId,
+	}
+
+	players, metadata, err := app.models.Players.GetAllWithTeam(pq, input.Filters)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -123,7 +131,7 @@ func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Reque
 	err = app.models.Players.Insert(player)
 	if err != nil {
 		switch {
-		case errors.Is(err, data.ErrNotFound):
+		case errors.Is(err, data.ErrRecordNotFound):
 			v.AddError("current_team_id", "team not found")
 			app.failedValidationResponse(w, r, v.Errors)
 		default:

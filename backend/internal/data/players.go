@@ -1,6 +1,7 @@
 package data
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -89,7 +90,7 @@ func (m PlayerModel) Insert(player *Player) error {
 		var pqErr *pq.Error
 		if errors.As(err, &pqErr) {
 			if pqErr.Code.Name() == "foreign_key_violation" {
-				return ErrNotFound
+				return ErrRecordNotFound
 			}
 		}
 		return err
@@ -122,7 +123,10 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 
 	var player Player
 
-	err := m.DB.QueryRow(query, id).Scan(
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, id).Scan(
 		&player.ID,
 		&player.IsActive,
 		&player.CurrentTeamID,
@@ -177,7 +181,10 @@ func (m PlayerModel) GetAll(FirstName, LastName, Position string, filters Filter
 
 	args := []any{FirstName, LastName, Position, filters.limit(), filters.offset()}
 
-	rows, err := m.DB.Query(query, args...)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.DB.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, Metadata{}, err
 	}
@@ -252,7 +259,10 @@ func (m PlayerModel) Update(player *Player) error {
 		player.Version,
 	}
 
-	err := m.DB.QueryRow(query, args...).Scan(&player.Version)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, args...).Scan(&player.Version)
 	if err != nil {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
@@ -297,6 +307,13 @@ type PlayerWithTeam struct {
 	TeamShortName string `json:"team_short_name"`
 }
 
+type PlayerQuery struct {
+	FirstName     string
+	LastName      string
+	Position      string
+	CurrentTeamID int
+}
+
 func (m PlayerModel) GetWithTeam(id int) (*PlayerWithTeam, error) {
 	query := /* sql */ `
 		SELECT
@@ -322,7 +339,10 @@ func (m PlayerModel) GetWithTeam(id int) (*PlayerWithTeam, error) {
 
 	var p PlayerWithTeam
 
-	err := m.DB.QueryRow(query, id).Scan(
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, id).Scan(
 		&p.ID,
 		&p.IsActive,
 		&p.CurrentTeamID,
@@ -351,7 +371,7 @@ func (m PlayerModel) GetWithTeam(id int) (*PlayerWithTeam, error) {
 	return &p, nil
 }
 
-func (m PlayerModel) GetAllWithTeam(FirstName, LastName, Position string, filters Filters) ([]*PlayerWithTeam, Metadata, error) {
+func (m PlayerModel) GetAllWithTeam(pq PlayerQuery, filters Filters) ([]*PlayerWithTeam, Metadata, error) {
 	query := fmt.Sprintf( /* sql */ `
 		SELECT
 			count(*) OVER(),
@@ -375,12 +395,23 @@ func (m PlayerModel) GetAllWithTeam(FirstName, LastName, Position string, filter
 		WHERE (first_name ILIKE $1 OR $1 = '')  -- switch to indexes with scale & combine last + first
 		AND (last_name ILIKE $2 OR $2 = '')
 		AND (position = $3 OR $3 = '')
+		AND (current_team_id = $4 OR $4 = 0)
 		ORDER BY %s %s, id ASC
-		LIMIT $4 OFFSET $5`, filters.sortColumn(), filters.SortDirection())
+		LIMIT $5 OFFSET $6`, filters.sortColumn(), filters.SortDirection())
 
-	args := []any{FirstName, LastName, Position, filters.limit(), filters.offset()}
+	args := []any{
+		pq.FirstName,
+		pq.LastName,
+		pq.Position,
+		pq.CurrentTeamID,
+		filters.limit(),
+		filters.offset(),
+	}
 
-	rows, err := m.DB.Query(query, args...)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.DB.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, Metadata{}, err
 	}

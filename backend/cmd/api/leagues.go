@@ -1,12 +1,37 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data"
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
 )
+
+func (app *application) showLeagueHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.notFoundResponse(w, r)
+		return
+	}
+
+	league, err := app.models.League.Get(id)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"league": league}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
 
 func (app *application) createLeagueHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
@@ -45,6 +70,55 @@ func (app *application) createLeagueHandler(w http.ResponseWriter, r *http.Reque
 	}
 }
 
+func (app *application) updateLeagueHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.notFoundResponse(w, r)
+		return
+	}
+
+	league, err := app.models.League.Get(id)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	var input struct {
+		Name *string `json:"name"`
+	}
+
+	err = app.readJSON(w, r, &input)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	if input.Name != nil {
+		league.Name = *input.Name
+	}
+
+	err = app.models.League.Update(league)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrEditConflict):
+			app.editConflictResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"league": league}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
 func (app *application) listLeaguesHandler(w http.ResponseWriter, r *http.Request) {
 	leagues, err := app.models.League.GetAll()
 	if err != nil {
@@ -53,6 +127,30 @@ func (app *application) listLeaguesHandler(w http.ResponseWriter, r *http.Reques
 	}
 
 	err = app.writeJSON(w, http.StatusOK, envelope{"leagues": leagues}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *application) deleteLeagueHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	err = app.models.League.Delete(id)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"message": "league successfully deleted"}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}

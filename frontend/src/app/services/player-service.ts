@@ -10,14 +10,17 @@ export class PlayerService {
 
   private baseUrl = environment.apiUrl + "/v1/players";
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
-  getPlayers(position?: string) 
-  {
+  getPlayers(position?: string, current_team_id?: number | null) {
     const params: any = {};
 
-    if (position) {
+    if (position && position !== '') {
       params.position = position;
+    }
+
+    if (current_team_id !== null && current_team_id !== undefined) {
+      params.current_team_id = current_team_id;
     }
 
     return this.httpClient.get<{ players: PlayerData[] }>(

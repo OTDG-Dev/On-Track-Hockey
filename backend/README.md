@@ -37,6 +37,7 @@ body:
 |--------|------------------------------|-----------------|--------|
 | GET    | `/v1/teams`                  | Show all teams  | WIP    |
 | POST   | [`/v1/teams`](#post-v1teams) | Create new team |        |
+| PATCH  | `/v1/teams/:id`              | Update a team   |        |
 | GET    | `/v1/teams/:id`              | Show a team     |        |
 | DELETE | `/v1/teams/:id`              | Delete a team   |        |
 
@@ -59,6 +60,9 @@ body:
 |--------|--------------------------------------|---------------------|--------|
 | GET    | `/v1/divisions`                      | Show all divisions  |        |
 | POST   | [`/v1/divisions`](#post-v1divisions) | Create new division |        |
+| PATCH  | `/v1/divisions/:id`                  | Update a division   |        |
+| GET    | `/v1/divisions/:id`                  | Show a division     |        |
+| DELETE | `/v1/divisions/:id`                  | Delete a division   |        |
 
 #### `POST /v1/divisions`
 
@@ -77,6 +81,9 @@ body:
 |--------|----------------------------------|-------------------|--------|
 | GET    | `/v1/leagues`                    | Show all leagues  |        |
 | POST   | [`/v1/leagues`](#post-v1leagues) | Create new league |        |
+| PATCH  | `/v1/leagues/:id`                | Update a league   |        |
+| GET    | `/v1/leagues/:id`                | Show a league     |        |
+| DELETE | `/v1/leagues/:id`                | Delete a league   |        |
 
 
 #### `POST /v1/leagues`
