@@ -1,0 +1,9 @@
+site_name: OnTrack Hockey
+
+theme:
+  name: readthedocs
+
+nav:
+  - Home: index.md
+  - API:
+      - Leagues: api/leagues.md
