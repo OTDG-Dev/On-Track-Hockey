@@ -19,10 +19,10 @@ Response:
 ```json
 {
   "game": {
-    "HomeTeamID": 1,
-    "AwayTeamID": 2,
-    "StartTime": "2026-03-10T19:30:00-05:00",
-    "Version": 1
+    "id": 2,
+    "home_team_id": 1,
+    "away_team_id": 2,
+    "start_time": "2026-03-10T19:30:00-05:00",
   }
 }
 ```
