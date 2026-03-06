@@ -38,5 +38,8 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPatch, "/v1/leagues/:id", app.updateLeagueHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/leagues/:id", app.deleteLeagueHandler)
 
+	router.HandlerFunc(http.MethodPost, "/v1/games", app.createGameHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/games/:id", app.showGameHandler)
+
 	return app.recoverPanic(app.rateLimit(app.cors(router)))
 }

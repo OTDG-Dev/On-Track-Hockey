@@ -14,7 +14,7 @@ import (
 type Team struct {
 	ID        int       `json:"id"`
 	CreatedAt time.Time `json:"-"`
-	Version   int       `json:"version"`
+	Version   int       `json:"-"`
 
 	FullName   string `json:"full_name"`
 	ShortName  string `json:"short_name"`

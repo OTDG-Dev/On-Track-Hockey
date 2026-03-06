@@ -15,6 +15,7 @@ type Models struct {
 	Teams    TeamModel
 	Division DivisonModel
 	League   LeagueModel
+	Games    GameModel
 }
 
 func NewModel(db *sql.DB) Models {
@@ -23,5 +24,6 @@ func NewModel(db *sql.DB) Models {
 		Teams:    TeamModel{DB: db},
 		Division: DivisonModel{DB: db},
 		League:   LeagueModel{DB: db},
+		Games:    GameModel{DB: db},
 	}
 }
