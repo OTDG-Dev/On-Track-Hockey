@@ -11,6 +11,20 @@
 }
 ```
 
+## View a league
+
+`GET /leagues/{id}`
+
+Example response:
+
+```json
+{
+  "league": {
+    "id": 2,
+    "name": "NHL"
+  }
+}
+```
 ## View all leagues
 
 `GET /leagues`
@@ -29,21 +43,6 @@ Example response:
       "name": "NHL"
     }
   ]
-}
-```
-
-## View single league
-
-`GET /leagues/{id}`
-
-Example response:
-
-```json
-{
-  "league": {
-    "id": 2,
-    "name": "NHL"
-  }
 }
 ```
 

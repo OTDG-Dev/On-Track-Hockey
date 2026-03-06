@@ -6,4 +6,8 @@ theme:
 nav:
   - Home: index.md
   - API:
+      - Players: api/players.md
+      - Teams: api/teams.md
+      - Games: api/games.md
+      - Divisions: api/divisions.md
       - Leagues: api/leagues.md
