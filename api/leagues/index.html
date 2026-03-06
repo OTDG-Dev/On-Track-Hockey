@@ -54,9 +54,9 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#create-a-league">Create a league</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#view-all-leagues">View all leagues</a>
+    <li class="toctree-l2"><a class="reference internal" href="#view-a-league">View a league</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#view-single-league">View single league</a>
+    <li class="toctree-l2"><a class="reference internal" href="#view-all-leagues">View all leagues</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#update-a-league">Update a league</a>
     </li>
@@ -96,6 +96,16 @@
   &quot;name&quot;: &quot;NHL&quot;
 }
 </code></pre>
+<h2 id="view-a-league">View a league</h2>
+<p><code>GET /leagues/{id}</code></p>
+<p>Example response:</p>
+<pre><code class="language-json">{
+  &quot;league&quot;: {
+    &quot;id&quot;: 2,
+    &quot;name&quot;: &quot;NHL&quot;
+  }
+}
+</code></pre>
 <h2 id="view-all-leagues">View all leagues</h2>
 <p><code>GET /leagues</code></p>
 <p>Example response:</p>
@@ -110,16 +120,6 @@
       &quot;name&quot;: &quot;NHL&quot;
     }
   ]
-}
-</code></pre>
-<h2 id="view-single-league">View single league</h2>
-<p><code>GET /leagues/{id}</code></p>
-<p>Example response:</p>
-<pre><code class="language-json">{
-  &quot;league&quot;: {
-    &quot;id&quot;: 2,
-    &quot;name&quot;: &quot;NHL&quot;
-  }
 }
 </code></pre>
 <h2 id="update-a-league">Update a league</h2>
