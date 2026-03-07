@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Teams - OnTrack Hockey</title>
+    <title>Players - OnTrack Hockey</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Teams";
-        var mkdocs_page_input_path = "api/teams.md";
+        var mkdocs_page_name = "Players";
+        var mkdocs_page_input_path = "api/players.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -44,20 +44,8 @@
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">API</span></p>
-              <ul class="current">
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Teams</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#create-a-team">Create a team</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#get-a-team">Get a team</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#get-all-teams">Get all teams</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#edit-a-team">Edit a Team</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#delete-a-team">Delete a team</a>
-    </li>
-    </ul>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../teams/">Teams</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../games/">Games</a>
                   </li>
@@ -78,8 +66,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">API</li>
-      <li class="breadcrumb-item active">Teams</li>
+      <li class="breadcrumb-item active">Players</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -88,102 +75,148 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="teams">Teams</h1>
-<h2 id="create-a-team">Create a team</h2>
-<p><code>POST /teams</code></p>
+                <h1 id="players">Players</h1>
+<h2 id="create-a-player">Create a player</h2>
+<p><code>POST /players</code></p>
 <p>Request:</p>
 <pre><code class="language-json">{
-  &quot;full_name&quot;: &quot;New York Rangers&quot;,
-  &quot;short_name&quot;: &quot;NYR&quot;,
-  &quot;division_id&quot;: 1,
+  &quot;first_name&quot;: &quot;Igor&quot;,
+  &quot;last_name&quot;: &quot;Shesterkin&quot;,
+  &quot;sweater_number&quot;: 31,
+  &quot;position&quot;: &quot;G&quot;,
+  &quot;birth_date&quot;: &quot;1995-12-30&quot;,
+  &quot;birth_country&quot;: &quot;RUS&quot;,
+  &quot;shoots_catches&quot;: &quot;L&quot;,
+  &quot;current_team_id&quot;: 1,
   &quot;is_active&quot;: true
 }
 </code></pre>
 <p>Response:</p>
 <pre><code class="language-json">{
-  &quot;team&quot;: {
-    &quot;id&quot;: 3,
-    &quot;full_name&quot;: &quot;New York Rangers&quot;,
-    &quot;short_name&quot;: &quot;NYR&quot;,
-    &quot;division_id&quot;: 1,
-    &quot;is_active&quot;: true
+  &quot;player&quot;: {
+    &quot;id&quot;: 35,
+    &quot;is_active&quot;: true,
+    &quot;current_team_id&quot;: 1,
+    &quot;first_name&quot;: &quot;Igor&quot;,
+    &quot;last_name&quot;: &quot;Shesterkin&quot;,
+    &quot;sweater_number&quot;: 31,
+    &quot;position&quot;: &quot;G&quot;,
+    &quot;birth_date&quot;: &quot;1995-12-30&quot;,
+    &quot;birth_country&quot;: &quot;RUS&quot;,
+    &quot;shoots_catches&quot;: &quot;L&quot;
   }
 }
 </code></pre>
-<h2 id="get-a-team">Get a team</h2>
-<p><code>GET /teams/{id}</code></p>
+<h2 id="view-a-player">View a player</h2>
+<p><code>GET /player/{id}</code></p>
 <p>Response:</p>
 <pre><code class="language-json">{
-  &quot;team&quot;: {
-    &quot;id&quot;: 1,
-    &quot;version&quot;: 2,
-    &quot;full_name&quot;: &quot;New York&quot;,
-    &quot;short_name&quot;: &quot;NYR&quot;,
-    &quot;division_id&quot;: 1,
-    &quot;is_active&quot;: false
+  &quot;player&quot;: {
+    &quot;id&quot;: 2,
+    &quot;is_active&quot;: true,
+    &quot;current_team_id&quot;: 2,
+    &quot;first_name&quot;: &quot;Macklin&quot;,
+    &quot;last_name&quot;: &quot;Celebrini&quot;,
+    &quot;sweater_number&quot;: 71,
+    &quot;position&quot;: &quot;C&quot;,
+    &quot;birth_date&quot;: &quot;2006-05-12&quot;,
+    &quot;birth_country&quot;: &quot;CAN&quot;,
+    &quot;shoots_catches&quot;: &quot;L&quot;,
+    &quot;team_full_name&quot;: &quot;San Jose Sharks&quot;,
+    &quot;team_short_name&quot;: &quot;SJS&quot;
   }
 }
 </code></pre>
-<h2 id="get-all-teams">Get all teams</h2>
-<p><code>GET /teams</code></p>
+<h2 id="view-all-players">View all players</h2>
+<blockquote>
+<p>needs to be updated, there are filters / pagination</p>
+</blockquote>
+<p><code>GET /players</code></p>
 <p>Response:</p>
 <pre><code class="language-json">{
-  &quot;teams&quot;: [
+  &quot;metadata&quot;: {
+    &quot;current_page&quot;: 1,
+    &quot;page_size&quot;: 20,
+    &quot;first_page&quot;: 1,
+    &quot;last_page&quot;: 1,
+    &quot;total_records&quot;: 2
+  },
+  &quot;players&quot;: [
     {
       &quot;id&quot;: 1,
-      &quot;version&quot;: 0,
-      &quot;full_name&quot;: &quot;New York Rangers&quot;,
-      &quot;short_name&quot;: &quot;NYR&quot;,
-      &quot;division_id&quot;: 1,
-      &quot;is_active&quot;: true
+      &quot;version&quot;: 1,
+      &quot;is_active&quot;: true,
+      &quot;current_team_id&quot;: 1,
+      &quot;first_name&quot;: &quot;Igor&quot;,
+      &quot;last_name&quot;: &quot;Shesterkin&quot;,
+      &quot;sweater_number&quot;: 31,
+      &quot;position&quot;: &quot;G&quot;,
+      &quot;birth_date&quot;: &quot;1995-12-30&quot;,
+      &quot;birth_country&quot;: &quot;RUS&quot;,
+      &quot;shoots_catches&quot;: &quot;L&quot;,
+      &quot;team_full_name&quot;: &quot;New York Rangers&quot;,
+      &quot;team_short_name&quot;: &quot;NYR&quot;
     },
     {
       &quot;id&quot;: 2,
-      &quot;version&quot;: 0,
-      &quot;full_name&quot;: &quot;San Jose Sharks&quot;,
-      &quot;short_name&quot;: &quot;SJS&quot;,
-      &quot;division_id&quot;: 1,
-      &quot;is_active&quot;: true
-    }
+      &quot;version&quot;: 1,
+      &quot;is_active&quot;: true,
+      &quot;current_team_id&quot;: 2,
+      &quot;first_name&quot;: &quot;Macklin&quot;,
+      &quot;last_name&quot;: &quot;Celebrini&quot;,
+      &quot;sweater_number&quot;: 71,
+      &quot;position&quot;: &quot;C&quot;,
+      &quot;birth_date&quot;: &quot;2006-05-12&quot;,
+      &quot;birth_country&quot;: &quot;CAN&quot;,
+      &quot;shoots_catches&quot;: &quot;L&quot;,
+      &quot;team_full_name&quot;: &quot;San Jose Sharks&quot;,
+      &quot;team_short_name&quot;: &quot;SJS&quot;
+    },
   ]
 }
 </code></pre>
-<h2 id="edit-a-team">Edit a Team</h2>
-<p><code>PATCH /teams/{id}</code></p>
-<p>Partial updates are accepted</p>
+<h2 id="update-a-player">Update a player</h2>
+<p><code>PATCH /player/{id}</code></p>
 <p>Request:</p>
 <pre><code class="language-json">{
-  &quot;full_name&quot;: &quot;New York Rangers&quot;,
-  &quot;short_name&quot;: &quot;NYR&quot;,
-  &quot;division_id&quot;: 1,
+  &quot;first_name&quot;: &quot;Connor&quot;,
+  &quot;last_name&quot;: &quot;McDavid&quot;,
+  &quot;sweater_number&quot;: 31,
+  &quot;position&quot;: &quot;G&quot;,
+  &quot;birth_date&quot;: &quot;1995-12-30&quot;,
+  &quot;birth_country&quot;: &quot;RUS&quot;,
+  &quot;shoots_catches&quot;: &quot;L&quot;,
+  &quot;current_team_id&quot;: 1,
   &quot;is_active&quot;: true
 }
 </code></pre>
 <p>Response:</p>
 <pre><code class="language-json">{
-  &quot;team&quot;: {
+  &quot;player&quot;: {
     &quot;id&quot;: 1,
-    &quot;full_name&quot;: &quot;New York&quot;,
-    &quot;short_name&quot;: &quot;NYR&quot;,
-    &quot;division_id&quot;: 1,
-    &quot;is_active&quot;: false
+    &quot;version&quot;: 3,
+    &quot;is_active&quot;: true,
+    &quot;current_team_id&quot;: 1,
+    &quot;first_name&quot;: &quot;Connor&quot;,
+    &quot;last_name&quot;: &quot;McDavid&quot;,
+    &quot;sweater_number&quot;: 31,
+    &quot;position&quot;: &quot;G&quot;,
+    &quot;birth_date&quot;: &quot;1995-12-30&quot;,
+    &quot;birth_country&quot;: &quot;RUS&quot;,
+    &quot;shoots_catches&quot;: &quot;L&quot;
   }
 }
 </code></pre>
-<h2 id="delete-a-team">Delete a team</h2>
-<p><code>DELETE /teams/{id}</code></p>
-<p>Response:</p>
+<h2 id="delete-a-player">Delete a player</h2>
+<p><code>DELETE /player/{id}</code></p>
+<p>Example response:</p>
 <pre><code class="language-json">{
-  &quot;message&quot;: &quot;team successfully deleted&quot;
+  &quot;message&quot;: &quot;player successfully deleted&quot;
 }
 </code></pre>
               
             </div>
           </div><footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../.." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../games/" class="btn btn-neutral float-right" title="Games">Next <span class="icon icon-circle-arrow-right"></span></a>
-    </div>
 
   <hr/>
 
@@ -205,10 +238,6 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../.." style="color: #fcfcfc">&laquo; Previous</a></span>
-    
-    
-      <span><a href="../games/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
