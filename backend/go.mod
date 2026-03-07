@@ -8,3 +8,5 @@ require (
 	github.com/tomasen/realip v0.0.0-20180522021738-f0c99a92ddce
 	golang.org/x/time v0.14.0
 )
+
+require github.com/DATA-DOG/go-sqlmock v1.5.2

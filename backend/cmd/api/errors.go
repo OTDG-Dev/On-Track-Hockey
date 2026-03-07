@@ -1,8 +1,12 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
+	"strings"
+
+	"github.com/lib/pq"
 )
 
 // helper method for logging an error message along with current request
@@ -66,4 +70,76 @@ func (app *application) editConflictResponse(w http.ResponseWriter, r *http.Requ
 
 func (app *application) rateLimitExceededResponse(w http.ResponseWriter, r *http.Request) {
 	app.errorResponse(w, r, http.StatusTooManyRequests, "rate limit exceeded")
+}
+
+// handleDatabaseError provides verbose error messages for database errors,
+// particularly for foreign key constraint violations (Issue #73)
+func (app *application) handleDatabaseError(w http.ResponseWriter, r *http.Request, err error) {
+	app.logError(r, err)
+
+	// Check for PostgreSQL specific errors
+	var pgErr *pq.Error
+	if errors.As(err, &pgErr) {
+		switch pgErr.Code {
+		case "23503": // foreign_key_violation
+			message := app.formatForeignKeyError(pgErr)
+			app.errorResponse(w, r, http.StatusConflict, message)
+			return
+		case "23505": // unique_violation
+			message := fmt.Sprintf("A record with this %s already exists", pgErr.Constraint)
+			app.errorResponse(w, r, http.StatusConflict, message)
+			return
+		case "23502": // not_null_violation
+			message := fmt.Sprintf("Field %s cannot be empty", pgErr.Column)
+			app.errorResponse(w, r, http.StatusBadRequest, message)
+			return
+		case "23514": // check_violation
+			message := fmt.Sprintf("Value violates check constraint: %s", pgErr.Constraint)
+			app.errorResponse(w, r, http.StatusBadRequest, message)
+			return
+		}
+	}
+
+	// Default to server error for unhandled database errors
+	app.serverErrorResponse(w, r, err)
+}
+
+// formatForeignKeyError creates a human-readable error message for foreign key violations
+func (app *application) formatForeignKeyError(pgErr *pq.Error) string {
+	constraint := pgErr.Constraint
+	detail := pgErr.Detail
+
+	var message strings.Builder
+	message.WriteString("Unable to complete operation: ")
+
+	// Try to provide specific context based on the constraint
+	switch {
+	case strings.Contains(constraint, "game_id"):
+		message.WriteString("the referenced game does not exist")
+	case strings.Contains(constraint, "team_id"):
+		message.WriteString("the referenced team does not exist")
+	case strings.Contains(constraint, "player_id"):
+		message.WriteString("the referenced player does not exist")
+	case strings.Contains(constraint, "game_event_id"):
+		message.WriteString("the referenced game event does not exist")
+	case strings.Contains(constraint, "home_team_id"):
+		message.WriteString("the referenced home team does not exist")
+	case strings.Contains(constraint, "away_team_id"):
+		message.WriteString("the referenced away team does not exist")
+	case strings.Contains(constraint, "division_id"):
+		message.WriteString("the referenced division does not exist")
+	case strings.Contains(constraint, "league_id"):
+		message.WriteString("the referenced league does not exist")
+	default:
+		message.WriteString("a related record does not exist")
+	}
+
+	// Add detail if available
+	if detail != "" {
+		message.WriteString(" (")
+		message.WriteString(detail)
+		message.WriteString(")")
+	}
+
+	return message.String()
 }

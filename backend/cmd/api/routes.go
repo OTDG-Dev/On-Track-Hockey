@@ -41,5 +41,20 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPost, "/v1/games", app.createGameHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/games/:id", app.showGameHandler)
 
+	// Game Events routes
+	router.HandlerFunc(http.MethodGet, "/v1/games/:id/events", app.listGameEventsByGameHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/game-events", app.createGameEventHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/game-events/:id", app.showGameEventHandler)
+	router.HandlerFunc(http.MethodPatch, "/v1/game-events/:id", app.updateGameEventHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/game-events/:id", app.deleteGameEventHandler)
+
+	// Event Participants routes
+	router.HandlerFunc(http.MethodGet, "/v1/game-events/:id/participants", app.listEventParticipantsByGameEventHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/event-participants", app.createEventParticipantHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/event-participants/:id", app.showEventParticipantHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/players/:id/event-participants", app.listEventParticipantsByPlayerHandler)
+	router.HandlerFunc(http.MethodPatch, "/v1/event-participants/:id", app.updateEventParticipantHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/event-participants/:id", app.deleteEventParticipantHandler)
+
 	return app.recoverPanic(app.rateLimit(app.cors(router)))
 }
