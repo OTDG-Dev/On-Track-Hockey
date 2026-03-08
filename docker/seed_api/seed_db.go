@@ -22,13 +22,13 @@ type Req struct {
 	ExpCode  int
 }
 
-func callApi(req Req, c http.Client, delay int, url string) error {
+func callApi(req Req, c http.Client, url string) (bool, error) {
 	var body io.Reader
 
 	if req.Payload != nil {
 		b, err := json.Marshal(req.Payload)
 		if err != nil {
-			return err
+			return false, err
 		}
 		body = bytes.NewBuffer(b)
 	}
@@ -37,28 +37,34 @@ func callApi(req Req, c http.Client, delay int, url string) error {
 
 	r, err := http.NewRequest(strings.ToUpper(req.Method), fullURL, body)
 	if err != nil {
-		return err
+		return false, err
 	}
 
-	time.Sleep(time.Duration(delay) * time.Second)
 	resp, err := c.Do(r)
 	if err != nil {
-		return err
+		return false, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != req.ExpCode {
-		return fmt.Errorf(
-			"unexpected status code: %d expected: %d\nfor request %s\nplayload: %v",
-			resp.StatusCode,
-			req.ExpCode,
-			req.Endpoint,
-			req.Payload,
-		)
+		switch resp.StatusCode {
+		case 429:
+			return true, nil
+		default:
+			return false, fmt.Errorf(
+				"unexpected status code: %d expected: %d\nfor request %s\nplayload: %v\nresponse: %s",
+				resp.StatusCode,
+				req.ExpCode,
+				req.Endpoint,
+				req.Payload,
+				body,
+			)
+		}
+
 	}
 
 	log.Printf("✓ created %s", req.Endpoint)
-	return nil
+	return false, nil
 }
 
 func main() {
@@ -78,12 +84,25 @@ func Run(delay int, url string) error {
 		Timeout: 3 * time.Second,
 	}
 
-	for _, request := range requestList {
-		err := callApi(request, c, delay, url)
-		if err != nil {
-			return err
-		}
+	currentDelay := time.Duration(delay) * time.Second
 
+	for _, request := range requestList {
+		// Loop until a request fails or succeeds.
+		// Only retry if we hit a ratelimiteed response code.
+		for range 3 {
+			time.Sleep(currentDelay)
+
+			retry, err := callApi(request, c, url)
+			if err != nil {
+				return err
+			}
+
+			if retry {
+				currentDelay += 1 * time.Second
+				continue
+			}
+			break
+		}
 	}
 	return nil
 }

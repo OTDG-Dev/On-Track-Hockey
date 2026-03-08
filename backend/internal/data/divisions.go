@@ -102,7 +102,7 @@ func (m DivisonModel) Delete(id int) error {
 
 	result, err := m.DB.ExecContext(ctx, query, id)
 	if err != nil {
-		return err
+		return ExecDeleteErrors(err, "division")
 	}
 
 	rowsAffected, err := result.RowsAffected()

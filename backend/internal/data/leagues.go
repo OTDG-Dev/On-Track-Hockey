@@ -133,7 +133,7 @@ func (m LeagueModel) Delete(id int) error {
 
 	result, err := m.DB.ExecContext(ctx, query, id)
 	if err != nil {
-		return err
+		return ExecDeleteErrors(err, "league")
 	}
 
 	rowsAffected, err := result.RowsAffected()
