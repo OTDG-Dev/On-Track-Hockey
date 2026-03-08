@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
@@ -67,8 +66,6 @@ func (m TeamModel) Get(id int) (*Team, error) {
 }
 
 func (m TeamModel) Insert(team *Team) error {
-	fmt.Println(team)
-
 	query := /* sql */ `
 	INSERT INTO teams (
 		full_name,
@@ -150,7 +147,7 @@ func (m TeamModel) Delete(id int) error {
 
 	result, err := m.DB.ExecContext(ctx, query, id)
 	if err != nil {
-		return err
+		return ExecDeleteErrors(err, "teams")
 	}
 
 	rowsAffected, err := result.RowsAffected()
