@@ -8,12 +8,13 @@ import (
 )
 
 type Game struct {
-	ID         int       `json:"id"`
-	CreatedAt  time.Time `json:"-"`
+	ID        int       `json:"id"`
+	CreatedAt time.Time `json:"-"`
+	Version   int       `json:"-"`
+
 	HomeTeamID int       `json:"home_team_id"`
 	AwayTeamID int       `json:"away_team_id"`
 	StartTime  time.Time `json:"start_time"`
-	Version    int       `json:"version"`
 }
 
 type GameModel struct {
@@ -68,15 +69,15 @@ func (m *GameModel) Get(id int) (*Game, error) {
 	return &game, nil
 }
 
-type GameWithDetails struct {
+type GameView struct {
 	HomeTeam   string    `json:"home_team"`
 	AwayTeam   string    `json:"away_team"`
-	HomeTeamID string    `json:"home_team_id"`
-	AwayTeamID string    `json:"away_team_id"`
+	HomeTeamID int       `json:"home_team_id"`
+	AwayTeamID int       `json:"away_team_id"`
 	StartTime  time.Time `json:"start_time"`
 }
 
-func (m *GameModel) GetWithDetails(id int) (*GameWithDetails, error) {
+func (m *GameModel) GetView(id int) (*GameView, error) {
 	query := /* sql */ `
 		SELECT
 			home_team_id,
@@ -94,7 +95,7 @@ func (m *GameModel) GetWithDetails(id int) (*GameWithDetails, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	var g GameWithDetails
+	var g GameView
 
 	err := m.DB.QueryRowContext(ctx, query, id).Scan(
 		&g.HomeTeamID,
