@@ -36,7 +36,13 @@ func (m TeamModel) Get(id int) (*Team, error) {
 	}
 
 	query := /* sql */ `
-		SELECT id, full_name, short_name, division_id, version
+		SELECT 
+			id,
+			full_name,
+			short_name,
+			division_id,
+			is_active,
+			version
 		FROM teams
 		WHERE id = $1;`
 
@@ -50,6 +56,7 @@ func (m TeamModel) Get(id int) (*Team, error) {
 		&t.FullName,
 		&t.ShortName,
 		&t.DivisionID,
+		&t.IsActive,
 		&t.Version,
 	)
 
