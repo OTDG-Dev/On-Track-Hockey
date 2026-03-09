@@ -8,6 +8,9 @@ import { CreateDivision } from './components/create-division/create-division';
 import { CreateLeague } from './components/create-league/create-league';
 import { ViewPlayer } from './components/view-player/view-player';
 import { EditPlayer } from './components/edit-player/edit-player';
+import { ViewTeams } from './components/view-teams/view-teams';
+import { ViewTeam } from './components/view-team/view-team';
+import { EditTeam } from './components/edit-team/edit-team';
 
 export const routes: Routes = [
     {
@@ -45,5 +48,17 @@ export const routes: Routes = [
     {
         path: 'edit-player/:id',
         component: EditPlayer
+    },
+    {
+        path: 'view-teams',
+        component: ViewTeams
+    },
+    {
+        path: 'view-team/:id',
+        component: ViewTeam
+    },
+    {
+        path: 'edit-team/:id',
+        component: EditTeam
     }
 ];

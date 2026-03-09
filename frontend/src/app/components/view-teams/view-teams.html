@@ -1,0 +1,33 @@
+<div class="page-container">
+    <h1>View Players</h1>
+    <hr>
+
+    <div class="content-container">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Abbreviation</th>
+                    <th>Division</th>
+                    <th>Active</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let team of teams()">
+                    <td>
+                        <a [routerLink]="['/view-team', team.id]">
+                            {{ team.full_name }}
+                        </a>
+                    </td>
+                    <td>{{ team.short_name }}</td>
+                    <td>{{ getDivisionName(team.division_id) }}</td>
+                    <td [class.inactive-text]="!team.is_active">
+                        {{ team.is_active ? 'Active' : 'Incative'}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

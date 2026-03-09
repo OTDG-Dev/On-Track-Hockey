@@ -1,0 +1,53 @@
+
+<div class="page-container">
+    <h1>View Team</h1>
+    <hr>
+    
+    <div class="top-actions">
+      <button [routerLink]="['/edit-team', teamId]" class="action-button edit-button">
+        Edit Team
+      </button>
+  
+      <button (click)="deactivateTeam()" class="action-button delete-button">
+        Deactivate
+      </button>
+    </div>
+  
+    <!-- Avatar -->
+    <div class="avatar-wrapper">
+      <img class="player-avatar" [src]="avatarUrl()" alt="{{ full_name() }} Headshot">
+    </div>
+  
+    <div class="info-columns">
+      <!-- Left Column: Personal Info -->
+      <div class="column personal-column">
+        <p class="section-label">Info</p>
+        <div class="field">
+          <p>Name</p>
+          <div class="value-pill">{{ full_name() }}</div>
+        </div>
+        <div class="field">
+          <p>Abbreviation</p>
+          <div class="value-pill">{{ short_name() }}</div>
+        </div>
+        <div class="field">
+          <p>Active</p>
+        
+          @if (is_active()) {
+            <div class="value-pill">
+              Active
+            </div>
+          } @else {
+            <div class="value-pill inactive-pill">
+              Inactive
+            </div>
+          }
+        
+        </div>
+        <div class="field">
+          <p>Division</p>
+          <div class="value-pill">{{ getDivisionName(division_id()) }}</div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,57 @@
+<div class="page-container">
+    <h1>Edit Team</h1>
+    <hr>
+    <form>
+      <p>Team</p>
+      <div class="name-row">
+        <div class="field">
+          <input [(ngModel)]="full_name" type="text" name="full_name" id="full_name">
+          <p>Team Name</p>
+        </div>
+        <div class="field">
+          <input [(ngModel)]="short_name" type="text" name="short_name" id="short_name">
+          <p>Abbreviation</p>
+        </div>
+      </div>
+  
+      <div class="identification-row">
+        <div class="field">
+          <select [(ngModel)]="division_id" name="division_id">
+            @for (division of divisions(); track division.name) {
+              <option [ngValue]="division.id">
+                {{ division.name }}
+              </option>
+            }
+          </select>
+          <p>Division</p>
+        </div>
+      </div>
+  
+  
+      <div class="checkbox-field">
+        <input [(ngModel)]="is_active" type="checkbox" name="is_active" id="is_active" />
+        <label for="is_active">Active</label>
+      </div>
+  
+    </form>
+  
+    <div class="button-wrapper">
+      <button (click)="patchTeam()" type="button" id="createButton">
+        Edit
+      </button>
+    </div>
+  
+    @if (successMessage()) {
+    <div class="success-message" [class.fade-out]="isFading()">
+      {{ successMessage() }}
+    </div>
+    }
+  
+    @if (errorMessage()) {
+    <div class="error-message" [class.fade-out]="isFading()">
+      {{ errorMessage() }}
+    </div>
+    }
+  
+  </div>
+  
