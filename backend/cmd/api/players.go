@@ -17,7 +17,7 @@ func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	player, err := app.models.Players.GetWithTeam(id)
+	player, err := app.models.Players.GetView(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -75,7 +75,7 @@ func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Reques
 		CurrentTeamID: input.CurrentTeamId,
 	}
 
-	players, metadata, err := app.models.Players.GetAllWithTeam(pq, input.Filters)
+	players, metadata, err := app.models.Players.GetViewAll(pq, input.Filters)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return

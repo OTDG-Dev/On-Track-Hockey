@@ -12,7 +12,7 @@ import (
 type League struct {
 	ID        int       `json:"id"`
 	CreatedAt time.Time `json:"-"`
-	Version   int       `json:"version"`
+	Version   int       `json:"-"`
 
 	Name string `json:"name"`
 }

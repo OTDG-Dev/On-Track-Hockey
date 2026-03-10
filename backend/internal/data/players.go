@@ -314,7 +314,7 @@ type PlayerQuery struct {
 	CurrentTeamID int
 }
 
-func (m PlayerModel) GetWithTeam(id int) (*PlayerWithTeam, error) {
+func (m PlayerModel) GetView(id int) (*PlayerWithTeam, error) {
 	query := /* sql */ `
 		SELECT
 			p.id,
@@ -371,7 +371,7 @@ func (m PlayerModel) GetWithTeam(id int) (*PlayerWithTeam, error) {
 	return &p, nil
 }
 
-func (m PlayerModel) GetAllWithTeam(pq PlayerQuery, filters Filters) ([]*PlayerWithTeam, Metadata, error) {
+func (m PlayerModel) GetViewAll(pq PlayerQuery, filters Filters) ([]*PlayerWithTeam, Metadata, error) {
 	query := fmt.Sprintf( /* sql */ `
 		SELECT
 			count(*) OVER(),

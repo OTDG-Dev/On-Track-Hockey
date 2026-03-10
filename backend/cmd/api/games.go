@@ -43,7 +43,7 @@ func (app *application) showGameHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	game, err := app.models.Games.GetWithDetails(id)
+	game, err := app.models.Games.GetView(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
