@@ -1,4 +1,9 @@
-﻿# On-Track-Hockey
+# On-Track-Hockey 
+
+[![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=white)](backend/)
+[![Angular](https://img.shields.io/badge/Angular-DD0031?logo=angular&logoColor=white)](frontend/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?logo=postgresql&logoColor=white)](db/)
+[![Docs](https://img.shields.io/badge/docs-online-blue)](https://otdg-dev.github.io/On-Track-Hockey/)
 
 Hockey SMS (Sports Management System)
 
@@ -44,7 +49,9 @@ Backend: http://localhost:3000
 
 ## Contributing
 
-Contributions are welcome.  
+Contributions are welcome, but please follow these guidelines: 
 
-If you're interested, fork the repository, open an issue, or submit a pull request and jump in.
+1. Keep pull requests small and focused on a single issue.
+2. Do not submit large AI-generated pull requests.
+
 

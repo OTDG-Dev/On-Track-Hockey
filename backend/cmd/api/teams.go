@@ -157,6 +157,8 @@ func (app *application) deleteTeamHandler(w http.ResponseWriter, r *http.Request
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
 			app.notFoundResponse(w, r)
+		case errors.Is(err, data.ErrFKeyViolation):
+			app.badRequestResponse(w, r, err)
 		default:
 			app.serverErrorResponse(w, r, err)
 		}
