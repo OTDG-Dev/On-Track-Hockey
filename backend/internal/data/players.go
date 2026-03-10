@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/stats"
-	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
+	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/validator"
 	"github.com/lib/pq"
 )
 
