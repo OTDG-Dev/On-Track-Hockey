@@ -17,15 +17,17 @@ Request:
 ```
 
 Event types:
+
 - `goal`
 - `penalty`
 - `shot`
 - `save`
 
 Situations:
+
 - `ev` even strength
 - `pp` powerplay
-- `sh` short handed,
+- `sh` short handed
 - `en` empty net
 
 Response:
