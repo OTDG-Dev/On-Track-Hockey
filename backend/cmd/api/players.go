@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data"
-	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
+	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/validator"
 )
 
 func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request) {
