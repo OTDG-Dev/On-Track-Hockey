@@ -9,4 +9,4 @@ require (
 	golang.org/x/time v0.14.0
 )
 
-require github.com/DATA-DOG/go-sqlmock v1.5.2 // indirect
+require github.com/DATA-DOG/go-sqlmock v1.5.2
