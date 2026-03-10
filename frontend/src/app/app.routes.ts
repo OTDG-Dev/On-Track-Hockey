@@ -12,6 +12,7 @@ import { ViewTeams } from './components/view-teams/view-teams';
 import { ViewTeam } from './components/view-team/view-team';
 import { EditTeam } from './components/edit-team/edit-team';
 import { ViewDivisions } from './components/view-divisions/view-divisions';
+import { ViewDivision } from './components/view-division/view-division';
 
 export const routes: Routes = [
     {
@@ -65,5 +66,9 @@ export const routes: Routes = [
     {
         path: 'view-divisions',
         component: ViewDivisions
+    },
+    {
+        path: 'view-division/:id',
+        component: ViewDivision
     }
 ];

@@ -16,6 +16,10 @@ export class DivisionService {
     return this.httpClient.get<{ divisions: DivisionData[] }>(this.baseUrl);
   }
 
+  getDivision(id:number) {
+    return this.httpClient.get<{ division: DivisionData }>(`${this.baseUrl}/${id}`);
+  }
+
   createDivision(league_id: number, name: string)
   {
     const body = {
@@ -24,6 +28,16 @@ export class DivisionService {
     };
 
     return this.httpClient.post<{ division: DivisionData }>(this.baseUrl, body);
+  }
+
+  patchDivision(league_id: number, name: string, id: number)
+  {
+    const body = {
+      "league_id": league_id,
+      "name": name,
+    };
+
+    return this.httpClient.patch<{ division: DivisionData }>(`${this.baseUrl}/${id}`, body);
   }
   
 }
