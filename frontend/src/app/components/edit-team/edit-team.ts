@@ -56,7 +56,7 @@ export class EditTeam {
           this.short_name.set(responseData.team.short_name);
           this.is_active.set(responseData.team.is_active);
           this.division_id.set(responseData.team.division_id);
-          console.log("is_active : " + this.is_active())
+          
         },
         error: (err) => {
           console.log(err);
