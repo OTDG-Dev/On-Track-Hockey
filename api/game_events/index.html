@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Leagues - OnTrack Hockey</title>
+    <title>Games - OnTrack Hockey</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Leagues";
-        var mkdocs_page_input_path = "api/leagues.md";
+        var mkdocs_page_name = "Games";
+        var mkdocs_page_input_path = "api/game_events.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -45,7 +45,7 @@
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">API</span></p>
-              <ul class="current">
+              <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../players/">Players</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../teams/">Teams</a>
@@ -54,19 +54,7 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../divisions/">Divisions</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Leagues</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#create-a-league">Create a league</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#view-a-league">View a league</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#view-all-leagues">View all leagues</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#update-a-league">Update a league</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#delete-a-league">Delete a league</a>
-    </li>
-    </ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../leagues/">Leagues</a>
                   </li>
               </ul>
       </div>
@@ -83,8 +71,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
-          <li>API &raquo;</li>
-      <li>Leagues</li>
+      <li>Games</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -93,58 +80,61 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="leagues">Leagues</h1>
-<h2 id="create-a-league">Create a league</h2>
-<p><code>POST /leagues</code></p>
+                <h1 id="games">Games</h1>
+<h2 id="create-a-game-event">Create a game event</h2>
+<p><code>POST /games/{game_id}/events</code></p>
+<p>Request:</p>
 <pre><code class="language-json">{
-  &quot;name&quot;: &quot;NHL&quot;
+  &quot;period&quot;: 2,
+  &quot;clock_seconds&quot;: 360,
+  &quot;event_type&quot;: &quot;penalty&quot;,
+  &quot;team_id&quot;: 2,
+  &quot;situation&quot;: &quot;EV&quot;
 }
 </code></pre>
-<h2 id="view-a-league">View a league</h2>
-<p><code>GET /leagues/{id}</code></p>
-<p>Example response:</p>
+<p>Event types:
+- <code>goal</code>
+- <code>penalty</code>
+- <code>shot</code>
+- <code>save</code></p>
+<p>Situations:
+- <code>ev</code> even strength
+- <code>pp</code> powerplay
+- <code>sh</code> short handed,
+- <code>en</code> empty net</p>
+<p>Response:</p>
 <pre><code class="language-json">{
-  &quot;league&quot;: {
+  &quot;game_events&quot;: {
     &quot;id&quot;: 2,
-    &quot;name&quot;: &quot;NHL&quot;
+    &quot;event_number&quot;: 2,
+    &quot;game_id&quot;: 1,
+    &quot;period&quot;: 2,
+    &quot;clock_seconds&quot;: 12,
+    &quot;event_type&quot;: &quot;penalty&quot;,
+    &quot;situation&quot;: &quot;EV&quot;,
+    &quot;team_id&quot;: 2
   }
 }
 </code></pre>
-<h2 id="view-all-leagues">View all leagues</h2>
-<p><code>GET /leagues</code></p>
-<p>Example response:</p>
+<h2 id="view-a-game-event">View a game event</h2>
+<p><code>GET /events/{id}</code></p>
+<p>Response:</p>
 <pre><code class="language-json">{
-  &quot;leagues&quot;: [
-    {
-      &quot;id&quot;: 1,
-      &quot;name&quot;: &quot;AHL&quot;
-    },
-    {
-      &quot;id&quot;: 2,
-      &quot;name&quot;: &quot;NHL&quot;
-    }
-  ]
-}
-</code></pre>
-<h2 id="update-a-league">Update a league</h2>
-<p><code>PATCH /leagues/{id}</code></p>
-<pre><code class="language-json">{
-  &quot;name&quot;: &quot;KHL&quot;
-}
-</code></pre>
-<h2 id="delete-a-league">Delete a league</h2>
-<p><code>DELETE /leagues/{id}</code></p>
-<p>Example response:</p>
-<pre><code class="language-json">{
-  &quot;message&quot;: &quot;league successfully deleted&quot;
+  &quot;game_events&quot;: {
+    &quot;id&quot;: 1,
+    &quot;event_number&quot;: 1,
+    &quot;game_id&quot;: 1,
+    &quot;period&quot;: 2,
+    &quot;clock_seconds&quot;: 12,
+    &quot;event_type&quot;: &quot;penalty&quot;,
+    &quot;situation&quot;: &quot;EV&quot;,
+    &quot;team_id&quot;: 2
+  }
 }
 </code></pre>
               
             </div>
           </div><footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../divisions/" class="btn btn-neutral float-left" title="Divisions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-    </div>
 
   <hr/>
 
@@ -165,8 +155,6 @@
   <div class="rst-versions" role="note" aria-label="Versions">
   <span class="rst-current-version" data-toggle="rst-current-version">
     
-    
-      <span><a href="../divisions/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
   </span>
