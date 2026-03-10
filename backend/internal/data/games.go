@@ -70,15 +70,18 @@ func (m *GameModel) Get(id int) (*Game, error) {
 }
 
 type GameView struct {
-	HomeTeam   string    `json:"home_team"`
-	AwayTeam   string    `json:"away_team"`
-	HomeTeamID int       `json:"home_team_id"`
-	AwayTeamID int       `json:"away_team_id"`
-	StartTime  time.Time `json:"start_time"`
+	HomeTeam   string      `json:"home_team"`
+	AwayTeam   string      `json:"away_team"`
+	HomeTeamID int         `json:"home_team_id"`
+	AwayTeamID int         `json:"away_team_id"`
+	StartTime  time.Time   `json:"start_time"`
+	GameEvents []GameEvent `json:"game_events"`
 }
 
-func (m *GameModel) GetView(id int) (*GameView, error) {
-	query := /* sql */ `
+func (m *GameModel) GetView(gameID int) (*GameView, error) {
+
+	// Phase 1: Game Info
+	gameQuery := /* sql */ `
 		SELECT
 			home_team_id,
 			t1.short_name,
@@ -97,7 +100,7 @@ func (m *GameModel) GetView(id int) (*GameView, error) {
 
 	var g GameView
 
-	err := m.DB.QueryRowContext(ctx, query, id).Scan(
+	err := m.DB.QueryRowContext(ctx, gameQuery, gameID).Scan(
 		&g.HomeTeamID,
 		&g.HomeTeam,
 		&g.AwayTeamID,
@@ -112,6 +115,53 @@ func (m *GameModel) GetView(id int) (*GameView, error) {
 			return nil, err
 		}
 	}
+
+	// Phase 2: Game events
+	eventsQuery := /* sql */ `
+		SELECT
+			id,
+			period,
+			clock_seconds,
+			event_type,
+			situation,
+			event_number,
+			team_id
+		FROM game_events
+		WHERE game_id = $1`
+
+	ctx, cancel = context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.DB.QueryContext(ctx, eventsQuery, gameID)
+	if err != nil {
+		return &g, nil
+	}
+	defer rows.Close()
+
+	gameEvents := []GameEvent{}
+
+	for rows.Next() {
+		var e GameEvent
+		err := rows.Scan(
+			&e.ID,
+			&e.Period,
+			&e.ClockSeconds,
+			&e.EventType,
+			&e.Situation,
+			&e.EventNumber,
+			&e.TeamID,
+		)
+		if err != nil {
+			return &g, err
+		}
+		gameEvents = append(gameEvents, e)
+	}
+
+	if err := rows.Err(); err != nil {
+		return &g, err
+	}
+
+	g.GameEvents = gameEvents
 
 	return &g, nil
 }

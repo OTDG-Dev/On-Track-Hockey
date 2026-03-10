@@ -10,10 +10,10 @@ import (
 
 func (app *application) createGameEventHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
-		GameID    int    `json:"game_id"`
 		Period    int    `json:"period"`
-		Clock     int    `json:"clock"`
+		Clock     int    `json:"clock_seconds"`
 		EventType string `json:"event_type"`
+		Situation string `json:"situation"`
 		TeamID    int    `json:"team_id"`
 	}
 	err := app.readJSON(w, r, &input)
@@ -22,12 +22,19 @@ func (app *application) createGameEventHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 
+	gameID, err := app.readIDParam(r, "game_id")
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
 	event := data.GameEvent{
-		GameID:    input.GameID,
-		Period:    input.Period,
-		Clock:     input.Clock,
-		EventType: input.EventType,
-		TeamID:    input.TeamID,
+		GameID:       gameID,
+		Period:       input.Period,
+		ClockSeconds: input.Clock,
+		EventType:    input.EventType,
+		TeamID:       input.TeamID,
+		Situation:    input.Situation,
 	}
 
 	v := validator.New()
@@ -36,7 +43,7 @@ func (app *application) createGameEventHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	if err := app.models.GameEvents.Insert(event); err != nil {
+	if err := app.models.GameEvents.Insert(&event); err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
 	}

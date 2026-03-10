@@ -5,63 +5,106 @@ import (
 	"database/sql"
 	"errors"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
 )
 
+const maxClockSeconds = 1200
+
 type GameEvent struct {
 	ID        int       `json:"id"`
 	CreatedAt time.Time `json:"-"`
 	Version   int       `json:"-"`
 
-	GameID    int    `json:"game_id"`
-	Period    int    `json:"period"`
-	Clock     int    `json:"clock"`
-	EventType string `json:"event_type"`
-	TeamID    int    `json:"team_id"`
+	EventNumber  int    `json:"event_number"`
+	GameID       int    `json:"game_id,omitzero"`
+	Period       int    `json:"period"`
+	ClockSeconds int    `json:"clock_seconds"`
+	EventType    string `json:"event_type"`
+	Situation    string `json:"situation"`
+	TeamID       int    `json:"team_id"`
 }
 
 type GameEventModel struct {
 	DB *sql.DB
 }
 
-var eventTypes = []string{"goal", "penalty", "shot", "save"} // could be a custom type..
+var eventTypes = []string{"goal", "penalty", "shot", "save"}
+var situations = []string{"EV", "PP", "SH", "EN"}
 
 func ValidateGameEvent(v *validator.Validator, e *GameEvent) {
 	e.EventType = strings.ToLower(e.EventType)
-	v.Check(slices.Contains(eventTypes, e.EventType), "event_type", "this type not permitted")
+	msg := "this type not permitted must be <" + strings.Join(eventTypes, "|") + ">"
+	v.Check(slices.Contains(eventTypes, e.EventType), "event_type", msg)
+
+	e.Situation = strings.ToUpper(e.Situation)
+	msg = "this type not permitted must be <" + strings.Join(situations, "|") + ">"
+	v.Check(slices.Contains(situations, e.Situation), "situation", msg)
+
+	v.Check(e.Period >= 1 && e.Period <= 3, "period", "invalid period")
+
+	msg = "invalid clock, must be less than " + strconv.Itoa(maxClockSeconds)
+	v.Check(e.ClockSeconds >= 0 && e.ClockSeconds <= 1200, "clock_seconds", msg)
 }
 
-func (m *GameEventModel) Insert(event GameEvent) error {
+func (m *GameEventModel) Insert(event *GameEvent) error {
 	query := /* sql */ `
 		INSERT INTO game_events (
 			game_id,
+			event_number,
 			period,
-			clock,
+			clock_seconds,
 			event_type,
-			team_id,
+			situation,
+			team_id
 		)
-		VALUES ($1,$2,$3,$4,$5)
-		RETURNING id, created_at, version`
+		SELECT
+			$1,
+			COALESCE(MAX(event_number),0) + 1, -- Numbering name space for local game
+			$2,
+			$3,
+			$4,
+			$5,
+			$6
+		FROM game_events
+		WHERE game_id = $1
+		RETURNING id, created_at, version, event_number`
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	args := []any{event.GameID, event.Period, event.Clock, event.EventType, event.TeamID}
-	return m.DB.QueryRowContext(ctx, query, args...).Scan(&event.ID, &event.CreatedAt, &event.Version)
+	args := []any{
+		event.GameID,
+		event.Period,
+		event.ClockSeconds,
+		event.EventType,
+		event.Situation,
+		event.TeamID,
+	}
+
+	return m.DB.QueryRowContext(ctx, query, args...).Scan(
+		&event.ID,
+		&event.CreatedAt,
+		&event.Version,
+		&event.EventNumber,
+	)
 }
 
 func (m *GameEventModel) Get(id int) (*GameEvent, error) {
 	query := /* sql */ `
 		SELECT
+			id,
+			event_number,
 			version,
 			game_id,
 			period,
-			clock,
+			clock_seconds,
 			event_type,
-			team_id,
+			situation,
+			team_id
 		FROM game_events
 		WHERE id = $1`
 
@@ -71,11 +114,14 @@ func (m *GameEventModel) Get(id int) (*GameEvent, error) {
 	var event GameEvent
 
 	err := m.DB.QueryRowContext(ctx, query, id).Scan(
+		&event.ID,
+		&event.EventNumber,
 		&event.Version,
 		&event.GameID,
 		&event.Period,
-		&event.Clock,
+		&event.ClockSeconds,
 		&event.EventType,
+		&event.Situation,
 		&event.TeamID,
 	)
 

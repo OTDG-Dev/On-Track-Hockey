@@ -7,14 +7,24 @@ CREATE TABLE IF NOT EXISTS game_events (
         REFERENCES games(id)
         ON DELETE CASCADE,
 
-    period INTEGER NOT NULL,
+    event_number INTEGER NOT NULL,
 
-    clock INTERVAL NOT NULL,
+    period INTEGER NOT NULL,
+    clock_seconds INTEGER NOT NULL,
 
     event_type text NOT NULL
         CHECK (event_type in ('penalty', 'goal', 'shot', 'save')),
 
+    situation TEXT
+        CHECK (situation IN ('EV','PP','SH','EN')),
+
     team_id bigint NOT NULL
         REFERENCES teams(id)
-        ON DELETE RESTRICT
+        ON DELETE RESTRICT,
+
+    UNIQUE (game_id, event_number)
 );
+
+
+-- return timeInPeriod
+-- return timeRemainig
