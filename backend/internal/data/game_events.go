@@ -9,10 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
+	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/validator"
 )
-
-const maxClockSeconds = 1200
 
 type GameEvent struct {
 	ID        int       `json:"id"`
@@ -32,22 +30,26 @@ type GameEventModel struct {
 	DB *sql.DB
 }
 
+const maxClockSeconds = 1200
+
 var eventTypes = []string{"goal", "penalty", "shot", "save"}
 var situations = []string{"EV", "PP", "SH", "EN"}
 
 func ValidateGameEvent(v *validator.Validator, e *GameEvent) {
 	e.EventType = strings.ToLower(e.EventType)
-	msg := "this type not permitted must be <" + strings.Join(eventTypes, "|") + ">"
+	msg := "must be one of:" + strings.Join(eventTypes, ",")
 	v.Check(slices.Contains(eventTypes, e.EventType), "event_type", msg)
 
 	e.Situation = strings.ToUpper(e.Situation)
-	msg = "this type not permitted must be <" + strings.Join(situations, "|") + ">"
+	msg = "must be one of: " + strings.Join(situations, ",")
 	v.Check(slices.Contains(situations, e.Situation), "situation", msg)
 
 	v.Check(e.Period >= 1 && e.Period <= 3, "period", "invalid period")
 
 	msg = "invalid clock, must be less than " + strconv.Itoa(maxClockSeconds)
-	v.Check(e.ClockSeconds >= 0 && e.ClockSeconds <= 1200, "clock_seconds", msg)
+	v.Check(e.ClockSeconds >= 0 && e.ClockSeconds <= maxClockSeconds, "clock_seconds", msg)
+
+	v.Check(e.TeamID > 0, "team_id", "must be greater than 0")
 }
 
 func (m *GameEventModel) Insert(event *GameEvent) error {
@@ -134,5 +136,5 @@ func (m *GameEventModel) Get(id int) (*GameEvent, error) {
 		}
 	}
 
-	return &event, err
+	return &event, nil
 }
