@@ -121,24 +121,24 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 		FROM players
 		WHERE id = $1`
 
-	var player Player
+	var p Player
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	err := m.DB.QueryRowContext(ctx, query, id).Scan(
-		&player.ID,
-		&player.IsActive,
-		&player.CurrentTeamID,
-		&player.FirstName,
-		&player.LastName,
-		&player.SweaterNumber,
-		&player.Position,
-		&player.BirthDate,
-		&player.BirthCountry,
-		&player.Headshot,
-		&player.ShootsCatches,
-		&player.Version,
+		&p.ID,
+		&p.IsActive,
+		&p.CurrentTeamID,
+		&p.FirstName,
+		&p.LastName,
+		&p.SweaterNumber,
+		&p.Position,
+		&p.BirthDate,
+		&p.BirthCountry,
+		&p.Headshot,
+		&p.ShootsCatches,
+		&p.Version,
 	)
 
 	if err != nil {
@@ -150,7 +150,7 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 		}
 	}
 
-	return &player, nil
+	return &p, nil
 }
 
 // currently not used, wip if should be removed..
