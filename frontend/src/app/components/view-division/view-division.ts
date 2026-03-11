@@ -1,48 +1,43 @@
 import { Component, signal, WritableSignal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { LeagueData } from '../../interfaces/league-data';
+import { TeamService } from '../../services/team-service';
 import { DivisionService } from '../../services/division-service';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { DivisionData } from '../../interfaces/division-data';
+import { CommonModule } from '@angular/common';
 import { LeagueService } from '../../services/league-service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { LeagueData } from '../../interfaces/league-data';
 
 @Component({
   selector: 'app-view-division',
-  imports: [FormsModule],
+  imports: [RouterModule, CommonModule],
   templateUrl: './view-division.html',
   styleUrl: './view-division.css',
 })
 export class ViewDivision {
 
-  division_id: number = 1;
+  divisionId: number = -1;
   name: WritableSignal<string> = signal("");
-  league_id: WritableSignal<number> = signal(-1);
-
+  leagueId: WritableSignal<number> = signal(-1);
   leagues: WritableSignal<LeagueData[]> = signal([]);
 
-  successMessage: WritableSignal<string> = signal('');
-  errorMessage: WritableSignal<string> = signal('');
-  isFading = signal(false);
+  avatarUrl: WritableSignal<string> = signal("https://a.espncdn.com/combiner/i?img=/i/headshots/nhl/players/full/5149125.png&w=350&h=254");
 
-  constructor(private divisionService: DivisionService, private leageService: LeagueService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private leagueService: LeagueService, private divisionService: DivisionService, private route: ActivatedRoute, private router: Router) {}
 
-  ngOnInit()
-  {
+  ngOnInit(){
     const id = this.route.snapshot.paramMap.get('id');
-    this.division_id = Number(id);
+    this.divisionId = Number(id);
 
-    this.getDivision(this.division_id);
+    this.getDivision(this.divisionId);
 
-    this.leageService.getLeagues()
-    .subscribe(
-      {
-        next: (responseData) => {
-          this.leagues.set(responseData.leagues);
-        },
-        error: (err) => {
-          console.log(err);
-        }
+    this.leagueService.getLeagues().subscribe({
+      next: (responseData) => {
+        this.leagues.set(responseData.leagues);
+      },
+      error: (err) => {
+        console.log(err);
       }
-    )
+    });
   }
 
   getDivision(id: number) {
@@ -51,7 +46,8 @@ export class ViewDivision {
       {
         next: (responseData) => {
           this.name.set(responseData.division.name);
-          this.league_id.set(responseData.division.league_id);
+          this.leagueId.set(responseData.division.league_id);
+          console.log(responseData.division);
         },
         error: (err) => {
           console.log(err);
@@ -61,36 +57,9 @@ export class ViewDivision {
     )
   }
 
-  patchDivision() 
-  {
-    this.divisionService.patchDivision(this.league_id(), this.name(), this.division_id)
-    .subscribe(
-      {
-        next: (responseData) => {
-          this.successMessage.set(`Edited ${responseData.division.name} Division`);
-
-          setTimeout(() => {
-            this.isFading.set(true);
-          }, 2500);
-
-          setTimeout(() => {
-            this.successMessage.set('');
-            this.isFading.set(false);
-          }, 2750);
-        },
-        error: (err) => {
-          this.errorMessage.set(`Failed to Edit Division`);
-
-          setTimeout(() => {
-            this.isFading.set(true);
-          }, 2500);
-
-          setTimeout(() => {
-            this.errorMessage.set('');
-            this.isFading.set(false);
-          }, 2750);
-        }
-      }
-    )
+  getLeagueName(id: number) {
+    const league = this.leagues().find(d => d.id === id);
+    return league ? league.name : 'Unknown';
   }
+
 }

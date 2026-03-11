@@ -1,47 +1,35 @@
+
 <div class="page-container">
-    <h1>Edit Division</h1>
+    <h1>View Division</h1>
     <hr>
-    <form>
-      <p>Division</p>
-      <div class="name-row">
-
+    
+    <div class="top-actions">
+      <button [routerLink]="['/edit-division', divisionId]" class="action-button edit-button">
+        Edit Division
+      </button>
+  
+      <!-- <button (click)="deactivateTeam()" class="action-button delete-button">
+        Deactivate
+      </button> -->
+    </div>
+  
+    <!-- Avatar -->
+    <div class="avatar-wrapper">
+      <img class="player-avatar" [src]="avatarUrl()" alt="{{ name() }} Headshot">
+    </div>
+  
+    <div class="info-columns">
+      <!-- Left Column: Personal Info -->
+      <div class="column personal-column">
+        <p class="section-label">Info</p>
         <div class="field">
-          <input [(ngModel)]="name" type="text" name="name" id="name">
           <p>Name</p>
+          <div class="value-pill">{{ name() }}</div>
         </div>
-
         <div class="field">
-          <select [(ngModel)]="league_id" name="league_id">
-            @for (league of leagues(); track league.name) {
-              <option [ngValue]="league.id">
-                {{ league.name }}
-              </option>
-            }
-          </select>
           <p>League</p>
+          <div class="value-pill">{{ getLeagueName(leagueId()) }}</div>
         </div>
       </div>
-
-
-    </form>
-  
-    <div class="button-wrapper">
-      <button (click)="patchDivision()" type="button" id="createButton">
-        Edit
-      </button>
     </div>
-  
-    @if (successMessage()) {
-    <div class="success-message" [class.fade-out]="isFading()">
-      {{ successMessage() }}
-    </div>
-    }
-  
-    @if (errorMessage()) {
-    <div class="error-message" [class.fade-out]="isFading()">
-      {{ errorMessage() }}
-    </div>
-    }
-  
   </div>
-  

@@ -1,273 +1,179 @@
-h1 {
+/* Match other pages */
+.page-container.view-player-container h1 {
+    text-align: center;   /* matches other sheet */
+    font-weight: 600;     /* makes it visibly bolder */
+    margin: 0;  
+}
+
+.page-container hr {
+    width: 100vw;
+    border: none;
+    height: 2px;
+    background-color: #e4e4e4;
+
+    margin: 24px 0;   /* matches your other sheet EXACTLY */
+
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.page-container.view-player-container h1 {
     text-align: center;
+    font-weight: 600;
+    margin-bottom: 16px;
 }
 
-.name-row {
-    display: flex;
-    gap: 5px;
+.page-container.view-player-container hr {
+    width: 100vw;          /* full viewport width */
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 2px;
+    border: none;
+    background-color: #e4e4e4;
+    margin: 24px 0;
 }
 
-.field {
+/* ---------- Two Column Layout ---------- */
+.info-columns {
+    display: grid;
+    gap: 32px;
+}
+
+.column {
     display: flex;
     flex-direction: column;
-    padding-bottom: 20px;
+    gap: 16px;
+}
+
+/* ---------- Section Labels ---------- */
+.section-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #e4e4e4;
+    padding-bottom: 4px;
+}
+
+/* ---------- Field Rows ---------- */
+.field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e4e4e4;
 }
 
 .field p {
-    margin: 4px 1px 0;
-    font-size: 12px;
-    color: #777;
-}
-
-/* Text inputs (name fields) */
-.field input {
-    width: 200px;
-    padding: 18px;
-    font-family: inherit;
     font-size: 14px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-}
-
-/* Number + date inputs */
-input[type="text"],
-input[type="number"],
-input[type="date"] {
-    width: 200px;
-    padding: 18px;
-    margin-bottom: 14px;
-
-    font-family: inherit;
-    font-size: 14px;
-
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background-color: #fff;
-    color: #111827;
-
-    outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-/* Selects */
-select {
-    width: 200px;
-    padding: 18px;
-    margin-bottom: 16px;
-
-    font-family: inherit;
-    font-size: 14px;
-
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background-color: #fff;
-}
-
-/* Focus states */
-.field input:focus,
-input[type="number"]:focus,
-input[type="date"]:focus,
-select:focus {
-    border-color: #27AE60;
-    box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.15);
-}
-
-/* Remove number spinners */
-/* Chrome / Edge / Safari */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
+    font-weight: 500;
+    color: #555;
     margin: 0;
+    padding-right: 50px;
+    flex: 1;
 }
 
-/* Firefox */
-input[type="number"] {
-    -moz-appearance: textfield;
+/* ---------- Value Display ---------- */
+.value-pill {
+    display: inline-block;
+    background-color: #f0fdf4;  /* subtle green tint */
+    color: #1e7e34;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 13px;
+    margin-left: auto;
 }
 
-/* Date input polish */
-input[type="date"] {
-    cursor: pointer;
+.inactive-pill {
+    background-color: #fef2f2; /* subtle red tint */
+    color: #b91c1c;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-    opacity: 0.6;
-}
-
-input,
-select,
-button {
-    outline: none;
-}
-
-/* Button */
-button {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-    border: 0;
-    font-weight: 400;
-    cursor: pointer;
-    transition: background-color 0.1s ease;
-}
-
-.button-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-#createButton {
-    color: white;
-    background-color: #27AE60;
-    width: 300px;
-    height: 50px;
-
-    font-size: 18px;
-    font-weight: 200;
-    letter-spacing: 0.3px;
-}
-
-#createButton:hover {
-    background-color: #219150;
-}
-
-/* Divider */
-hr {
-    width: 100%;
+.page-container.view-player-container hr {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw; /* full viewport width */
+    max-width: 100vw;
     border: none;
     height: 2px;
     background-color: #e4e4e4;
     margin: 24px 0;
 }
 
-/* Select placeholder behavior */
-select:required:invalid {
-    color: gray;
-}
-
-option[value=""][disabled] {
-    display: none;
-}
-
-option {
-    color: black;
-}
-
-/* Success + Error Messages */
-.success-message,
-.error-message {
-    position: fixed;
-    top: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    width: 320px;
-    padding: 14px 18px;
-
-    font-size: 14px;
-    font-weight: 500;
-    text-align: center;
-
-    border-radius: 8px;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 6px 16px;
-
-    z-index: 1000;
-
-    animation: slideDown 0.2s ease;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -10px);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, 0);
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+    .info-columns {
+        grid-template-columns: 1fr; /* stack on smaller screens */
+        gap: 24px;
     }
 }
 
-.fade-out {
-    animation: slideUp 0.25s ease forwards;
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 1;
-        transform: translate(-50%, 0);
-    }
-    to {
-        opacity: 0;
-        transform: translate(-50%, -10px);
-    }
-}
-
-/* Success */
-.success-message {
-    background-color: #e9f7ef;   /* solid light green */
-    border: 1px solid #27AE60;
-    color: #1e7e34;
-}
-
-/* Error */
-.error-message {
-    background-color: #fdecea;   /* solid light red */
-    border: 1px solid #dc2626;
-    color: #b91c1c;
-}
-
-/* Checkbox wrapper */
-.checkbox-field {
+/* ---------- Avatar ---------- */
+.avatar-wrapper {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 8px;
-    margin-bottom: 16px;
     justify-content: center;
+    margin: 16px 0;
 }
 
-/* Hide default checkbox */
-.checkbox-field input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 1px solid #d1d5db;
+.player-avatar {
+    width: 240px;       /* size of the headshot */
+    height: 240px;
+    border-radius: 50%; /* circular */
+    object-fit: cover;  /* keep aspect ratio, crop if needed */
+    border: 3px solid #afafaf69; /* optional accent border */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* ---------- Top Right Buttons ---------- */
+/* ---------- Top Right Buttons ---------- */
+.top-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-self: stretch;
+    gap: 12px;
+    margin-top: 12px;
+    margin-bottom: 20px;
+    margin-right: 30px;
+}
+
+/* Smaller, subtle base */
+.action-button {
+    padding: 6px 14px;
+    height: auto;
+    font-size: 13px;
+    font-weight: 500;
     border-radius: 6px;
-    background-color: #fff;
+    background: transparent;
     cursor: pointer;
-    position: relative;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    transition: all 0.15s ease;
 }
 
-/* Focus state (match your green theme) */
-.checkbox-field input[type="checkbox"]:focus {
-    border-color: #27AE60;
-    box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.15);
+/* Subtle outlined Edit */
+.edit-button {
+    color: #27AE60;
+    border: 1px solid #27AE60;
 }
 
-/* Checked state */
-.checkbox-field input[type="checkbox"]:checked {
-    background-color: #27AE60;
-    border-color: #27AE60;
+.edit-button:hover {
+    background-color: rgba(39, 174, 96, 0.08);
 }
 
-/* Checkmark */
-.checkbox-field input[type="checkbox"]:checked::after {
-    content: "✔";
-    position: absolute;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+/* Subtle outlined Delete */
+.delete-button {
+    color: #dc2626;
+    border: 1px solid #dc2626;
 }
 
-/* Label styling */
-.checkbox-field label {
-    font-size: 14px;
-    color: #374151;
-    cursor: pointer;
+.delete-button:hover {
+    background-color: rgba(220, 38, 38, 0.08);
+}
+
+/* Light click feedback */
+.action-button:active {
+    transform: scale(0.96);
 }
