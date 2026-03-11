@@ -11,6 +11,9 @@ import { EditPlayer } from './components/edit-player/edit-player';
 import { ViewTeams } from './components/view-teams/view-teams';
 import { ViewTeam } from './components/view-team/view-team';
 import { EditTeam } from './components/edit-team/edit-team';
+import { ViewDivisions } from './components/view-divisions/view-divisions';
+import { EditDivision } from './components/edit-division/edit-division';
+import { ViewDivision } from './components/view-division/view-division';
 
 export const routes: Routes = [
     {
@@ -60,5 +63,17 @@ export const routes: Routes = [
     {
         path: 'edit-team/:id',
         component: EditTeam
+    },
+    {
+        path: 'view-divisions',
+        component: ViewDivisions
+    },
+    {
+        path: 'view-division/:id',
+        component: ViewDivision
+    },
+    {
+        path: 'edit-division/:id',
+        component: EditDivision
     }
 ];

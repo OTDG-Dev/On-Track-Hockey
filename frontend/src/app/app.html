@@ -22,10 +22,15 @@
           <a routerLink="/view-teams" routerLinkActive="active">View Teams</a>
         </div>
       </div>
-      <a routerLink="/create-division" routerLinkActive="active">Create Division</a>
+      <div class="nav-dropdown">
+        <a class="dropdown-toggle">Divisions ▾</a>
+        <div class="dropdown-menu">
+          <a routerLink="/create-division" routerLinkActive="active">Create Division</a>
+          <a routerLink="/view-divisions" routerLinkActive="active">View Divisions</a>
+        </div>
+      </div>
       <a routerLink="/create-league" routerLinkActive="active">Create League</a>
     </div>
-
   </div>
 </nav>
 <router-outlet></router-outlet>

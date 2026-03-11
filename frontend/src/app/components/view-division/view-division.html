@@ -1,0 +1,35 @@
+
+<div class="page-container">
+    <h1>View Division</h1>
+    <hr>
+    
+    <div class="top-actions">
+      <button [routerLink]="['/edit-division', divisionId]" class="action-button edit-button">
+        Edit Division
+      </button>
+  
+      <!-- <button (click)="deactivateTeam()" class="action-button delete-button">
+        Deactivate
+      </button> -->
+    </div>
+  
+    <!-- Avatar -->
+    <div class="avatar-wrapper">
+      <img class="player-avatar" [src]="avatarUrl()" alt="{{ name() }} Headshot">
+    </div>
+  
+    <div class="info-columns">
+      <!-- Left Column: Personal Info -->
+      <div class="column personal-column">
+        <p class="section-label">Info</p>
+        <div class="field">
+          <p>Name</p>
+          <div class="value-pill">{{ name() }}</div>
+        </div>
+        <div class="field">
+          <p>League</p>
+          <div class="value-pill">{{ getLeagueName(leagueId()) }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
