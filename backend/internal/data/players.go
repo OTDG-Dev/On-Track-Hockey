@@ -15,7 +15,7 @@ import (
 type Player struct {
 	ID        int       `json:"id"`
 	CreatedAt time.Time `json:"-"`
-	Version   int       `json:"version"`
+	Version   int       `json:"-"`
 
 	IsActive      bool `json:"is_active"`
 	CurrentTeamID int  `json:"current_team_id"`
