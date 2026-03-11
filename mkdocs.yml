@@ -8,6 +8,7 @@ nav:
   - API:
       - Players: api/players.md
       - Teams: api/teams.md
+      - Roster: api/roster.md
       - Divisions: api/divisions.md
       - Leagues: api/leagues.md
       - Games: api/games.md

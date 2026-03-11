@@ -26,6 +26,8 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPatch, "/v1/teams/:id", app.updateTeamHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/teams/:id", app.deleteTeamHandler)
 
+	router.HandlerFunc(http.MethodGet, "/v1/roster/:team_id", app.listRosterHandler)
+
 	router.HandlerFunc(http.MethodGet, "/v1/divisions", app.listDivisionsHandler)
 	router.HandlerFunc(http.MethodPost, "/v1/divisions", app.createDivisionHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/divisions/:id", app.showDivisionHandler)
