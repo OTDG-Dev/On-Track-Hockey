@@ -38,9 +38,29 @@ Response:
   "game": {
     "home_team": "NYR",
     "away_team": "SJS",
-    "home_team_id": "1",
-    "away_team_id": "2",
-    "start_time": "2026-03-11T00:30:00Z"
+    "home_team_id": 1,
+    "away_team_id": 2,
+    "start_time": "2026-03-11T00:30:00Z",
+    "game_events": [
+      {
+        "id": 1,
+        "event_number": 1,
+        "period": 2,
+        "clock_seconds": 12,
+        "event_type": "penalty",
+        "situation": "EV",
+        "team_id": 2
+      },
+      {
+        "id": 2,
+        "event_number": 2,
+        "period": 2,
+        "clock_seconds": 12,
+        "event_type": "penalty",
+        "situation": "EV",
+        "team_id": 2
+      }
+    ]
   }
 }
 ```

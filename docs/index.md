@@ -44,6 +44,7 @@ Backend: http://localhost:3000
 
 ## Contributing
 
-Contributions are welcome.  
+Contributions are welcome, but please follow these guidelines:
 
-If you're interested, fork the repository, open an issue, or submit a pull request and jump in.
+1. Keep pull requests small and focused on a single issue.
+2. Do not submit large AI-generated pull requests.

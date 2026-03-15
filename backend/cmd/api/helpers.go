@@ -10,15 +10,20 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
+	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/validator"
+
 	"github.com/julienschmidt/httprouter"
 )
 
-func (app *application) readIDParam(r *http.Request) (int, error) {
+func (app *application) readIDParam(r *http.Request, idKey ...string) (int, error) {
 	params := httprouter.ParamsFromContext(r.Context())
 
-	// convert to a base 10 int (with bit size of 64)
-	id, err := strconv.Atoi(params.ByName("id"))
+	key := "id" // default
+	if len(idKey) > 0 && idKey[0] != "" {
+		key = idKey[0]
+	}
+
+	id, err := strconv.Atoi(params.ByName(key))
 	if err != nil || id < 1 {
 		return 0, errors.New("invalid id parameter")
 	}

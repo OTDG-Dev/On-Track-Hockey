@@ -1,0 +1,1 @@
+DROP TABLE if EXISTS game_event_participants;

@@ -6,13 +6,13 @@ import (
 	"errors"
 	"time"
 
-	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
+	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/validator"
 )
 
 type League struct {
 	ID        int       `json:"id"`
 	CreatedAt time.Time `json:"-"`
-	Version   int       `json:"version"`
+	Version   int       `json:"-"`
 
 	Name string `json:"name"`
 }

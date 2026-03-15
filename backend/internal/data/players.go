@@ -8,14 +8,14 @@ import (
 	"time"
 
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/stats"
-	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data/validator"
+	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/validator"
 	"github.com/lib/pq"
 )
 
 type Player struct {
 	ID        int       `json:"id"`
 	CreatedAt time.Time `json:"-"`
-	Version   int       `json:"version"`
+	Version   int       `json:"-"`
 
 	IsActive      bool `json:"is_active"`
 	CurrentTeamID int  `json:"current_team_id"`
@@ -121,24 +121,24 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 		FROM players
 		WHERE id = $1`
 
-	var player Player
+	var p Player
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	err := m.DB.QueryRowContext(ctx, query, id).Scan(
-		&player.ID,
-		&player.IsActive,
-		&player.CurrentTeamID,
-		&player.FirstName,
-		&player.LastName,
-		&player.SweaterNumber,
-		&player.Position,
-		&player.BirthDate,
-		&player.BirthCountry,
-		&player.Headshot,
-		&player.ShootsCatches,
-		&player.Version,
+		&p.ID,
+		&p.IsActive,
+		&p.CurrentTeamID,
+		&p.FirstName,
+		&p.LastName,
+		&p.SweaterNumber,
+		&p.Position,
+		&p.BirthDate,
+		&p.BirthCountry,
+		&p.Headshot,
+		&p.ShootsCatches,
+		&p.Version,
 	)
 
 	if err != nil {
@@ -150,7 +150,7 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 		}
 	}
 
-	return &player, nil
+	return &p, nil
 }
 
 // currently not used, wip if should be removed..
@@ -314,7 +314,7 @@ type PlayerQuery struct {
 	CurrentTeamID int
 }
 
-func (m PlayerModel) GetWithTeam(id int) (*PlayerWithTeam, error) {
+func (m PlayerModel) GetView(id int) (*PlayerWithTeam, error) {
 	query := /* sql */ `
 		SELECT
 			p.id,
@@ -371,7 +371,7 @@ func (m PlayerModel) GetWithTeam(id int) (*PlayerWithTeam, error) {
 	return &p, nil
 }
 
-func (m PlayerModel) GetAllWithTeam(pq PlayerQuery, filters Filters) ([]*PlayerWithTeam, Metadata, error) {
+func (m PlayerModel) GetViewAll(pq PlayerQuery, filters Filters) ([]*PlayerWithTeam, Metadata, error) {
 	query := fmt.Sprintf( /* sql */ `
 		SELECT
 			count(*) OVER(),
