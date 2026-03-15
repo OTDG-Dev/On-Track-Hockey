@@ -53,4 +53,8 @@ export class TeamService {
     return this.httpClient.delete<{ team: TeamData}>(`${this.baseUrl}/${id}`);
   }
 
+  getRoster(id: number) {
+    
+  }
+
 }

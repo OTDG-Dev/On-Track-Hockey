@@ -5,6 +5,7 @@ import { DivisionData } from '../../interfaces/division-data';
 import { DivisionService } from '../../services/division-service';
 import { CommonModule } from '@angular/common';
 import { RosterService } from '../../services/roster-service';
+import { PlayerData } from '../../interfaces/player-data';
 
 @Component({
   selector: 'app-view-team',
@@ -14,12 +15,18 @@ import { RosterService } from '../../services/roster-service';
 })
 export class ViewTeam {
 
+  activeTab: 'info' | 'players' = 'info';
+
   teamId: number = -1;
   full_name: WritableSignal<string> = signal("");
   short_name: WritableSignal<string> = signal("");
   division_id: WritableSignal<number> = signal(-1);
   is_active: WritableSignal<boolean> = signal(false);
   divisions: WritableSignal<DivisionData[]> = signal([]);
+
+  forwards: WritableSignal<PlayerData[]> = signal([]);
+  defenseman: WritableSignal<PlayerData[]> = signal([]);
+  goalies: WritableSignal<PlayerData[]> = signal([]);
 
   avatarUrl: WritableSignal<string> = signal("https://a.espncdn.com/combiner/i?img=/i/headshots/nhl/players/full/5149125.png&w=350&h=254");
 
@@ -42,7 +49,12 @@ export class ViewTeam {
 
     this.rosterService.getRoster(this.teamId).subscribe({
       next: (responseData) => {
-        console.log(responseData.roster);
+        this.forwards.set(responseData.roster.forwards);
+        this.defenseman.set(responseData.roster.defensemen);
+        this.goalies.set(responseData.roster.goalies);
+        console.log(this.forwards());
+        console.log(this.defenseman());
+        console.log(this.goalies());
       },
       error: (err) => {
         console.log(err);

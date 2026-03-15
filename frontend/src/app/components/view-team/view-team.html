@@ -1,53 +1,176 @@
-
 <div class="page-container">
-    <h1>View Team</h1>
-    <hr>
-    
-    <div class="top-actions">
-      <button [routerLink]="['/edit-team', teamId]" class="action-button edit-button">
-        Edit Team
-      </button>
-  
-      <button (click)="deactivateTeam()" class="action-button delete-button">
-        Deactivate
-      </button>
+
+  <h1>View Team</h1>
+  <hr>
+
+  <!-- ACTION BUTTONS -->
+  <div class="top-actions">
+    <button [routerLink]="['/edit-team', teamId]" class="action-button edit-button">
+      Edit Team
+    </button>
+
+    <button (click)="deactivateTeam()" class="action-button delete-button">
+      Deactivate
+    </button>
+  </div>
+
+  <div class="avatar-wrapper">
+    <img
+      class="player-avatar"
+      [src]="avatarUrl()"
+      alt="{{ full_name() }} Headshot"
+    >
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div
+      class="tab"
+      [class.active]="activeTab === 'info'"
+      (click)="activeTab = 'info'"
+    >
+      Info
     </div>
-  
-    <!-- Avatar -->
-    <div class="avatar-wrapper">
-      <img class="player-avatar" [src]="avatarUrl()" alt="{{ full_name() }} Headshot">
+
+    <div
+      class="tab"
+      [class.active]="activeTab === 'players'"
+      (click)="activeTab = 'players'"
+    >
+      Players
     </div>
-  
+  </div>
+
+
+  <!-- INFO TAB -->
+  <div class="tab-content" [class.hidden]="activeTab !== 'info'">
+
+
+
     <div class="info-columns">
-      <!-- Left Column: Personal Info -->
+
       <div class="column personal-column">
-        <p class="section-label">Info</p>
+
+
         <div class="field">
           <p>Name</p>
           <div class="value-pill">{{ full_name() }}</div>
         </div>
+
         <div class="field">
           <p>Abbreviation</p>
           <div class="value-pill">{{ short_name() }}</div>
         </div>
+
         <div class="field">
           <p>Active</p>
-        
+
           @if (is_active()) {
-            <div class="value-pill">
-              Active
-            </div>
+            <div class="value-pill">Active</div>
           } @else {
-            <div class="value-pill inactive-pill">
-              Inactive
-            </div>
+            <div class="value-pill inactive-pill">Inactive</div>
           }
-        
+
         </div>
+
         <div class="field">
           <p>Division</p>
-          <div class="value-pill">{{ getDivisionName(division_id()) }}</div>
+          <div class="value-pill">
+            {{ getDivisionName(division_id()) }}
+          </div>
         </div>
+
       </div>
+
     </div>
+
   </div>
+
+
+  <!-- PLAYERS TAB -->
+  <div class="tab-content" [class.hidden]="activeTab !== 'players'">
+
+    <!-- Forwards -->
+    <div class="player-section">
+      <h2 class="position-heading">Forwards</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Sweater Number</th>
+            <th>Position</th>
+            <th>Birth Date</th>
+            <th>Birth Country</th>
+            <th>Shoots/Catches</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let player of forwards()">
+            <td><a [routerLink]="['/view-player', player.id]">{{ player.first_name }} {{ player.last_name }}</a></td>
+            <td>{{ player.sweater_number }}</td>
+            <td>{{ player.position }}</td>
+            <td>{{ player.birth_date }}</td>
+            <td>{{ player.birth_country }}</td>
+            <td>{{ player.shoots_catches }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Defensemen -->
+    <div class="player-section">
+      <h2 class="position-heading">Defensemen</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Sweater Number</th>
+            <th>Position</th>
+            <th>Birth Date</th>
+            <th>Birth Country</th>
+            <th>Shoots/Catches</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let player of defenseman()">
+            <td><a [routerLink]="['/view-player', player.id]">{{ player.first_name }} {{ player.last_name }}</a></td>
+            <td>{{ player.sweater_number }}</td>
+            <td>{{ player.position }}</td>
+            <td>{{ player.birth_date }}</td>
+            <td>{{ player.birth_country }}</td>
+            <td>{{ player.shoots_catches }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Goalies -->
+    <div class="player-section">
+      <h2 class="position-heading">Goalies</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Sweater Number</th>
+            <th>Position</th>
+            <th>Birth Date</th>
+            <th>Birth Country</th>
+            <th>Shoots/Catches</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let player of goalies()">
+            <td><a [routerLink]="['/view-player', player.id]">{{ player.first_name }} {{ player.last_name }}</a></td>
+            <td>{{ player.sweater_number }}</td>
+            <td>{{ player.position }}</td>
+            <td>{{ player.birth_date }}</td>
+            <td>{{ player.birth_country }}</td>
+            <td>{{ player.shoots_catches }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+  </div>
+
+</div>
