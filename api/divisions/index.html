@@ -60,6 +60,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#view-all-divisions">View all divisions</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#view-all-teams-from-a-division">View all teams from a division</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#update-a-division">Update a division</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#delete-a-division">Delete a division</a>
@@ -141,6 +143,28 @@
       &quot;league_id&quot;: 1,
       &quot;name&quot;: &quot;Div 2&quot;
     },
+  ]
+}
+</code></pre>
+<h2 id="view-all-teams-from-a-division">View all teams from a division</h2>
+<p><code>GET /divisions/{division_id}/teams</code></p>
+<p>Example response:</p>
+<pre><code class="language-json">{
+  &quot;teams&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;full_name&quot;: &quot;New York Rangers&quot;,
+      &quot;short_name&quot;: &quot;NYR&quot;,
+      &quot;division_id&quot;: 1,
+      &quot;is_active&quot;: true
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;full_name&quot;: &quot;San Jose Sharks&quot;,
+      &quot;short_name&quot;: &quot;SJS&quot;,
+      &quot;division_id&quot;: 1,
+      &quot;is_active&quot;: true
+    }
   ]
 }
 </code></pre>
