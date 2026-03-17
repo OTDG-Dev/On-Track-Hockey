@@ -7,17 +7,33 @@
       <button [routerLink]="['/edit-division', divisionId]" class="action-button edit-button">
         Edit Division
       </button>
-  
-      <!-- <button (click)="deactivateTeam()" class="action-button delete-button">
-        Deactivate
-      </button> -->
     </div>
   
     <!-- Avatar -->
     <div class="avatar-wrapper">
       <img class="player-avatar" [src]="avatarUrl()" alt="{{ name() }} Headshot">
     </div>
+
+    <!-- TABS -->
+  <div class="tabs">
+    <div
+      class="tab"
+      [class.active]="activeTab === 'info'"
+      (click)="activeTab = 'info'"
+    >
+      Info
+    </div>
+
+    <div
+      class="tab"
+      [class.active]="activeTab === 'teams'"
+      (click)="activeTab = 'teams'"
+    >
+      Teams
+    </div>
+  </div>
   
+  <div class="tab-content" [class.hidden]="activeTab !== 'info'">
     <div class="info-columns">
       <!-- Left Column: Personal Info -->
       <div class="column personal-column">
@@ -32,4 +48,28 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="tab-content" [class.hidden]="activeTab !== 'teams'">
+    <div class="player-section">
+      <h2 class="position-heading">Teams</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Abbreviation</th>
+            <th>Active</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let team of teams()">
+            <td><a [routerLink]="['/view-team', team.id]">{{ team.full_name }}</a></td>
+            <td>{{ team.short_name }}</td>
+            <td>{{ team.is_active }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   </div>
