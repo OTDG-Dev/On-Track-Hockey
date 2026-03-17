@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"golang.org/x/time/rate"
 )
 
-func (app *application) recoverPanic(next http.Handler) http.Handler {
+func (app *Application) recoverPanic(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			pv := recover()
@@ -24,8 +24,8 @@ func (app *application) recoverPanic(next http.Handler) http.Handler {
 	})
 }
 
-func (app *application) rateLimit(next http.Handler) http.Handler {
-	if !app.config.limiter.enabled {
+func (app *Application) rateLimit(next http.Handler) http.Handler {
+	if !app.Config.Limiter.Enabled {
 		return next
 	}
 
@@ -64,7 +64,7 @@ func (app *application) rateLimit(next http.Handler) http.Handler {
 
 		if _, found := clients[ip]; !found {
 			// createa and add a new client struct to the map if it doesn't already exist
-			clients[ip] = &client{limiter: rate.NewLimiter(rate.Limit(app.config.limiter.rps), app.config.limiter.burst)}
+			clients[ip] = &client{limiter: rate.NewLimiter(rate.Limit(app.Config.Limiter.RPS), app.Config.Limiter.Burst)}
 		}
 
 		clients[ip].lastSeen = time.Now()
@@ -81,7 +81,7 @@ func (app *application) rateLimit(next http.Handler) http.Handler {
 }
 
 // temporary patch for CORS
-func (app *application) cors(next http.Handler) http.Handler {
+func (app *Application) cors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		allowedOrigins := map[string]bool{
 			"http://localhost:4200": true,

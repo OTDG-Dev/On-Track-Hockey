@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/data"
 )
 
-func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) createGameHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		HomeTeamId int       `json:"home_team_id"`
 		AwayTeamID int       `json:"away_team_id"`
@@ -27,7 +27,7 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 		StartTime:  input.StartTime,
 	}
 
-	err = app.models.Games.Insert(&game)
+	err = app.Models.Games.Insert(&game)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -36,14 +36,14 @@ func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request
 	app.writeJSON(w, http.StatusCreated, envelope{"game": game}, nil)
 }
 
-func (app *application) showGameHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) showGameHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
 	}
 
-	game, err := app.models.Games.GetView(id)
+	game, err := app.Models.Games.GetView(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):

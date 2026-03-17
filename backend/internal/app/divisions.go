@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"errors"
@@ -9,14 +9,14 @@ import (
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/validator"
 )
 
-func (app *application) showTeamHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) showDivisionHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
-		app.badRequestResponse(w, r, err)
+		app.notFoundResponse(w, r)
 		return
 	}
 
-	team, err := app.models.Teams.Get(id)
+	division, err := app.Models.Division.Get(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -27,18 +27,16 @@ func (app *application) showTeamHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	err = app.writeJSON(w, http.StatusOK, envelope{"team": team}, nil)
+	err = app.writeJSON(w, http.StatusOK, envelope{"division": division}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
 }
 
-func (app *application) createTeamHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) createDivisionHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
-		FullName   string `json:"full_name"`
-		ShortName  string `json:"short_name"`
-		DivisionID int    `json:"division_id"`
-		IsActive   bool   `json:"is_active"`
+		Name     string `json:"name"`
+		LeagueID int    `json:"league_id"`
 	}
 
 	err := app.readJSON(w, r, &input)
@@ -47,26 +45,23 @@ func (app *application) createTeamHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	team := &data.Team{
-		FullName:   input.FullName,
-		ShortName:  input.ShortName,
-		DivisionID: input.DivisionID,
-		IsActive:   input.IsActive,
+	div := &data.Division{
+		LeagueID: input.LeagueID,
+		Name:     input.Name,
 	}
 
 	v := validator.New()
 
-	if data.ValidateTeam(v, team); !v.Valid() {
+	if data.ValidateDivision(v, div); !v.Valid() {
 		app.failedValidationResponse(w, r, v.Errors)
 		return
 	}
 
-	err = app.models.Teams.Insert(team)
-
+	err = app.Models.Division.Insert(div)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
-			v.AddError("division_id", "division not found")
+			v.AddError("league_id", "league does not exist")
 			app.failedValidationResponse(w, r, v.Errors)
 		default:
 			app.serverErrorResponse(w, r, err)
@@ -75,23 +70,35 @@ func (app *application) createTeamHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	headers := make(http.Header)
-	headers.Set("Location", fmt.Sprintf("/v1/teams/%d", team.ID))
+	headers.Set("Location", fmt.Sprintf("/v1/divisions/%d", div.ID))
 
-	err = app.writeJSON(w, http.StatusCreated, envelope{"team": team}, headers)
+	err = app.writeJSON(w, http.StatusCreated, envelope{"division": div}, headers)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
-
 }
 
-func (app *application) updateTeamHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) listDivisionsHandler(w http.ResponseWriter, r *http.Request) {
+	divs, err := app.Models.Division.GetAll()
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"divisions": divs}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *Application) updateDivisionHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
 	}
 
-	team, err := app.models.Teams.Get(id)
+	division, err := app.Models.Division.Get(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -103,10 +110,8 @@ func (app *application) updateTeamHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	var input struct {
-		FullName   *string `json:"full_name"`
-		ShortName  *string `json:"short_name"`
-		DivisionID *int    `json:"division_id"`
-		IsActive   *bool   `json:"is_active"`
+		Name     *string `json:"name"`
+		LeagueID *int    `json:"league_id"`
 	}
 
 	err = app.readJSON(w, r, &input)
@@ -115,20 +120,14 @@ func (app *application) updateTeamHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	if input.FullName != nil {
-		team.FullName = *input.FullName
+	if input.LeagueID != nil {
+		division.LeagueID = *input.LeagueID
 	}
-	if input.ShortName != nil {
-		team.ShortName = *input.ShortName
-	}
-	if input.DivisionID != nil {
-		team.DivisionID = *input.DivisionID
-	}
-	if input.IsActive != nil {
-		team.IsActive = *input.IsActive
+	if input.Name != nil {
+		division.Name = *input.Name
 	}
 
-	err = app.models.Teams.Update(team)
+	err = app.Models.Division.Update(division)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrEditConflict):
@@ -139,20 +138,20 @@ func (app *application) updateTeamHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	err = app.writeJSON(w, http.StatusOK, envelope{"team": team}, nil)
+	err = app.writeJSON(w, http.StatusOK, envelope{"division": division}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
 }
 
-func (app *application) deleteTeamHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) deleteDivisionHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
 	}
 
-	err = app.models.Teams.Delete(id)
+	err = app.Models.Division.Delete(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -165,19 +164,29 @@ func (app *application) deleteTeamHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	err = app.writeJSON(w, http.StatusOK, envelope{"message": "team successfully deleted"}, nil)
+	err = app.writeJSON(w, http.StatusOK, envelope{"message": "division successfully deleted"}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
 }
 
-func (app *application) listTeamsHandler(w http.ResponseWriter, r *http.Request) {
-	teams, err := app.models.Teams.GetAll()
+func (app *Application) listDivisionTeamHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
 	if err != nil {
-		app.serverErrorResponse(w, r, err)
+		app.badRequestResponse(w, r, err)
 		return
 	}
 
+	teams, err := app.Models.Division.GetAllTeams(id)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
 	err = app.writeJSON(w, http.StatusOK, envelope{"teams": teams}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)

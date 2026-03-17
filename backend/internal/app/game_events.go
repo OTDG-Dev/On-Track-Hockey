@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/validator"
 )
 
-func (app *application) createGameEventHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) createGameEventHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Period    int    `json:"period"`
 		Clock     int    `json:"clock_seconds"`
@@ -43,7 +43,7 @@ func (app *application) createGameEventHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	if err := app.models.GameEvents.Insert(&event); err != nil {
+	if err := app.Models.GameEvents.Insert(&event); err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
 	}
@@ -54,14 +54,14 @@ func (app *application) createGameEventHandler(w http.ResponseWriter, r *http.Re
 	}
 }
 
-func (app *application) showGameEventHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) showGameEventHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
 	}
 
-	event, err := app.models.GameEvents.Get(id)
+	event, err := app.Models.GameEvents.Get(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
