@@ -63,6 +63,33 @@ Example response:
 }
 ```
 
+## View all teams from a division
+
+`GET /divisions/{division_id}/teams`
+
+Example response:
+
+```json
+{
+  "teams": [
+    {
+      "id": 1,
+      "full_name": "New York Rangers",
+      "short_name": "NYR",
+      "division_id": 1,
+      "is_active": true
+    },
+    {
+      "id": 2,
+      "full_name": "San Jose Sharks",
+      "short_name": "SJS",
+      "division_id": 1,
+      "is_active": true
+    }
+  ]
+}
+```
+
 ## Update a division
 
 `PATCH /division/{id}`

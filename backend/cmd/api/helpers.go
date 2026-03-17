@@ -15,6 +15,8 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+// readIDParam reads an int from a http request
+// by default it searches for the key "id" if idKey is not provided
 func (app *application) readIDParam(r *http.Request, idKey ...string) (int, error) {
 	params := httprouter.ParamsFromContext(r.Context())
 

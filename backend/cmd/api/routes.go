@@ -33,6 +33,7 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/v1/divisions/:id", app.showDivisionHandler)
 	router.HandlerFunc(http.MethodPatch, "/v1/divisions/:id", app.updateDivisionHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/divisions/:id", app.deleteDivisionHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/divisions/:id/teams", app.listDivisionTeamHandler)
 
 	router.HandlerFunc(http.MethodGet, "/v1/leagues", app.listLeaguesHandler)
 	router.HandlerFunc(http.MethodPost, "/v1/leagues", app.createLeagueHandler)

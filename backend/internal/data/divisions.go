@@ -180,3 +180,48 @@ func (m DivisonModel) GetAll() ([]*Division, error) {
 
 	return divs, nil
 }
+
+func (m DivisonModel) GetAllTeams(divisionID int) ([]*Team, error) {
+	// add division filter
+	query := /* sql */ `
+		SELECT
+			id,
+			full_name,
+			short_name,
+			division_id,
+			is_active
+		FROM teams
+		WHERE division_id = $1`
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.DB.QueryContext(ctx, query, divisionID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	teams := []*Team{}
+
+	for rows.Next() {
+		var t Team
+		err = rows.Scan(
+			&t.ID,
+			&t.FullName,
+			&t.ShortName,
+			&t.DivisionID,
+			&t.IsActive,
+		)
+		if err != nil {
+			return nil, err
+		}
+		teams = append(teams, &t)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return teams, nil
+}
