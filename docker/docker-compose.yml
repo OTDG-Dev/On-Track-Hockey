@@ -8,7 +8,7 @@ services:
     networks:
       - oth-net
     ports:
-      - 8080:8080
+      - 4200:8080
 
   api:
     build:
