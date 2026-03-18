@@ -1,0 +1,29 @@
+<div class="page-container">
+    <h1>View Leagues</h1>
+    <hr>
+
+    <div class="content-container">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>No. Of Divisions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let league of leagues()">
+                    <td>
+                        <a [routerLink]="['/view-league', league.id]">
+                            {{ league.name }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ getNoDivisions(league.id) }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

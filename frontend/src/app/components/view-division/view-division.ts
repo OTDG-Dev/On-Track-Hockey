@@ -42,7 +42,7 @@ export class ViewDivision {
       }
     });
 
-    this.teamService.getTeams().subscribe({
+    this.divisionService.getTeamsInDivision(this.divisionId).subscribe({
       next: (responseData) => {
         this.teams.set(responseData.teams);
       },
