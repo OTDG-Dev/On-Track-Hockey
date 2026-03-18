@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"errors"
@@ -9,14 +9,14 @@ import (
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/validator"
 )
 
-func (app *application) showDivisionHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) showDivisionHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
 	}
 
-	division, err := app.models.Division.Get(id)
+	division, err := app.Models.Division.Get(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -33,7 +33,7 @@ func (app *application) showDivisionHandler(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func (app *application) createDivisionHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) createDivisionHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Name     string `json:"name"`
 		LeagueID int    `json:"league_id"`
@@ -57,7 +57,7 @@ func (app *application) createDivisionHandler(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	err = app.models.Division.Insert(div)
+	err = app.Models.Division.Insert(div)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -78,8 +78,8 @@ func (app *application) createDivisionHandler(w http.ResponseWriter, r *http.Req
 	}
 }
 
-func (app *application) listDivisionsHandler(w http.ResponseWriter, r *http.Request) {
-	divs, err := app.models.Division.GetAll()
+func (app *Application) listDivisionsHandler(w http.ResponseWriter, r *http.Request) {
+	divs, err := app.Models.Division.GetAll()
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -91,14 +91,14 @@ func (app *application) listDivisionsHandler(w http.ResponseWriter, r *http.Requ
 	}
 }
 
-func (app *application) updateDivisionHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) updateDivisionHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
 	}
 
-	division, err := app.models.Division.Get(id)
+	division, err := app.Models.Division.Get(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -127,7 +127,7 @@ func (app *application) updateDivisionHandler(w http.ResponseWriter, r *http.Req
 		division.Name = *input.Name
 	}
 
-	err = app.models.Division.Update(division)
+	err = app.Models.Division.Update(division)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrEditConflict):
@@ -144,14 +144,14 @@ func (app *application) updateDivisionHandler(w http.ResponseWriter, r *http.Req
 	}
 }
 
-func (app *application) deleteDivisionHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) deleteDivisionHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
 	}
 
-	err = app.models.Division.Delete(id)
+	err = app.Models.Division.Delete(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -165,6 +165,29 @@ func (app *application) deleteDivisionHandler(w http.ResponseWriter, r *http.Req
 	}
 
 	err = app.writeJSON(w, http.StatusOK, envelope{"message": "division successfully deleted"}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *Application) listDivisionTeamHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	teams, err := app.Models.Division.GetAllTeams(id)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+	err = app.writeJSON(w, http.StatusOK, envelope{"teams": teams}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}

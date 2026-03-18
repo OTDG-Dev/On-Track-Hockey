@@ -1,15 +1,15 @@
-package main
+package app
 
 import "net/http"
 
-func (app *application) listRosterHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) listRosterHandler(w http.ResponseWriter, r *http.Request) {
 	teamID, err := app.readIDParam(r, "team_id")
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
 	}
 
-	roster, err := app.models.Roster.Get(teamID)
+	roster, err := app.Models.Roster.Get(teamID)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return

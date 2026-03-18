@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"errors"
@@ -9,14 +9,14 @@ import (
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/validator"
 )
 
-func (app *application) showTeamHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) showTeamHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
 	}
 
-	team, err := app.models.Teams.Get(id)
+	team, err := app.Models.Teams.Get(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -33,7 +33,7 @@ func (app *application) showTeamHandler(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
-func (app *application) createTeamHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) createTeamHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		FullName   string `json:"full_name"`
 		ShortName  string `json:"short_name"`
@@ -61,7 +61,7 @@ func (app *application) createTeamHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	err = app.models.Teams.Insert(team)
+	err = app.Models.Teams.Insert(team)
 
 	if err != nil {
 		switch {
@@ -84,14 +84,14 @@ func (app *application) createTeamHandler(w http.ResponseWriter, r *http.Request
 
 }
 
-func (app *application) updateTeamHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) updateTeamHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
 	}
 
-	team, err := app.models.Teams.Get(id)
+	team, err := app.Models.Teams.Get(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -128,7 +128,7 @@ func (app *application) updateTeamHandler(w http.ResponseWriter, r *http.Request
 		team.IsActive = *input.IsActive
 	}
 
-	err = app.models.Teams.Update(team)
+	err = app.Models.Teams.Update(team)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrEditConflict):
@@ -145,14 +145,14 @@ func (app *application) updateTeamHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (app *application) deleteTeamHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) deleteTeamHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
 	}
 
-	err = app.models.Teams.Delete(id)
+	err = app.Models.Teams.Delete(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -171,8 +171,8 @@ func (app *application) deleteTeamHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (app *application) listTeamsHandler(w http.ResponseWriter, r *http.Request) {
-	teams, err := app.models.Teams.GetAll()
+func (app *Application) listTeamsHandler(w http.ResponseWriter, r *http.Request) {
+	teams, err := app.Models.Teams.GetAll()
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return

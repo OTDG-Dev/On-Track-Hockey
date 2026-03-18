@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func (app *application) routes() http.Handler {
+func (app *Application) Routes() http.Handler {
 	router := httprouter.New()
 
 	router.NotFound = http.HandlerFunc(app.notFoundResponse)
@@ -33,6 +33,7 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/v1/divisions/:id", app.showDivisionHandler)
 	router.HandlerFunc(http.MethodPatch, "/v1/divisions/:id", app.updateDivisionHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/divisions/:id", app.deleteDivisionHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/divisions/:id/teams", app.listDivisionTeamHandler)
 
 	router.HandlerFunc(http.MethodGet, "/v1/leagues", app.listLeaguesHandler)
 	router.HandlerFunc(http.MethodPost, "/v1/leagues", app.createLeagueHandler)

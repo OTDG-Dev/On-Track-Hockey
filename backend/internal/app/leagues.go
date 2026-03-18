@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"errors"
@@ -9,14 +9,14 @@ import (
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/validator"
 )
 
-func (app *application) showLeagueHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) showLeagueHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
 	}
 
-	league, err := app.models.League.Get(id)
+	league, err := app.Models.League.Get(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -33,7 +33,7 @@ func (app *application) showLeagueHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (app *application) createLeagueHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) createLeagueHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Name string `json:"name"`
 	}
@@ -55,7 +55,7 @@ func (app *application) createLeagueHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	err = app.models.League.Insert(league)
+	err = app.Models.League.Insert(league)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -70,14 +70,14 @@ func (app *application) createLeagueHandler(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func (app *application) updateLeagueHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) updateLeagueHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
 	}
 
-	league, err := app.models.League.Get(id)
+	league, err := app.Models.League.Get(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -102,7 +102,7 @@ func (app *application) updateLeagueHandler(w http.ResponseWriter, r *http.Reque
 		league.Name = *input.Name
 	}
 
-	err = app.models.League.Update(league)
+	err = app.Models.League.Update(league)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrEditConflict):
@@ -119,8 +119,8 @@ func (app *application) updateLeagueHandler(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func (app *application) listLeaguesHandler(w http.ResponseWriter, r *http.Request) {
-	leagues, err := app.models.League.GetAll()
+func (app *Application) listLeaguesHandler(w http.ResponseWriter, r *http.Request) {
+	leagues, err := app.Models.League.GetAll()
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -132,14 +132,14 @@ func (app *application) listLeaguesHandler(w http.ResponseWriter, r *http.Reques
 	}
 }
 
-func (app *application) deleteLeagueHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) deleteLeagueHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
 	}
 
-	err = app.models.League.Delete(id)
+	err = app.Models.League.Delete(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):

@@ -46,7 +46,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ../db/migrations:/migrations
+      - ../backend/db/migrations:/migrations
     command: [ "-path", "/migrations", "-database", "${OTH_DB_DSN}", "up" ]
 
 networks:

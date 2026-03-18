@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"fmt"
@@ -6,17 +6,17 @@ import (
 )
 
 // helper method for logging an error message along with current request
-func (app *application) logError(r *http.Request, err error) {
+func (app *Application) logError(r *http.Request, err error) {
 	var (
 		method = r.Method
 		uri    = r.URL.RequestURI()
 	)
 
-	app.logger.Error(err.Error(), "method", method, "uri", uri)
+	app.Logger.Error(err.Error(), "method", method, "uri", uri)
 }
 
 // JSON formatted error messages, using any type as the message
-func (app *application) errorResponse(w http.ResponseWriter, r *http.Request, status int, message any) {
+func (app *Application) errorResponse(w http.ResponseWriter, r *http.Request, status int, message any) {
 	env := envelope{
 		"error": message,
 	}
@@ -30,7 +30,7 @@ func (app *application) errorResponse(w http.ResponseWriter, r *http.Request, st
 }
 
 // Send a 500, log the request and send the user a generic JSON response
-func (app *application) serverErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
+func (app *Application) serverErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
 	app.logError(r, err)
 
 	message := "the server encountered a problem and could not process your request"
@@ -38,32 +38,32 @@ func (app *application) serverErrorResponse(w http.ResponseWriter, r *http.Reque
 }
 
 // Send a 404, log the request and send the user a generic JSON response
-func (app *application) notFoundResponse(w http.ResponseWriter, r *http.Request) {
+func (app *Application) notFoundResponse(w http.ResponseWriter, r *http.Request) {
 	message := "the requested resource could not be found"
 	app.errorResponse(w, r, http.StatusNotFound, message)
 }
 
 // Send a 405, log the request and send the user a generic JSON response
-func (app *application) methodNotAllowedResponse(w http.ResponseWriter, r *http.Request) {
+func (app *Application) methodNotAllowedResponse(w http.ResponseWriter, r *http.Request) {
 	message := fmt.Sprintf("the %s method is not supported for this resouce", r.Method)
 	app.errorResponse(w, r, http.StatusMethodNotAllowed, message)
 }
 
 // Send a 400, log the request and send the user a generic JSON response
 // If user input is bad
-func (app *application) badRequestResponse(w http.ResponseWriter, r *http.Request, err error) {
+func (app *Application) badRequestResponse(w http.ResponseWriter, r *http.Request, err error) {
 	app.errorResponse(w, r, http.StatusBadRequest, err.Error())
 }
 
-func (app *application) failedValidationResponse(w http.ResponseWriter, r *http.Request, errors map[string]string) {
+func (app *Application) failedValidationResponse(w http.ResponseWriter, r *http.Request, errors map[string]string) {
 	app.errorResponse(w, r, http.StatusUnprocessableEntity, errors)
 }
 
-func (app *application) editConflictResponse(w http.ResponseWriter, r *http.Request) {
+func (app *Application) editConflictResponse(w http.ResponseWriter, r *http.Request) {
 	message := "unable to update the record due to an edit conflict, please try again"
 	app.errorResponse(w, r, http.StatusConflict, message)
 }
 
-func (app *application) rateLimitExceededResponse(w http.ResponseWriter, r *http.Request) {
+func (app *Application) rateLimitExceededResponse(w http.ResponseWriter, r *http.Request) {
 	app.errorResponse(w, r, http.StatusTooManyRequests, "rate limit exceeded")
 }

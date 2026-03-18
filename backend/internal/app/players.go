@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"errors"
@@ -10,14 +10,14 @@ import (
 	"github.com/OTDG-Dev/On-Track-Hockey/backend/internal/validator"
 )
 
-func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) showPlayerHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
 	}
 
-	player, err := app.models.Players.GetView(id)
+	player, err := app.Models.Players.GetView(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -34,7 +34,7 @@ func (app *application) showPlayerHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) listPlayersHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		FirstName     string
 		LastName      string
@@ -75,7 +75,7 @@ func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Reques
 		CurrentTeamID: input.CurrentTeamId,
 	}
 
-	players, metadata, err := app.models.Players.GetViewAll(pq, input.Filters)
+	players, metadata, err := app.Models.Players.GetViewAll(pq, input.Filters)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -87,7 +87,7 @@ func (app *application) listPlayersHandler(w http.ResponseWriter, r *http.Reques
 	}
 }
 
-func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) createPlayerHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		IsActive      bool `json:"is_active"`
 		CurrentTeamId int  `json:"current_team_id"`
@@ -128,7 +128,7 @@ func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	err = app.models.Players.Insert(player)
+	err = app.Models.Players.Insert(player)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -149,14 +149,14 @@ func (app *application) createPlayerHandler(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func (app *application) updatePlayerHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) updatePlayerHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
 	}
 
-	player, err := app.models.Players.Get(id)
+	player, err := app.Models.Players.Get(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -222,7 +222,7 @@ func (app *application) updatePlayerHandler(w http.ResponseWriter, r *http.Reque
 
 	data.ValidatePlayer(v, player)
 
-	err = app.models.Players.Update(player)
+	err = app.Models.Players.Update(player)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrEditConflict):
@@ -239,14 +239,14 @@ func (app *application) updatePlayerHandler(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func (app *application) deletePlayerHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) deletePlayerHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
 	}
 
-	err = app.models.Players.Delete(id)
+	err = app.Models.Players.Delete(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
