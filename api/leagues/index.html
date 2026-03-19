@@ -66,6 +66,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#delete-a-league">Delete a league</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#view-all-divisions-in-a-league">View all divisions in a league</a>
+    </li>
     </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../games/">Games</a>
@@ -141,6 +143,23 @@
 <p>Example response:</p>
 <pre><code class="language-json">{
   &quot;message&quot;: &quot;league successfully deleted&quot;
+}
+</code></pre>
+<h2 id="view-all-divisions-in-a-league">View all divisions in a league</h2>
+<p><code>GET /v1/leagues/:id/divisions</code></p>
+<pre><code class="language-json">{
+  &quot;divisions&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;league_id&quot;: 1,
+      &quot;name&quot;: &quot;DIV1&quot;
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;league_id&quot;: 1,
+      &quot;name&quot;: &quot;DIV2&quot;
+    }
+  ]
 }
 </code></pre>
               
