@@ -62,11 +62,11 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#view-all-leagues">View all leagues</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#view-all-divisions-in-a-league">View all divisions in a league</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#update-a-league">Update a league</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#delete-a-league">Delete a league</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#view-all-divisions-in-a-league">View all divisions in a league</a>
     </li>
     </ul>
                   </li>
@@ -132,19 +132,6 @@
   ]
 }
 </code></pre>
-<h2 id="update-a-league">Update a league</h2>
-<p><code>PATCH /leagues/{id}</code></p>
-<pre><code class="language-json">{
-  &quot;name&quot;: &quot;KHL&quot;
-}
-</code></pre>
-<h2 id="delete-a-league">Delete a league</h2>
-<p><code>DELETE /leagues/{id}</code></p>
-<p>Example response:</p>
-<pre><code class="language-json">{
-  &quot;message&quot;: &quot;league successfully deleted&quot;
-}
-</code></pre>
 <h2 id="view-all-divisions-in-a-league">View all divisions in a league</h2>
 <p><code>GET /v1/leagues/{league_id}/divisions</code></p>
 <pre><code class="language-json">{
@@ -160,6 +147,19 @@
       &quot;name&quot;: &quot;DIV2&quot;
     }
   ]
+}
+</code></pre>
+<h2 id="update-a-league">Update a league</h2>
+<p><code>PATCH /leagues/{id}</code></p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;KHL&quot;
+}
+</code></pre>
+<h2 id="delete-a-league">Delete a league</h2>
+<p><code>DELETE /leagues/{id}</code></p>
+<p>Example response:</p>
+<pre><code class="language-json">{
+  &quot;message&quot;: &quot;league successfully deleted&quot;
 }
 </code></pre>
               
