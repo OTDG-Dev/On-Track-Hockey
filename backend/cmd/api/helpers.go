@@ -11,9 +11,7 @@ func getEnvFloat(key string, defaultValue float64) float64 {
 			return parsed
 		}
 	}
-
 	return defaultValue
-
 }
 
 func getEnvInt(key string, defaultValue int) int {
