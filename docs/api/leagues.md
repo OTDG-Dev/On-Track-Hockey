@@ -71,7 +71,7 @@ Example response:
 
 ## View all divisions in a league
 
-`GET /v1/leagues/:id/divisions`
+`GET /v1/leagues/{league_id}/divisions`
 
 ```json
 {
