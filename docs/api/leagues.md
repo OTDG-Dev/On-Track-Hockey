@@ -67,3 +67,25 @@ Example response:
   "message": "league successfully deleted"
 }
 ```
+
+
+## View all divisions in a league
+
+`GET /v1/leagues/:id/divisions`
+
+```json
+{
+  "divisions": [
+    {
+      "id": 1,
+      "league_id": 1,
+      "name": "DIV1"
+    },
+    {
+      "id": 2,
+      "league_id": 1,
+      "name": "DIV2"
+    }
+  ]
+}
+```

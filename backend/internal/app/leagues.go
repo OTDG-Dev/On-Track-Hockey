@@ -157,3 +157,22 @@ func (app *Application) deleteLeagueHandler(w http.ResponseWriter, r *http.Reque
 		app.serverErrorResponse(w, r, err)
 	}
 }
+
+func (app *Application) listLeagueDivisonHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	divisions, err := app.Models.Division.GetAll(&id)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	if err := app.writeJSON(w, http.StatusOK, envelope{"divisions": divisions}, nil); err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+
+}

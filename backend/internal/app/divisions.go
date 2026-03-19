@@ -79,7 +79,7 @@ func (app *Application) createDivisionHandler(w http.ResponseWriter, r *http.Req
 }
 
 func (app *Application) listDivisionsHandler(w http.ResponseWriter, r *http.Request) {
-	divs, err := app.Models.Division.GetAll()
+	divs, err := app.Models.Division.GetAll(nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
