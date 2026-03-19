@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS game_event_participants (
         ON DELETE RESTRICT,
 
     role text NOT NULL
-        CHECK (role IN ('primary', 'secondary', 'tertiary')),
+        CHECK (role IN ('scorer', 'assist_primary', 'assist_secondary','penalty_taker')),
     
     UNIQUE (event_id, role),
     UNIQUE (event_id, player_id)
