@@ -80,7 +80,6 @@ func (app *Application) rateLimit(next http.Handler) http.Handler {
 	})
 }
 
-// temporary patch for CORS
 func (app *Application) cors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		allowedOrigins := map[string]bool{
@@ -92,6 +91,7 @@ func (app *Application) cors(next http.Handler) http.Handler {
 
 		if allowedOrigins[origin] {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Vary", "Origin")
 		}
 
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
