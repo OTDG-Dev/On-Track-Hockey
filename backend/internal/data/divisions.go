@@ -13,7 +13,7 @@ import (
 type Division struct {
 	ID        int       `json:"id"`
 	CreatedAt time.Time `json:"-"`
-	Version   int       `json:"version"`
+	Version   int       `json:"-"`
 
 	LeagueID int    `json:"league_id"`
 	Name     string `json:"name"`
@@ -145,19 +145,20 @@ func (m DivisonModel) Update(division *Division) error {
 	return nil
 }
 
-func (m DivisonModel) GetAll() ([]*Division, error) {
+func (m DivisonModel) GetAll(leagueID *int) ([]*Division, error) {
 	// should query league_id for divs
 	query := /* sql */ `
 		SELECT
 			id,
 			name,
 			league_id
-		FROM divisions`
+		FROM divisions
+		WHERE ($1::int IS NULL OR league_id = $1)`
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	rows, err := m.DB.QueryContext(ctx, query)
+	rows, err := m.DB.QueryContext(ctx, query, leagueID)
 	if err != nil {
 		return nil, err
 	}

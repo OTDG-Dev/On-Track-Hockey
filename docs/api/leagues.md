@@ -46,6 +46,27 @@ Example response:
 }
 ```
 
+## View all divisions in a league
+
+`GET /v1/leagues/{league_id}/divisions`
+
+```json
+{
+  "divisions": [
+    {
+      "id": 1,
+      "league_id": 1,
+      "name": "DIV1"
+    },
+    {
+      "id": 2,
+      "league_id": 1,
+      "name": "DIV2"
+    }
+  ]
+}
+```
+
 ## Update a league
 
 `PATCH /leagues/{id}`

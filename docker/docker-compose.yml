@@ -1,57 +1,57 @@
 name: on-track-hockey
 services:
-  frontend:
-    build:
-      context: ../frontend
-      dockerfile: docker/Dockerfile
-    restart: unless-stopped
-    networks:
-      - oth-net
-    ports:
-      - 4200:8080
+    frontend:
+        build:
+            context: ../frontend
+            dockerfile: docker/Dockerfile
+        restart: unless-stopped
+        networks:
+            - oth-net
+        ports:
+            - 8080:8080
 
-  api:
-    build:
-      context: ../backend
-    restart: unless-stopped
-    env_file:
-      - .env
-    networks:
-      - oth-net
-    ports:
-      - 3000:3000
+    api:
+        build:
+            context: ../backend
+        restart: unless-stopped
+        env_file:
+            - .env
+        networks:
+            - oth-net
+        ports:
+            - 3000:3000
 
-  db:
-    image: "postgres:18.1-alpine"
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    networks:
-      - oth-net
-    volumes:
-      - postgres-data:/var/lib/postgresql
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
-      interval: 5s
-      timeout: 1s
-      retries: 5
-      start_period: 20s
+    db:
+        image: "postgres:18.1-alpine"
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+        networks:
+            - oth-net
+        volumes:
+            - postgres-data:/var/lib/postgresql
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+            interval: 5s
+            timeout: 1s
+            retries: 5
+            start_period: 20s
 
-  migrate:
-    image: migrate/migrate:v4.19.1
-    networks:
-      - oth-net
-    depends_on:
-      db:
-        condition: service_healthy
-    volumes:
-      - ../backend/db/migrations:/migrations
-    command: [ "-path", "/migrations", "-database", "${OTH_DB_DSN}", "up" ]
+    migrate:
+        image: migrate/migrate:v4.19.1
+        networks:
+            - oth-net
+        depends_on:
+            db:
+                condition: service_healthy
+        volumes:
+            - ../backend/db/migrations:/migrations
+        command: [ "-path", "/migrations", "-database", "${OTH_DB_DSN}", "up" ]
 
 networks:
-  oth-net:
-    driver: bridge
+    oth-net:
+        driver: bridge
 volumes:
-  postgres-data:
-    name: "postgres-data"
+    postgres-data:
+        name: "postgres-data"
