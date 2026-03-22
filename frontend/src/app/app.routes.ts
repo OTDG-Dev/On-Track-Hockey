@@ -14,6 +14,7 @@ import { EditTeam } from './components/edit-team/edit-team';
 import { ViewDivisions } from './components/view-divisions/view-divisions';
 import { EditDivision } from './components/edit-division/edit-division';
 import { ViewDivision } from './components/view-division/view-division';
+import { ViewLeagues } from './components/view-leagues/view-leagues';
 
 export const routes: Routes = [
     {
@@ -75,5 +76,9 @@ export const routes: Routes = [
     {
         path: 'edit-division/:id',
         component: EditDivision
+    },
+    {
+        path: 'view-leagues',
+        component: ViewLeagues
     }
 ];

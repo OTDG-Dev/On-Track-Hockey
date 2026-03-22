@@ -6,6 +6,7 @@ import { DivisionData } from '../../interfaces/division-data';
 import { CommonModule } from '@angular/common';
 import { LeagueService } from '../../services/league-service';
 import { LeagueData } from '../../interfaces/league-data';
+import { TeamData } from '../../interfaces/team-data';
 
 @Component({
   selector: 'app-view-division',
@@ -15,14 +16,16 @@ import { LeagueData } from '../../interfaces/league-data';
 })
 export class ViewDivision {
 
+  activeTab: 'info' | 'teams' = 'info';
   divisionId: number = -1;
   name: WritableSignal<string> = signal("");
   leagueId: WritableSignal<number> = signal(-1);
   leagues: WritableSignal<LeagueData[]> = signal([]);
+  teams: WritableSignal<TeamData[]> = signal([]);
 
   avatarUrl: WritableSignal<string> = signal("https://a.espncdn.com/combiner/i?img=/i/headshots/nhl/players/full/5149125.png&w=350&h=254");
 
-  constructor(private leagueService: LeagueService, private divisionService: DivisionService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private leagueService: LeagueService, private divisionService: DivisionService, private teamService: TeamService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(){
     const id = this.route.snapshot.paramMap.get('id');
@@ -33,6 +36,15 @@ export class ViewDivision {
     this.leagueService.getLeagues().subscribe({
       next: (responseData) => {
         this.leagues.set(responseData.leagues);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+
+    this.divisionService.getTeamsInDivision(this.divisionId).subscribe({
+      next: (responseData) => {
+        this.teams.set(responseData.teams);
       },
       error: (err) => {
         console.log(err);

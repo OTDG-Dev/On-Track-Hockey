@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { LeagueData } from '../interfaces/league-data';
+import { DivisionData } from '../interfaces/division-data';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,10 @@ export class LeagueService {
 
   getLeagues() {
     return this.httpClient.get<{ leagues: LeagueData[] }>(this.baseUrl);
+  }
+
+  getDivisionByLeague(id: number) {
+    return this.httpClient.get<{ divisions: DivisionData[] }>(`${this.baseUrl}/${id}/divisions`)
   }
   
 }

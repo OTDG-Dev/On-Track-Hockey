@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { DivisionData } from '../interfaces/division-data';
+import { TeamData } from '../interfaces/team-data';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +16,12 @@ export class DivisionService {
   getDivisions() {
     return this.httpClient.get<{ divisions: DivisionData[] }>(this.baseUrl);
   }
+  
+  getTeamsInDivision(id: number) {
+    return this.httpClient.get<{ teams: TeamData[] }>(`${this.baseUrl}/${id}/teams`);
+  }
 
-  getDivision(id:number) {
+  getDivision(id: number) {
     return this.httpClient.get<{ division: DivisionData }>(`${this.baseUrl}/${id}`);
   }
 
