@@ -63,8 +63,19 @@ func (m LeagueModel) Insert(league *League) error {
 	return m.DB.QueryRowContext(ctx, query, []any{league.Name}...).Scan(&league.ID)
 }
 
-func (m LeagueModel) GetAll() ([]*League, error) {
-	query := /* sql */ `SELECT id, name FROM leagues`
+type LeagueWithMetadata struct {
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	DivCount int    `json:"div_count"`
+}
+
+func (m LeagueModel) GetAll() ([]*LeagueWithMetadata, error) {
+	query := /* sql */ `
+        SELECT l.id, l.name, COUNT(d.id) AS div_count
+        FROM leagues l
+        LEFT JOIN divisions d ON l.id = d.league_id
+        GROUP BY l.id, l.name
+        ORDER BY l.name`
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -74,11 +85,11 @@ func (m LeagueModel) GetAll() ([]*League, error) {
 		return nil, err
 	}
 
-	leagues := []*League{}
+	leagues := []*LeagueWithMetadata{}
 
 	for rows.Next() {
-		var l League
-		err = rows.Scan(&l.ID, &l.Name)
+		var l LeagueWithMetadata
+		err = rows.Scan(&l.ID, &l.Name, &l.DivCount)
 		if err != nil {
 			return nil, err
 		}
