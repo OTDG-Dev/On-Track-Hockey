@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LeagueData } from '../../interfaces/league-data';
 import { LeagueService } from '../../services/league-service';
+import { DivisionData } from '../../interfaces/division-data';
 
 @Component({
   selector: 'app-view-leagues',
@@ -14,6 +15,7 @@ import { LeagueService } from '../../services/league-service';
 export class ViewLeagues {
 
   leagues: WritableSignal<LeagueData[]> = signal([]);
+  divisionCounts = signal<Record<number, number>>({});
 
   constructor(private leagueService: LeagueService) { }
 
@@ -21,14 +23,25 @@ export class ViewLeagues {
     this.leagueService.getLeagues().subscribe({
       next: (responseData) => {
         this.leagues.set(responseData.leagues);
+        responseData.leagues.forEach(league => {
+          this.loadDivisionCount(league.id);
+        });
       },
       error: (err) => {
         console.log(err);
       }
     });
+
   }
 
-  getNoDivisions(id: number) {
-    return id;
+  loadDivisionCount(id: number) {
+    this.leagueService.getDivisionByLeague(id).subscribe({
+      next: (res) => {
+        this.divisionCounts.update(counts => ({
+          ...counts,
+          [id]: res.divisions.length
+        }));
+      }
+    });
   }
 }

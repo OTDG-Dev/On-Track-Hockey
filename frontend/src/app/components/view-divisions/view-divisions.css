@@ -25,10 +25,11 @@ hr {
 
 /* Table wrapper spacing */
 table {
-    width: 100%;
-    max-width: 1000%;
+    width: auto;
+    max-width: 60%;
     border-collapse: collapse;
     margin: 30px auto 0 auto;
+
     /* <-- this centers it */
 
     background-color: #ffffff;
@@ -63,6 +64,20 @@ td {
     border-bottom: 1px solid #f1f1f1;
 }
 
+/* Last column (your existing fix) */
+th:last-child,
+td:last-child {
+    width: 1%;
+    white-space: nowrap;
+}
+
+/* NEW: Prevent first column from stretching too much */
+th:first-child,
+td:first-child {
+    width: 1%;
+    white-space: nowrap;
+}
+
 /* Remove border from last row */
 tbody tr:last-child td {
     border-bottom: none;
@@ -77,11 +92,6 @@ tbody tr:hover {
     background-color: rgba(39, 174, 96, 0.05);
 }
 
-/* Sweater number subtle emphasis */
-td:nth-child(3) {
-    font-weight: 500;
-    color: #27AE60;
-}
 
 /* Responsive scroll on small screens */
 @media (max-width: 768px) {
