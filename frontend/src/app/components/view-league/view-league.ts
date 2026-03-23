@@ -28,6 +28,7 @@ export class ViewLeague {
     this.leagueId = Number(id);
 
     this.getLeague(this.leagueId);
+    this.getDivisions(this.leagueId);
   }
 
   getLeague(id: number) {
@@ -39,6 +40,15 @@ export class ViewLeague {
         }
       }
     )
+  }
+
+  getDivisions(id: number) {
+    this.leagueService.getDivisionByLeague(id)
+    .subscribe({
+      next: (responseData) => {
+        this.divisions.set(responseData.divisions);
+      }
+    })
   }
 
 }
