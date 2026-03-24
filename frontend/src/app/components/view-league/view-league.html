@@ -1,0 +1,67 @@
+
+<div class="page-container">
+    <h1>View League</h1>
+    <hr>
+    
+    <div class="top-actions">
+      <button [routerLink]="['/edit-league', leagueId]" class="action-button edit-button">
+        Edit League
+      </button>
+    </div>
+  
+    <!-- Avatar -->
+    <div class="avatar-wrapper">
+      <img class="player-avatar" [src]="avatarUrl()" alt="{{ name() }} Headshot">
+    </div>
+
+    <!-- TABS -->
+  <div class="tabs">
+    <div
+      class="tab"
+      [class.active]="activeTab === 'info'"
+      (click)="activeTab = 'info'"
+    >
+      Info
+    </div>
+
+    <div
+      class="tab"
+      [class.active]="activeTab === 'divisions'"
+      (click)="activeTab = 'divisions'"
+    >
+      Divisions
+    </div>
+  </div>
+  
+  <div class="tab-content" [class.hidden]="activeTab !== 'info'">
+    <div class="info-columns">
+      <!-- Left Column: Personal Info -->
+      <div class="column personal-column">
+        <p class="section-label">Info</p>
+        <div class="field">
+          <p>Name</p>
+          <div class="value-pill">{{ name() }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" [class.hidden]="activeTab !== 'divisions'">
+    <div class="player-section">
+      <h2 class="position-heading">Divisions</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let division of divisions()">
+            <td><a [routerLink]="['/view-division', division.id]">{{ division.name }}</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  </div>

@@ -1,4 +1,5 @@
 export interface LeagueData {
     name: string,
-    id: number
+    id: number,
+    div_count: number
 }

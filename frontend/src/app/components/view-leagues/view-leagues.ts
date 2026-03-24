@@ -23,25 +23,11 @@ export class ViewLeagues {
     this.leagueService.getLeagues().subscribe({
       next: (responseData) => {
         this.leagues.set(responseData.leagues);
-        responseData.leagues.forEach(league => {
-          this.loadDivisionCount(league.id);
-        });
       },
       error: (err) => {
         console.log(err);
       }
     });
 
-  }
-
-  loadDivisionCount(id: number) {
-    this.leagueService.getDivisionByLeague(id).subscribe({
-      next: (res) => {
-        this.divisionCounts.update(counts => ({
-          ...counts,
-          [id]: res.divisions.length
-        }));
-      }
-    });
   }
 }

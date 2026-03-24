@@ -22,12 +22,28 @@ export class LeagueService {
     return this.httpClient.post<{ league: LeagueData }>(this.baseUrl, body);
   }
 
-  getLeagues() {
+  getLeague(id: number) 
+  {
+    return this.httpClient.get<{ league: LeagueData }>(`${this.baseUrl}/${id}`);
+  }
+
+  getLeagues() 
+  {
     return this.httpClient.get<{ leagues: LeagueData[] }>(this.baseUrl);
   }
 
-  getDivisionByLeague(id: number) {
+  getDivisionByLeague(id: number) 
+  {
     return this.httpClient.get<{ divisions: DivisionData[] }>(`${this.baseUrl}/${id}/divisions`)
+  }
+
+  patchLeague(name: string, id: number) 
+  {
+    const body = {
+      "name": name
+    };
+
+    return this.httpClient.patch<{ league: LeagueData }>(`${this.baseUrl}/${id}`, body);
   }
   
 }
