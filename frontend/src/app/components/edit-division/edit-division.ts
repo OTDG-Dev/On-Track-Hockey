@@ -13,7 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class EditDivision {
 
-  division_id: number = 1;
+  division_id: number = -1;
   name: WritableSignal<string> = signal("");
   league_id: WritableSignal<number> = signal(-1);
 
