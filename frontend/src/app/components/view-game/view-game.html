@@ -1,0 +1,76 @@
+<div class="page-container">
+
+    <h1>Game</h1>
+    <hr>
+  
+    <div class="content-container">
+  
+      <!-- Scoreboard -->
+      <div class="game-card">
+        <div class="teams-row">
+  
+          <div class="team">
+            <h2>{{ home_team() }}</h2>
+            <div class="score">{{ home_team_id() }}</div>
+          </div>
+  
+          <div class="middle">
+            <div class="vs">VS</div>
+            <div class="time">{{ start_time() }}</div>
+          </div>
+  
+          <div class="team">
+            <h2>{{ away_team() }}</h2>
+            <div class="score">{{ away_team_id() }}</div>
+          </div>
+  
+        </div>
+      </div>
+  
+      <!-- Events Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Period</th>
+            <th>Time</th>
+            <th>Event</th>
+            <th>Team</th>
+            <th>Situation</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          @for (event of game_events(); track event.id) {
+            <tr>
+              <td>{{ event.event_number }}</td>
+              <td>{{ event.period }}</td>
+              <td>{{ formatClock(event.clock_seconds) }}</td>
+  
+              <td [style.color]="event.event_type === 'goal' ? '#27AE60' : ''">
+                {{ event.event_type | uppercase }}
+              </td>
+  
+              <td>
+                <span 
+                  class="value-pill"
+                  [class.inactive-pill]="event.team_id !== home_team_id()"
+                >
+                  {{ getTeamName(event.team_id) }}
+                </span>
+              </td>
+  
+              <td>{{ event.situation }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="empty-state">
+                No events yet
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+  
+    </div>
+  </div>
