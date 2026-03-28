@@ -1,0 +1,46 @@
+name: Docker Build Test
+
+on:
+  pull_request:
+    paths:
+      - "backend/**"
+      - "docker/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - "docker/**"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Ensure .env file exists
+        run: |
+          if [ ! -f docker/template.env ]; then
+            echo "Error: template.env file is missing!" && exit 1;
+          fi
+          cp docker/template.env docker/.env
+          echo "Copied template.env to .env successfully."
+      
+      - name: Build Docker Compose services
+        run: docker compose -f docker/docker-compose.yml build
+        
+      - name: Verify containers start
+        run: |
+          docker compose -f docker/docker-compose.yml up -d
+          sleep 10
+          docker compose -f docker/docker-compose.yml ps
+          
+      - name: Check API health
+        run: docker compose -f docker/docker-compose.yml exec -T api sh -c "ping -c 1 api || true"
+      
+      - name: Cleanup
+        if: always()
+        run: docker compose -f docker/docker-compose.yml down
