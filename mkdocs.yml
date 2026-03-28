@@ -6,10 +6,10 @@ theme:
 nav:
   - Home: index.md
   - API:
-      - Players: api/players.md
-      - Teams: api/teams.md
-      - Roster: api/roster.md
-      - Divisions: api/divisions.md
       - Leagues: api/leagues.md
+      - Divisions: api/divisions.md
+      - Teams: api/teams.md
+      - Players: api/players.md
+      - Roster: api/roster.md
       - Games: api/games.md
       - Game Events: api/game_events.md
