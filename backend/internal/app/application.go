@@ -10,24 +10,29 @@ import (
 )
 
 type Config struct {
-	Port int
-	Env  string
-	DB   struct {
-		DSN          string
-		MaxOpenConns int
-		MaxIdleConns int
-		MaxIdleTime  time.Duration
-	}
-	Limiter struct {
-		RPS     float64
-		Burst   int
-		Enabled bool
-	}
+	Port    int
+	Env     string
+	DB      DBConfig
+	Limiter LimiterConfig
+}
+
+type DBConfig struct {
+	DSN          string
+	MaxOpenConns int
+	MaxIdleConns int
+	MaxIdleTime  time.Duration
+}
+
+type LimiterConfig struct {
+	RPS     float64
+	Burst   int
+	Enabled bool
 }
 
 type Application struct {
 	Config Config
 	Logger *slog.Logger
+	DB     *sql.DB
 	Models data.Models
 }
 
@@ -40,15 +45,12 @@ func New(cfg Config, logger *slog.Logger) (*Application, error) {
 	app := &Application{
 		Config: cfg,
 		Logger: logger,
+		DB:     db,
 		Models: data.NewModel(db),
 	}
 
 	return app, nil
 }
-
-// func (app *Application) Routes() {
-// 	return app.routes()
-// }
 
 func OpenDB(cfg Config) (*sql.DB, error) {
 	db, err := sql.Open("postgres", cfg.DB.DSN)

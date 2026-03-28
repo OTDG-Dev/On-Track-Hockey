@@ -21,3 +21,15 @@ func (app *Application) Server() error {
 
 	return srv.ListenAndServe()
 }
+
+func (app *Application) Shutdown() {
+	app.Logger.Info("shutting down api server")
+
+	if app.DB == nil {
+		return
+	}
+
+	if err := app.DB.Close(); err != nil {
+		app.Logger.Error("error closing database connection", "error", err)
+	}
+}
