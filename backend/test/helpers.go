@@ -11,7 +11,6 @@ import (
 	"net"
 	"net/http"
 	"strings"
-	"sync"
 	"testing"
 	"time"
 
@@ -27,39 +26,22 @@ import (
 var (
 	MIGRATIONS_PATH = "file://../db/migrations"
 
-	sharedSetupMu   sync.Mutex
-	sharedSetupOnce sync.Once
 	sharedApp       *app.Application
 	sharedBaseURL   string
 	sharedContainer testcontainers.Container
 )
 
-// Discard verbose logs from test containers unless a test fails.
+// Discard verbose testcontainers lifecycle logs during test runs.
 func init() {
 	tclog.SetDefault(log.New(io.Discard, "", 0))
 }
 
-// setup starts a postgres container, runs migrations, and starts the API server.
-// Optional flag: setup(t, true) forces a clean recreate of shared infra.
-// Returns the application instance and the base URL for making requests.
-func setup(t *testing.T, cleanRecreate ...bool) (*app.Application, string) {
+// setup starts shared test infrastructure once and reuses it across tests.
+// It resets DB state before each call to keep test isolation.
+func setup(t *testing.T) (*app.Application, string) {
 	t.Helper()
 
-	forceRecreate := len(cleanRecreate) > 0 && cleanRecreate[0]
-
-	sharedSetupMu.Lock()
-	defer sharedSetupMu.Unlock()
-
-	if forceRecreate {
-		teardownShared()
-		sharedApp = nil
-		sharedBaseURL = ""
-		sharedContainer = nil
-		sharedSetupOnce = sync.Once{}
-	}
-
-	// Initialize expensive infrastructure only once.
-	sharedSetupOnce.Do(func() {
+	if sharedApp == nil {
 		port := getFreePort(t)
 		sharedBaseURL = fmt.Sprintf("http://%s:%d", "localhost", port)
 
@@ -72,9 +54,9 @@ func setup(t *testing.T, cleanRecreate ...bool) (*app.Application, string) {
 
 		sharedApp = startAPI(t, dsn, port)
 		waitForAPI(t, sharedBaseURL+"/v1/healthcheck")
-	})
+	}
 
-	// Wipe the database clean before each test to ensure test isolation.
+	// Wipe the database clean before each test to ensure test isolation
 	resetDB(t, sharedApp)
 
 	return sharedApp, sharedBaseURL
@@ -92,7 +74,7 @@ func teardownShared() {
 	}
 }
 
-// startPostgres starts a postgres container and returns the DSN for connecting to it.
+// startPostgres starts a postgres container and returns the DSN for connecting to it
 func startPostgres(t *testing.T, ctx context.Context) (testcontainers.Container, string) {
 	t.Helper()
 
