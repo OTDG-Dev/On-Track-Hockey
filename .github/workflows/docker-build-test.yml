@@ -5,12 +5,14 @@ on:
     paths:
       - "backend/**"
       - "docker/**"
+      - "frontend/**"
   push:
     branches:
       - main
     paths:
       - "backend/**"
       - "docker/**"
+      - "frontend/**"
 
 jobs:
   build-and-test:
