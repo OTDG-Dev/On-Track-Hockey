@@ -1,0 +1,216 @@
+:host {
+    display: block;
+    padding-bottom: 60px;
+}
+
+/* ---------- Page Layout ---------- */
+.page-container {
+    padding: 32px;
+    padding-top: 40px; /* space from navbar */
+}
+
+h1 {
+    text-align: center;
+}
+
+/* Divider */
+hr {
+    width: 100%;
+    border: none;
+    height: 2px;
+    background-color: #e4e4e4;
+    margin: 24px 0;
+}
+
+.content-container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* ---------- Scoreboard ---------- */
+.game-card {
+    margin: 0 auto 30px auto;
+    padding: 24px;
+
+    background-color: #ffffff;
+    border-radius: 12px;
+
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+}
+
+.teams-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.team {
+    flex: 1;
+    text-align: center;
+}
+
+.team h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 12px;
+}
+
+.score {
+    font-size: 48px;
+    font-weight: 700;
+    color: #27AE60;
+}
+
+.middle {
+    text-align: center;
+    min-width: 100px;
+}
+
+.vs {
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+.time {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* ---------- Table ---------- */
+table {
+    width: 100%;
+    max-width: 1000px;
+    border-collapse: collapse;
+    margin: 0 auto;
+
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+}
+
+/* Header */
+thead {
+    background-color: #f9fafb;
+}
+
+th {
+    text-align: left;
+    padding: 16px 26px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: #6b7280;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Rows */
+td {
+    padding: 18px 26px;
+    font-size: 14px;
+    color: #111827;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+/* Remove border from last row */
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Hover effect */
+tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+tbody tr:hover {
+    background-color: rgba(39, 174, 96, 0.05);
+}
+
+/* Column sizing + alignment */
+th:nth-child(1),
+td:nth-child(1) {
+    width: 60px;
+    text-align: center;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+    width: 80px;
+    text-align: center;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+    width: 90px;
+    text-align: center;
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+    min-width: 140px;
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+    min-width: 120px;
+}
+
+th:nth-child(6),
+td:nth-child(6) {
+    width: auto;
+}
+
+/* Column separators */
+td:not(:last-child),
+th:not(:last-child) {
+    border-right: 1px solid #f1f1f1;
+}
+
+/* ---------- Pills ---------- */
+.value-pill {
+    display: inline-block;
+    background-color: #f0fdf4;
+    color: #1e7e34;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.inactive-pill {
+    background-color: #fef2f2;
+    color: #b91c1c;
+}
+
+/* ---------- Empty state ---------- */
+.empty-state {
+    text-align: center;
+    color: #6b7280;
+    padding: 20px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .teams-row {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .score {
+        font-size: 40px;
+    }
+}
