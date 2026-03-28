@@ -58,3 +58,16 @@ func (app *Application) showGameHandler(w http.ResponseWriter, r *http.Request) 
 		app.serverErrorResponse(w, r, err)
 	}
 }
+
+func (app *Application) listGamesHandler(w http.ResponseWriter, r *http.Request) {
+	games, err := app.Models.Games.GetAll()
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"games": games}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}

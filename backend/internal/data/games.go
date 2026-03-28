@@ -78,6 +78,15 @@ type GameView struct {
 	GameEvents []GameEvent `json:"game_events"`
 }
 
+type GameListView struct {
+	ID         int       `json:"id"`
+	HomeTeam   string    `json:"home_team"`
+	AwayTeam   string    `json:"away_team"`
+	HomeTeamID int       `json:"home_team_id"`
+	AwayTeamID int       `json:"away_team_id"`
+	StartTime  time.Time `json:"start_time"`
+}
+
 func (m *GameModel) GetView(gameID int) (*GameView, error) {
 
 	// Phase 1: Game Info
@@ -164,4 +173,54 @@ func (m *GameModel) GetView(gameID int) (*GameView, error) {
 	g.GameEvents = gameEvents
 
 	return &g, nil
+}
+
+func (m *GameModel) GetAll() ([]*GameListView, error) {
+	query := /* sql */ `
+		SELECT
+			g.id,
+			g.home_team_id,
+			t1.short_name,
+			g.away_team_id,
+			t2.short_name,
+			g.start_time
+		FROM games g
+		INNER JOIN teams t1
+			ON g.home_team_id = t1.id
+		INNER JOIN teams t2
+			ON g.away_team_id = t2.id
+		ORDER BY g.start_time DESC`
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	games := []*GameListView{}
+
+	for rows.Next() {
+		var g GameListView
+		err = rows.Scan(
+			&g.ID,
+			&g.HomeTeamID,
+			&g.HomeTeam,
+			&g.AwayTeamID,
+			&g.AwayTeam,
+			&g.StartTime,
+		)
+		if err != nil {
+			return nil, err
+		}
+		games = append(games, &g)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return games, nil
 }
