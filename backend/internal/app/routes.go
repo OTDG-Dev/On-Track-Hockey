@@ -43,6 +43,7 @@ func (app *Application) Routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/v1/leagues/:id/divisions", app.listLeagueDivisonHandler)
 
 	router.HandlerFunc(http.MethodPost, "/v1/games", app.createGameHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/games", app.listGamesHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/games/:id", app.showGameHandler)
 
 	router.HandlerFunc(http.MethodPost, "/v1/games/:game_id/events", app.createGameEventHandler)

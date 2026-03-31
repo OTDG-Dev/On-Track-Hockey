@@ -1,0 +1,41 @@
+<div class="page-container">
+
+    <h1>Games</h1>
+    <hr>
+  
+    <div class="content-container">
+  
+      <div class="games-grid">
+  
+        @for (game of games(); track game.id) {
+          <div class="game-card" [routerLink]="['/view-game', game.id]">
+  
+            <div class="teams-row">
+  
+              <div class="team">
+                <h3>{{ game.home_team }}</h3>
+              </div>
+  
+              <div class="middle">
+                <div class="vs">VS</div>
+                <div class="time">{{ game.start_time | date:'MMM. d - h:mm a' }}</div>
+              </div>
+  
+              <div class="team">
+                <h3>{{ game.away_team }}</h3>
+              </div>
+  
+            </div>
+  
+          </div>
+        } @empty {
+          <div class="empty-state">
+            No games available
+          </div>
+        }
+  
+      </div>
+  
+    </div>
+  
+  </div>

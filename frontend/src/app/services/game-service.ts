@@ -15,5 +15,22 @@ export class GameService {
   getGame(id: number) {
     return this.httpClient.get<{ game: GameData }>(`${this.baseUrl}/${id}`);
   }
+
+  getGames(){
+    return this.httpClient.get<{ games: GameData[]}>(`${this.baseUrl}`)
+  }
+
+  postGameEvent(period: number, clock_seconds: number, event_type: string, team_id: number, situation: string, game_id: number) {
+    
+    const body = {
+      "period": period,
+      "clock_seconds": clock_seconds,
+      "event_type": event_type,
+      "team_id": team_id,
+      "situation": situation
+    }
+
+    return this.httpClient.post<{ gameEvents: GamepadEvent[]}>(`${this.baseUrl}/${game_id}/events`, body);
+  }
   
 }
