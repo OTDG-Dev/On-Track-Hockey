@@ -13,6 +13,7 @@ func (app *Application) createGameHandler(w http.ResponseWriter, r *http.Request
 		HomeTeamId int       `json:"home_team_id"`
 		AwayTeamID int       `json:"away_team_id"`
 		StartTime  time.Time `json:"start_time"`
+		IsFinished bool      `json:"is_finished"`
 	}
 
 	err := app.readJSON(w, r, &input)
@@ -25,6 +26,7 @@ func (app *Application) createGameHandler(w http.ResponseWriter, r *http.Request
 		HomeTeamID: input.HomeTeamId,
 		AwayTeamID: input.AwayTeamID,
 		StartTime:  input.StartTime,
+		IsFinished: input.IsFinished,
 	}
 
 	err = app.Models.Games.Insert(&game)
