@@ -60,6 +60,36 @@ Response:
 }
 ```
 
+## Edit a game
+
+`PATCH /games/{id}`
+
+Partial updates are accepted
+
+Request:
+
+```json
+{
+  "home_team_id": 1,
+  "away_team_id": 3,
+  "is_finished": true
+}
+```
+
+Response:
+
+```json
+{
+  "game": {
+    "id": 2,
+    "home_team_id": 1,
+    "away_team_id": 3,
+    "start_time": "2026-03-10T19:30:00-05:00",
+    "is_finished": true
+  }
+}
+```
+
 ## View a game
 
 `GET /games/{id}`
