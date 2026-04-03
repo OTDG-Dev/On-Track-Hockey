@@ -18,6 +18,7 @@ import { ViewLeagues } from './components/view-leagues/view-leagues';
 import { ViewLeague } from './components/view-league/view-league';
 import { EditLeague } from './components/edit-league/edit-league';
 import { ViewGame } from './components/view-game/view-game';
+import { ViewGames } from './components/view-games/view-games';
 
 export const routes: Routes = [
     {
@@ -95,5 +96,9 @@ export const routes: Routes = [
     {
         path: 'view-game/:id',
         component: ViewGame
+    },
+    {
+        path: 'view-games',
+        component: ViewGames
     }
 ];

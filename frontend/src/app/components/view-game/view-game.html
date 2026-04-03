@@ -1,72 +1,162 @@
 <div class="page-container">
-    <div class="content-container">
-  
-      <!-- Scoreboard -->
-      <div class="game-card">
-        <div class="teams-row">
-  
-          <div class="team">
-            <h2>{{ home_team() }}</h2>
-            <div class="score">{{ home_team_id() }}</div>
-          </div>
-  
-          <div class="middle">
-            <div class="vs">VS</div>
-            <div class="time">{{ start_time() }}</div>
-          </div>
-  
-          <div class="team">
-            <h2>{{ away_team() }}</h2>
-            <div class="score">{{ away_team_id() }}</div>
-          </div>
-  
+
+  <h1>Game</h1>
+  <hr>
+
+  <div class="content-container">
+
+    <!-- Scoreboard -->
+    <div class="game-card">
+      <div class="teams-row">
+
+        <div class="team">
+          <h2>{{ home_team() }}</h2>
+          <div class="score">{{ home_team_id() }}</div>
         </div>
+
+        <div class="middle">
+          <div class="vs">VS</div>
+          <div class="time">{{ start_time() | date:'MMM d • h:mm a' }}</div>
+        </div>
+
+        <div class="team">
+          <h2>{{ away_team() }}</h2>
+          <div class="score">{{ away_team_id() }}</div>
+        </div>
+
       </div>
-  
-      <!-- Events Table -->
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Period</th>
-            <th>Time</th>
-            <th>Event</th>
-            <th>Team</th>
-            <th>Situation</th>
-          </tr>
-        </thead>
-  
-        <tbody>
-          @for (event of game_events(); track event.id) {
-            <tr>
-              <td>{{ event.event_number }}</td>
-              <td>{{ event.period }}</td>
-              <td>{{ formatClock(event.clock_seconds) }}</td>
-  
-              <td [style.color]="event.event_type === 'goal' ? '#27AE60' : ''">
-                {{ event.event_type | uppercase }}
-              </td>
-  
-              <td>
-                <span 
-                  class="value-pill"
-                  [class.inactive-pill]="event.team_id !== home_team_id()"
-                >
-                  {{ getTeamName(event.team_id) }}
-                </span>
-              </td>
-  
-              <td>{{ event.situation }}</td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="6" class="empty-state">
-                No events yet
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-  
     </div>
+
+    <!-- Events Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Period</th>
+          <th>Time</th>
+          <th>Event</th>
+          <th>Team</th>
+          <th>Situation</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <!-- Existing Events -->
+        @for (event of game_events(); track event.id) {
+          <tr>
+            <td>{{ event.event_number }}</td>
+            <td>{{ event.period }}</td>
+            <td>{{ formatClock(event.clock_seconds) }}</td>
+
+            <td [style.color]="event.event_type === 'goal' ? '#27AE60' : ''">
+              {{ event.event_type | titlecase }}
+            </td>
+
+            <td>
+              <span 
+                class="value-pill"
+                [class.inactive-pill]="event.team_id !== home_team_id()"
+              >
+                {{ getTeamName(event.team_id) }}
+              </span>
+            </td>
+
+            <td>{{ event.situation }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="empty-state">
+              No events yet
+            </td>
+          </tr>
+        }
+
+        <!-- Inline Editable Row -->
+        @if (isAddingEvent()) {
+          <tr class="edit-row">
+            <td>{{ newEvent().event_number }}</td>
+
+            <td>
+              <input 
+                type="text" 
+                maxlength="1" 
+                placeholder="1-3" 
+                [(ngModel)]="newEvent().period"
+              >
+            </td>
+
+            <td>
+              <div class="clock-input">
+                <input 
+                  type="text" 
+                  maxlength="2" 
+                  placeholder="MM" 
+                  [(ngModel)]="newEvent().minutes"
+                >
+                <span class="colon">:</span>
+                <input 
+                  type="text" 
+                  maxlength="2" 
+                  placeholder="SS" 
+                  [(ngModel)]="newEvent().seconds"
+                >
+              </div>
+            </td>
+
+            <td>
+              <select [(ngModel)]="newEvent().event_type">
+                <option value="" disabled>Select</option>
+                <option value="goal">Goal</option>
+                <option value="penalty">Penalty</option>
+                <option value="shot">Shot</option>
+                <option value="save">Save</option>
+              </select>
+            </td>
+
+            <td>
+              <select [(ngModel)]="newEvent().team_id">
+                <option [value]="home_team_id()">{{ home_team() }}</option>
+                <option [value]="away_team_id()">{{ away_team() }}</option>
+              </select>
+            </td>
+
+            <td>
+              <select [(ngModel)]="newEvent().situation">
+                <option value="" disabled>Select</option>
+                <option value="EV">EV</option>
+                <option value="PP">PP</option>
+                <option value="SH">SH</option>
+                <option value="EN">EN</option>
+              </select>
+            </td>
+          </tr>
+        }
+
+        <!-- Bottom Action Row -->
+        <tr class="add-row">
+          <td colspan="6">
+            @if (!isAddingEvent()) {
+              <button class="add-button" (click)="onAddEvent()">
+                + Add Event
+              </button>
+            } @else {
+              <div class="edit-actions">
+                <button class="save-button" (click)="onSaveEvent()">Save</button>
+                <button class="cancel-button" (click)="onCancelAdd()">Cancel</button>
+              </div>
+            }
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    @if (errorMessage()) {
+      <div class="error-message" [class.fade-out]="isFading()">
+        {{ errorMessage() }}
+      </div>
+      }
+
   </div>
+</div>
