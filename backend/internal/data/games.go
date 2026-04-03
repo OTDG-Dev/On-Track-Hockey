@@ -79,6 +79,41 @@ func (m *GameModel) Get(id int) (*Game, error) {
 	return &game, nil
 }
 
+func (m *GameModel) Update(game *Game) error {
+	query := /* sql */ `
+		UPDATE games
+		SET
+			home_team_id = $1,
+			away_team_id = $2,
+			is_finished = $3,
+			version = version + 1
+		WHERE id = $4 AND version = $5
+		RETURNING version`
+
+	args := []any{
+		game.HomeTeamID,
+		game.AwayTeamID,
+		game.IsFinished,
+		game.ID,
+		game.Version,
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, args...).Scan(&game.Version)
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return ErrEditConflict
+		default:
+			return err
+		}
+	}
+
+	return nil
+}
+
 type GameView struct {
 	HomeTeam   string      `json:"home_team"`
 	AwayTeam   string      `json:"away_team"`

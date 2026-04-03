@@ -10,7 +10,8 @@ Request:
 {
   "home_team_id": 1,
   "away_team_id": 2,
-  "start_time": "2026-03-10T19:30:00-05:00"
+  "start_time": "2026-03-10T19:30:00-05:00",
+  "is_finished": false
 }
 ```
 
@@ -23,6 +24,7 @@ Response:
     "home_team_id": 1,
     "away_team_id": 2,
     "start_time": "2026-03-10T19:30:00-05:00",
+    "is_finished": false
   }
 }
 ```
@@ -42,15 +44,17 @@ Response:
       "away_team": "SJS",
       "home_team_id": 1,
       "away_team_id": 2,
+      "is_finished": false,
       "start_time": "2026-03-11T00:30:00Z"
     },
     {
       "id": 2,
       "home_team": "NYR",
-      "away_team": "TOR",
+      "away_team": "SJS",
       "home_team_id": 1,
-      "away_team_id": 3,
-      "start_time": "2026-03-12T00:30:00Z"
+      "away_team_id": 2,
+      "is_finished": true,
+      "start_time": "2026-03-11T00:30:00Z"
     }
   ]
 }
@@ -69,6 +73,7 @@ Response:
     "away_team": "SJS",
     "home_team_id": 1,
     "away_team_id": 2,
+    "is_finished": false,
     "start_time": "2026-03-11T00:30:00Z",
     "game_events": [
       {

@@ -61,6 +61,63 @@ func (app *Application) showGameHandler(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
+func (app *Application) updateGameHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.notFoundResponse(w, r)
+		return
+	}
+
+	game, err := app.Models.Games.Get(id)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	var input struct {
+		HomeTeamID *int  `json:"home_team_id"`
+		AwayTeamID *int  `json:"away_team_id"`
+		IsFinished *bool `json:"is_finished"`
+	}
+
+	err = app.readJSON(w, r, &input)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	if input.HomeTeamID != nil {
+		game.HomeTeamID = *input.HomeTeamID
+	}
+	if input.AwayTeamID != nil {
+		game.AwayTeamID = *input.AwayTeamID
+	}
+	if input.IsFinished != nil {
+		game.IsFinished = *input.IsFinished
+	}
+
+	err = app.Models.Games.Update(game)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrEditConflict):
+			app.editConflictResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"game": game}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
 func (app *Application) listGamesHandler(w http.ResponseWriter, r *http.Request) {
 	games, err := app.Models.Games.GetAll()
 	if err != nil {
