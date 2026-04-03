@@ -62,6 +62,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#get-all-games">Get all games</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#edit-a-game">Edit a game</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#view-a-game">View a game</a>
     </li>
     </ul>
@@ -100,7 +102,8 @@
 <pre><code class="language-json">{
   &quot;home_team_id&quot;: 1,
   &quot;away_team_id&quot;: 2,
-  &quot;start_time&quot;: &quot;2026-03-10T19:30:00-05:00&quot;
+  &quot;start_time&quot;: &quot;2026-03-10T19:30:00-05:00&quot;,
+  &quot;is_finished&quot;: false
 }
 </code></pre>
 <p>Response:</p>
@@ -110,6 +113,7 @@
     &quot;home_team_id&quot;: 1,
     &quot;away_team_id&quot;: 2,
     &quot;start_time&quot;: &quot;2026-03-10T19:30:00-05:00&quot;,
+    &quot;is_finished&quot;: false
   }
 }
 </code></pre>
@@ -124,17 +128,40 @@
       &quot;away_team&quot;: &quot;SJS&quot;,
       &quot;home_team_id&quot;: 1,
       &quot;away_team_id&quot;: 2,
+      &quot;is_finished&quot;: false,
       &quot;start_time&quot;: &quot;2026-03-11T00:30:00Z&quot;
     },
     {
       &quot;id&quot;: 2,
       &quot;home_team&quot;: &quot;NYR&quot;,
-      &quot;away_team&quot;: &quot;TOR&quot;,
+      &quot;away_team&quot;: &quot;SJS&quot;,
       &quot;home_team_id&quot;: 1,
-      &quot;away_team_id&quot;: 3,
-      &quot;start_time&quot;: &quot;2026-03-12T00:30:00Z&quot;
+      &quot;away_team_id&quot;: 2,
+      &quot;is_finished&quot;: true,
+      &quot;start_time&quot;: &quot;2026-03-11T00:30:00Z&quot;
     }
   ]
+}
+</code></pre>
+<h2 id="edit-a-game">Edit a game</h2>
+<p><code>PATCH /games/{id}</code></p>
+<p>Partial updates are accepted</p>
+<p>Request:</p>
+<pre><code class="language-json">{
+  &quot;home_team_id&quot;: 1,
+  &quot;away_team_id&quot;: 3,
+  &quot;is_finished&quot;: true
+}
+</code></pre>
+<p>Response:</p>
+<pre><code class="language-json">{
+  &quot;game&quot;: {
+    &quot;id&quot;: 2,
+    &quot;home_team_id&quot;: 1,
+    &quot;away_team_id&quot;: 3,
+    &quot;start_time&quot;: &quot;2026-03-10T19:30:00-05:00&quot;,
+    &quot;is_finished&quot;: true
+  }
 }
 </code></pre>
 <h2 id="view-a-game">View a game</h2>
@@ -146,6 +173,7 @@
     &quot;away_team&quot;: &quot;SJS&quot;,
     &quot;home_team_id&quot;: 1,
     &quot;away_team_id&quot;: 2,
+    &quot;is_finished&quot;: false,
     &quot;start_time&quot;: &quot;2026-03-11T00:30:00Z&quot;,
     &quot;game_events&quot;: [
       {
