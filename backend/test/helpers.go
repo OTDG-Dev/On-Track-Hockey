@@ -286,7 +286,7 @@ func resetDB(t *testing.T, application *app.Application) {
 		SELECT table_name
 		FROM information_schema.tables
 		WHERE table_schema = 'public'
-		  AND table_name IN ('game_event_participants', 'game_events', 'games', 'roster', 'players', 'teams', 'divisions', 'leagues')
+		  AND table_name IN ('game_event_participants', 'game_events', 'games', 'roster', 'player_stats', 'players', 'teams', 'divisions', 'leagues')
 	`)
 	if err != nil {
 		t.Fatal(err)

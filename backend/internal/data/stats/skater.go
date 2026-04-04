@@ -1,6 +1,6 @@
 package stats
 
 type SkaterStatSet struct {
-	CurrentStats SeasonSplit[SkaterStats] `json:"current_stats,omitzero"`
-	CareerTotals SeasonSplit[SkaterStats] `json:"career_totals,omitzero"`
+	CurrentSeason SkaterStats `json:"current_season,omitzero"`
+	CareerTotals  SkaterStats `json:"career_totals,omitzero"`
 }

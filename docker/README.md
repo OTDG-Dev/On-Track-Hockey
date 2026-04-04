@@ -21,6 +21,19 @@ docker compose up -d --build frontend
 docker compose up -d --build api
 ```
 
+If you already have a running database volume from before a migration was added, apply migrations with:
+
+```bash
+docker compose up -d migrate
+```
+
+If you want a clean local database instead, recreate the stack and volumes:
+
+```bash
+docker compose down -v
+docker compose up --build -d
+```
+
 Enter database container
 
 ```bash

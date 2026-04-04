@@ -16,6 +16,11 @@ services:
         restart: unless-stopped
         env_file:
             - .env
+        depends_on:
+            db:
+                condition: service_healthy
+            migrate:
+                condition: service_completed_successfully
         networks:
             - oth-net
         ports:
@@ -40,6 +45,7 @@ services:
 
     migrate:
         image: migrate/migrate:v4.19.1
+        restart: "no"
         networks:
             - oth-net
         depends_on:
