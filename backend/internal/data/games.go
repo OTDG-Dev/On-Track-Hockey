@@ -15,6 +15,7 @@ type Game struct {
 	HomeTeamID int       `json:"home_team_id"`
 	AwayTeamID int       `json:"away_team_id"`
 	StartTime  time.Time `json:"start_time"`
+	IsFinished bool      `json:"is_finished"`
 }
 
 type GameModel struct {
@@ -26,24 +27,29 @@ func (m *GameModel) Insert(game *Game) error {
 		INSERT INTO games (
 			home_team_id,
 			away_team_id,
-			start_time
+			start_time,
+			is_finished
 		)
-		VALUES ($1, $2, $3)
+		VALUES ($1, $2, $3, $4)
 		RETURNING id, created_at, version`
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	args := []any{game.HomeTeamID, game.AwayTeamID, game.StartTime}
+	args := []any{game.HomeTeamID, game.AwayTeamID, game.StartTime, game.IsFinished}
 	return m.DB.QueryRowContext(ctx, query, args...).Scan(&game.ID, &game.CreatedAt, &game.Version)
 }
 
 func (m *GameModel) Get(id int) (*Game, error) {
 	query := /* sql */ `
-		SELECT 
+		SELECT
+			id,
+			created_at,
+			version,
 			home_team_id,
 			away_team_id,
-			start_time
+			start_time,
+			is_finished
 		FROM games
 		WHERE id = $1`
 
@@ -53,9 +59,13 @@ func (m *GameModel) Get(id int) (*Game, error) {
 	var game Game
 
 	err := m.DB.QueryRowContext(ctx, query, id).Scan(
+		&game.ID,
+		&game.CreatedAt,
+		&game.Version,
 		&game.HomeTeamID,
 		&game.AwayTeamID,
 		&game.StartTime,
+		&game.IsFinished,
 	)
 	if err != nil {
 		switch {
@@ -69,11 +79,47 @@ func (m *GameModel) Get(id int) (*Game, error) {
 	return &game, nil
 }
 
+func (m *GameModel) Update(game *Game) error {
+	query := /* sql */ `
+		UPDATE games
+		SET
+			home_team_id = $1,
+			away_team_id = $2,
+			is_finished = $3,
+			version = version + 1
+		WHERE id = $4 AND version = $5
+		RETURNING version`
+
+	args := []any{
+		game.HomeTeamID,
+		game.AwayTeamID,
+		game.IsFinished,
+		game.ID,
+		game.Version,
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.DB.QueryRowContext(ctx, query, args...).Scan(&game.Version)
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return ErrEditConflict
+		default:
+			return err
+		}
+	}
+
+	return nil
+}
+
 type GameView struct {
 	HomeTeam   string      `json:"home_team"`
 	AwayTeam   string      `json:"away_team"`
 	HomeTeamID int         `json:"home_team_id"`
 	AwayTeamID int         `json:"away_team_id"`
+	IsFinished bool        `json:"is_finished"`
 	StartTime  time.Time   `json:"start_time"`
 	GameEvents []GameEvent `json:"game_events"`
 }
@@ -84,6 +130,7 @@ type GameListView struct {
 	AwayTeam   string    `json:"away_team"`
 	HomeTeamID int       `json:"home_team_id"`
 	AwayTeamID int       `json:"away_team_id"`
+	IsFinished bool      `json:"is_finished"`
 	StartTime  time.Time `json:"start_time"`
 }
 
@@ -92,10 +139,11 @@ func (m *GameModel) GetView(gameID int) (*GameView, error) {
 	// Phase 1: Game Info
 	gameQuery := /* sql */ `
 		SELECT
-			home_team_id,
+			g.home_team_id,
 			t1.short_name,
-			away_team_id,
+			g.away_team_id,
 			t2.short_name,
+			g.is_finished,
 			g.start_time
 		FROM games g
 		INNER JOIN teams t1
@@ -114,6 +162,7 @@ func (m *GameModel) GetView(gameID int) (*GameView, error) {
 		&g.HomeTeam,
 		&g.AwayTeamID,
 		&g.AwayTeam,
+		&g.IsFinished,
 		&g.StartTime,
 	)
 	if err != nil {
@@ -183,6 +232,7 @@ func (m *GameModel) GetAll() ([]*GameListView, error) {
 			t1.short_name,
 			g.away_team_id,
 			t2.short_name,
+			g.is_finished,
 			g.start_time
 		FROM games g
 		INNER JOIN teams t1
@@ -210,6 +260,7 @@ func (m *GameModel) GetAll() ([]*GameListView, error) {
 			&g.HomeTeam,
 			&g.AwayTeamID,
 			&g.AwayTeam,
+			&g.IsFinished,
 			&g.StartTime,
 		)
 		if err != nil {

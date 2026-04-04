@@ -12,5 +12,7 @@ CREATE TABLE IF NOT EXISTS games (
         
     start_time TIMESTAMP WITH TIME ZONE NOT NULL,
 
+    is_finished BOOLEAN NOT NULL DEFAULT false,
+
     version integer NOT NULL DEFAULT 1
 );

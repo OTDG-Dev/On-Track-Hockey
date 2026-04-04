@@ -4,9 +4,12 @@ import { GameService } from '../../services/game-service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-view-game',
+  imports: [CommonModule, DatePipe, FormsModule],
   imports: [CommonModule, DatePipe, FormsModule],
   templateUrl: './view-game.html',
   styleUrl: './view-game.css',
@@ -28,12 +31,28 @@ export class ViewGame {
     seconds: 0
   });
 
+  isAddingEvent = signal(false);
+
+  newEvent = signal({
+    event_number: 0,
+    period: 1,
+    clock_seconds: 0,
+    event_type: '',
+    situation: '',
+    team_id: -1,
+    minutes: 0,
+    seconds: 0
+  });
+
   home_team: WritableSignal<string> = signal("");
   away_team: WritableSignal<string> = signal("");
   home_team_id: WritableSignal<number> = signal(-1);
   away_team_id: WritableSignal<number> = signal(-1);
   start_time: WritableSignal<string> = signal("");
   game_events: WritableSignal<GameEvent[]> = signal([]);
+
+  errorMessage: WritableSignal<string> = signal('');
+  isFading = signal(false);
 
   errorMessage: WritableSignal<string> = signal('');
   isFading = signal(false);
@@ -65,6 +84,25 @@ export class ViewGame {
         console.log(err);
       }
     })
+  }
+
+  onAddEvent() {
+    this.isAddingEvent.set(true);
+  
+    this.newEvent.set({
+      event_number: this.game_events().length + 1,
+      period: 1,
+      clock_seconds: 0,
+      event_type: '',
+      situation: '',
+      team_id: this.home_team_id(),
+      minutes: 0,
+      seconds: 0
+    });
+  }
+  
+  onCancelAdd() {
+    this.isAddingEvent.set(false);
   }
 
   onAddEvent() {

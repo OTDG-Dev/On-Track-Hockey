@@ -24,7 +24,3 @@ CREATE TABLE IF NOT EXISTS game_events (
 
     UNIQUE (game_id, event_number)
 );
-
-
--- return timeInPeriod
--- return timeRemainig

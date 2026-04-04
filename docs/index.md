@@ -11,11 +11,7 @@ Hockey SMS (Sports Management System)
 
 ## Stack
 
-```bash
-├──◈ db         # postgresql
-├──◈ backend    # go
-└──◈ frontend   # angular
-```
+![1](resources/development-stack.png)
 
 ## Status
 

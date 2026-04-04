@@ -7,6 +7,7 @@
 .page-container {
     padding: 32px;
     padding-top: 40px;
+    padding-top: 40px;
 }
 
 h1 {
@@ -30,6 +31,7 @@ hr {
 
 /* ---------- Scoreboard ---------- */
 .game-card {
+    margin-bottom: 30px;
     margin-bottom: 30px;
     padding: 24px;
 
@@ -92,6 +94,7 @@ table {
 
     box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
     table-layout: fixed;
+    table-layout: fixed;
 }
 
 /* Header */
@@ -119,14 +122,18 @@ td {
 }
 
 /* Hover */
+/* Hover */
 tbody tr:hover {
     background-color: rgba(39, 174, 96, 0.05);
 }
 
 /* Column alignment */
+/* Column alignment */
 th:nth-child(1),
 td:nth-child(1),
+td:nth-child(1),
 th:nth-child(2),
+td:nth-child(2),
 td:nth-child(2),
 th:nth-child(3),
 td:nth-child(3) {
@@ -157,6 +164,111 @@ th:not(:last-child) {
     color: #b91c1c;
 }
 
+/* ---------- Edit Row ---------- */
+.edit-row input,
+.edit-row select {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 13px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #fff;
+    box-sizing: border-box;
+    transition: all 0.15s ease;
+}
+
+.edit-row input:focus,
+.edit-row select:focus {
+    border-color: #27AE60;
+    outline: none;
+    box-shadow: 0 0 4px rgba(39, 174, 96, 0.3);
+}
+
+/* ---------- Clock Input (MM:SS) ---------- */
+.clock-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.clock-input input {
+    width: 40px;
+    padding: 6px 4px;
+    font-size: 13px;
+    text-align: center;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-sizing: border-box;
+    background-color: #fff;
+    transition: all 0.15s ease;
+    color: #111827;
+}
+
+.clock-input input:focus {
+    border-color: #27AE60;
+    outline: none;
+    box-shadow: 0 0 4px rgba(39, 174, 96, 0.3);
+}
+
+.clock-input .colon {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+/* ---------- Add Row ---------- */
+.add-row td {
+    text-align: center;
+    padding: 20px;
+    border-bottom: none;
+}
+
+/* ---------- Buttons ---------- */
+.add-button {
+    padding: 8px 16px;
+    font-size: 14px;
+
+    color: #27AE60;
+    background: transparent;
+    border: 1px solid #27AE60;
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.add-button:hover {
+    background-color: rgba(39, 174, 96, 0.08);
+}
+
+.edit-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.save-button {
+    padding: 6px 14px;
+    font-size: 13px;
+
+    color: white;
+    background-color: #27AE60;
+    border: none;
+    border-radius: 6px;
+}
+
+.cancel-button {
+    padding: 6px 14px;
+    font-size: 13px;
+
+    color: #6b7280;
+    background: transparent;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+}
+
+/* ---------- Empty ---------- */
 /* ---------- Edit Row ---------- */
 .edit-row input,
 .edit-row select {
