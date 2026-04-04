@@ -60,11 +60,34 @@ Response:
     "birth_date": "2006-05-12",
     "birth_country": "CAN",
     "shoots_catches": "L",
+    "skater_stats": {
+      "current_season": {
+        "games_played": 1,
+        "goals": 0,
+        "assists": 1,
+        "points": 1,
+        "pim": 0
+      },
+      "career_totals": {
+        "games_played": 1,
+        "goals": 0,
+        "assists": 1,
+        "points": 1,
+        "pim": 0
+      }
+    },
     "team_full_name": "San Jose Sharks",
     "team_short_name": "SJS"
   }
 }
 ```
+
+Notes:
+
+- Stats are returned on `GET /players/{id}` when a row exists in `player_stats`.
+- Stats stay basic for now
+- `GET /v0/updateStats` rebuilds stats
+- Right now it only does skater stats
 
 ## View all players
 

@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -314,6 +315,14 @@ type PlayerQuery struct {
 	CurrentTeamID int
 }
 
+type playerStatTotals struct {
+	PlayerID    int
+	GamesPlayed int
+	Goals       int
+	Assists     int
+	PIM         int
+}
+
 func (m PlayerModel) GetView(id int) (*PlayerWithTeam, error) {
 	query := /* sql */ `
 		SELECT
@@ -330,14 +339,20 @@ func (m PlayerModel) GetView(id int) (*PlayerWithTeam, error) {
 			p.shoots_catches,
 			p.version,
 			t.full_name,
-			t.short_name
+			t.short_name,
+			ps.skater_stats::text,
+			ps.goalie_stats::text
 		FROM players p
 		INNER JOIN teams t
 			ON p.current_team_id = t.id
+		LEFT JOIN player_stats ps
+			ON p.id = ps.player_id
 		WHERE p.id = $1
 	`
 
 	var p PlayerWithTeam
+	var skaterStatsJSON sql.NullString
+	var goalieStatsJSON sql.NullString
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -357,6 +372,8 @@ func (m PlayerModel) GetView(id int) (*PlayerWithTeam, error) {
 		&p.Version,
 		&p.TeamFullName,
 		&p.TeamShortName,
+		&skaterStatsJSON,
+		&goalieStatsJSON,
 	)
 
 	if err != nil {
@@ -368,7 +385,135 @@ func (m PlayerModel) GetView(id int) (*PlayerWithTeam, error) {
 		}
 	}
 
+	// Load saved skater stats
+	if skaterStatsJSON.Valid && skaterStatsJSON.String != "" {
+		p.SkaterStats = &stats.SkaterStatSet{}
+		if err := json.Unmarshal([]byte(skaterStatsJSON.String), p.SkaterStats); err != nil {
+			return nil, err
+		}
+	}
+
+	// Load saved goalie stats
+	if goalieStatsJSON.Valid && goalieStatsJSON.String != "" {
+		p.GoalieStats = &stats.GoalieStatSet{}
+		if err := json.Unmarshal([]byte(goalieStatsJSON.String), p.GoalieStats); err != nil {
+			return nil, err
+		}
+	}
+
 	return &p, nil
+}
+
+func (m PlayerModel) RebuildStats() (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// Phase 1: Start rebuild transaction
+	tx, err := m.DB.BeginTx(ctx, nil)
+	if err != nil {
+		return 0, err
+	}
+
+	defer tx.Rollback()
+
+	// Phase 2: Clear old stats
+	_, err = tx.ExecContext(ctx, `DELETE FROM player_stats`)
+	if err != nil {
+		return 0, err
+	}
+
+	// Phase 3: Read player totals
+	query := /* sql */ `
+		SELECT
+			p.id,
+			COUNT(DISTINCT ge.game_id),
+			COUNT(*) FILTER (WHERE ge.event_type = 'goal' AND gep.role = 'scorer'),
+			COUNT(*) FILTER (WHERE ge.event_type = 'goal' AND gep.role IN ('assist_primary', 'assist_secondary')),
+			COUNT(*) FILTER (WHERE ge.event_type = 'penalty' AND gep.role = 'penalty_taker')
+		FROM players p
+		LEFT JOIN game_event_participants gep ON gep.player_id = p.id
+		LEFT JOIN game_events ge ON ge.id = gep.event_id
+		WHERE p.position <> 'G'
+		GROUP BY p.id`
+
+	rows, err := tx.QueryContext(ctx, query)
+	if err != nil {
+		return 0, err
+	}
+
+	insertQuery := /* sql */ `
+		INSERT INTO player_stats (player_id, skater_stats)
+		VALUES ($1, $2)`
+
+	allTotals := []playerStatTotals{}
+
+	for rows.Next() {
+		var totals playerStatTotals
+
+		err = rows.Scan(
+			&totals.PlayerID,
+			&totals.GamesPlayed,
+			&totals.Goals,
+			&totals.Assists,
+			&totals.PIM,
+		)
+		if err != nil {
+			rows.Close()
+			return 0, err
+		}
+
+		allTotals = append(allTotals, totals)
+	}
+
+	if err = rows.Err(); err != nil {
+		rows.Close()
+		return 0, err
+	}
+
+	if err = rows.Close(); err != nil {
+		return 0, err
+	}
+
+	// Phase 4: Build and save stats
+	updated := 0
+
+	for _, totals := range allTotals {
+		if totals.GamesPlayed == 0 && totals.Goals == 0 && totals.Assists == 0 && totals.PIM == 0 {
+			continue
+		}
+
+		basicStats := stats.SkaterStats{
+			GamesPlayed: totals.GamesPlayed,
+			Goals:       totals.Goals,
+			Assists:     totals.Assists,
+			Points:      totals.Goals + totals.Assists,
+			PIM:         totals.PIM,
+		}
+
+		statSet := stats.SkaterStatSet{
+			CurrentSeason: basicStats,
+			CareerTotals:  basicStats,
+		}
+
+		payload, err := json.Marshal(statSet)
+		if err != nil {
+			return 0, err
+		}
+
+		_, err = tx.ExecContext(ctx, insertQuery, totals.PlayerID, payload)
+		if err != nil {
+			return 0, err
+		}
+
+		updated++
+	}
+
+	// Phase 5: Commit rebuild
+	if err := tx.Commit(); err != nil {
+		return 0, err
+	}
+
+	return updated, nil
 }
 
 func (m PlayerModel) GetViewAll(pq PlayerQuery, filters Filters) ([]*PlayerWithTeam, Metadata, error) {
