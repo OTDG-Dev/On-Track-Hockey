@@ -149,4 +149,16 @@ export class ViewGame {
     this.isAddingEvent.set(false);
   }
 
+  onMarkComplete() {
+    this.gameService.patchGameComplete(Number(this.game_id))
+    .subscribe({
+      next: (responseData) => {
+        console.log(responseData.game);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
 }

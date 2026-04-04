@@ -152,11 +152,17 @@
       </tbody>
     </table>
 
+    <div class="bottom-actions">
+      <button class="complete-button" (click)="onMarkComplete()">
+        Mark as Complete
+      </button>
+    </div>
+
     @if (errorMessage()) {
       <div class="error-message" [class.fade-out]="isFading()">
         {{ errorMessage() }}
       </div>
-      }
+    }
 
   </div>
 </div>

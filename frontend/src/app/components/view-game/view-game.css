@@ -133,6 +133,10 @@ td:nth-child(3) {
     text-align: center;
 }
 
+td, th {
+    text-align: center;
+}
+
 /* Column separators */
 td:not(:last-child),
 th:not(:last-child) {
@@ -361,4 +365,34 @@ select option {
     background-color: #fdecea;   /* solid light red */
     border: 1px solid #dc2626;
     color: #b91c1c;
+}
+
+/* ---------- Bottom Actions ---------- */
+.bottom-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+/* ---------- Complete Button ---------- */
+.complete-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+
+    color: white;
+    background-color: #27AE60;
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.complete-button:hover {
+    background-color: #219150;
+}
+
+.complete-button:active {
+    transform: scale(0.96);
 }
