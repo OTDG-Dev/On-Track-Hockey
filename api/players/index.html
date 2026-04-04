@@ -8,7 +8,7 @@
     <title>Players - OnTrack Hockey</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
@@ -17,12 +17,11 @@
         var mkdocs_page_url = null;
       </script>
     
-    <script src="../../js/jquery-3.6.0.min.js" defer></script>
     <!--[if lt IE 9]>
       <script src="../../js/html5shiv.min.js"></script>
     <![endif]-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-      <script>hljs.initHighlightingOnLoad();</script> 
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -34,7 +33,7 @@
           <a href="../.." class="icon icon-home"> OnTrack Hockey
         </a><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
@@ -52,7 +51,7 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../teams/">Teams</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Players</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Players</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#create-a-player">Create a player</a>
     </li>
@@ -86,9 +85,9 @@
       <div class="wy-nav-content">
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
-          <li>API &raquo;</li>
-      <li>Players</li>
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">API</li>
+      <li class="breadcrumb-item active">Players</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -144,11 +143,34 @@
     &quot;birth_date&quot;: &quot;2006-05-12&quot;,
     &quot;birth_country&quot;: &quot;CAN&quot;,
     &quot;shoots_catches&quot;: &quot;L&quot;,
+    &quot;skater_stats&quot;: {
+      &quot;current_season&quot;: {
+        &quot;games_played&quot;: 1,
+        &quot;goals&quot;: 0,
+        &quot;assists&quot;: 1,
+        &quot;points&quot;: 1,
+        &quot;pim&quot;: 0
+      },
+      &quot;career_totals&quot;: {
+        &quot;games_played&quot;: 1,
+        &quot;goals&quot;: 0,
+        &quot;assists&quot;: 1,
+        &quot;points&quot;: 1,
+        &quot;pim&quot;: 0
+      }
+    },
     &quot;team_full_name&quot;: &quot;San Jose Sharks&quot;,
     &quot;team_short_name&quot;: &quot;SJS&quot;
   }
 }
 </code></pre>
+<p>Notes:</p>
+<ul>
+<li>Stats are returned on <code>GET /players/{id}</code> when a row exists in <code>player_stats</code>.</li>
+<li>Stats stay basic for now</li>
+<li><code>GET /v0/updateStats</code> rebuilds stats</li>
+<li>Right now it only does skater stats</li>
+</ul>
 <h2 id="view-all-players">View all players</h2>
 <blockquote>
 <p>needs to be updated, there are filters / pagination</p>
@@ -271,14 +293,15 @@
     
   </span>
 </div>
-    <script>var base_url = '../..';</script>
-    <script src="../../js/theme_extra.js" defer></script>
-    <script src="../../js/theme.js" defer></script>
-      <script src="../../search/main.js" defer></script>
-    <script defer>
-        window.onload = function () {
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
             SphinxRtdTheme.Navigation.enable(true);
-        };
+        });
     </script>
 
 </body>
