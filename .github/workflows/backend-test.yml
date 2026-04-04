@@ -14,14 +14,34 @@ jobs:
   test-backend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: backend/go.mod
           cache-dependency-path: backend/go.sum
 
       - name: Run backend tests
         working-directory: backend
-        run: go test ./...
+        run: |
+          set -o pipefail
+
+          go test ./... -json | tee /tmp/go-test.jsonl > /tmp/go-test.log
+
+          passed=$(jq -r 'select(.Action=="pass" and .Test!=null) | .Test' /tmp/go-test.jsonl | wc -l | xargs)
+          failed=$(jq -r 'select(.Action=="fail" and .Test!=null) | .Test' /tmp/go-test.jsonl | wc -l | xargs)
+
+          echo "Passed tests: $passed"
+          echo "Failed tests: $failed"
+
+          {
+            echo "## Backend Test Score"
+            echo ""
+            echo "- Passed: $passed"
+            echo "- Failed: $failed"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$failed" -gt 0 ]; then
+            exit 1
+          fi
