@@ -56,6 +56,16 @@ func (app *Application) showGameHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	// If a game is marked as finished, we need to recalculate player stats to reflect the final results of the game
+	// This is a simple approach and should be optimizd to only recalculate stats for players involved in the game, but it works for now
+	if game.IsFinished {
+		_, err := app.Models.Players.RebuildStats()
+		if err != nil {
+			app.serverErrorResponse(w, r, err)
+			return
+		}
+	}
+
 	if err := app.writeJSON(w, http.StatusOK, envelope{"game": game}, nil); err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
@@ -110,6 +120,16 @@ func (app *Application) updateGameHandler(w http.ResponseWriter, r *http.Request
 			app.serverErrorResponse(w, r, err)
 		}
 		return
+	}
+
+	// If a game is marked as finished, we need to recalculate player stats to reflect the final results of the game
+	// This is a simple approach and should be optimizd to only recalculate stats for players involved in the game, but it works for now
+	if game.IsFinished {
+		_, err := app.Models.Players.RebuildStats()
+		if err != nil {
+			app.serverErrorResponse(w, r, err)
+			return
+		}
 	}
 
 	err = app.writeJSON(w, http.StatusOK, envelope{"game": game}, nil)

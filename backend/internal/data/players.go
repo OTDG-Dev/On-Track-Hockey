@@ -154,79 +154,6 @@ func (m PlayerModel) Get(id int) (*Player, error) {
 	return &p, nil
 }
 
-// currently not used, wip if should be removed..
-func (m PlayerModel) GetAll(FirstName, LastName, Position string, filters Filters) ([]*Player, Metadata, error) {
-	// WIP need to use like and also combine first/lastname into the query
-	// https://niallburkley.com/blog/index-columns-for-like-in-postgres/
-	query := fmt.Sprintf( /* sql */ `
-	SELECT
-		count(*) OVER(),
-		id,
-		is_active,
-		current_team_id,
-		first_name,
-		last_name,
-		sweater_number,
-		position,
-		birth_date,
-		birth_country,
-		headshot,
-		shoots_catches,
-		version
-	FROM players
-	WHERE (first_name ILIKE $1 OR $1 = '')  -- switch to indexes with scale & combine last + first
-	AND (last_name ILIKE $2 OR $2 = '')
-	AND (position = $3 OR $3 = '')
-	ORDER BY %s %s, id ASC
-	LIMIT $4 OFFSET $5`, filters.sortColumn(), filters.SortDirection())
-
-	args := []any{FirstName, LastName, Position, filters.limit(), filters.offset()}
-
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-
-	rows, err := m.DB.QueryContext(ctx, query, args...)
-	if err != nil {
-		return nil, Metadata{}, err
-	}
-	defer rows.Close()
-
-	totalRecords := 0
-	players := []*Player{}
-
-	for rows.Next() {
-		var p Player
-		err = rows.Scan(
-			&totalRecords,
-			&p.ID,
-			&p.IsActive,
-			&p.CurrentTeamID,
-			&p.FirstName,
-			&p.LastName,
-			&p.SweaterNumber,
-			&p.Position,
-			&p.BirthDate,
-			&p.BirthCountry,
-			&p.Headshot,
-			&p.ShootsCatches,
-			&p.Version,
-		)
-		if err != nil {
-			return nil, Metadata{}, err
-		}
-
-		players = append(players, &p)
-	}
-
-	if err = rows.Err(); err != nil {
-		return nil, Metadata{}, err
-	}
-
-	metadata := calculateMetadata(totalRecords, filters.Page, filters.PageSize)
-
-	return players, metadata, err
-}
-
 func (m PlayerModel) Update(player *Player) error {
 	query := /* sql */ `
 		UPDATE players
@@ -404,6 +331,7 @@ func (m PlayerModel) GetView(id int) (*PlayerWithTeam, error) {
 	return &p, nil
 }
 
+// RebuildStats will recalculate and update all player stats based on game events. It returns the number of players updated
 func (m PlayerModel) RebuildStats() (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
