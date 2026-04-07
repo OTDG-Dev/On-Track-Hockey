@@ -4,12 +4,9 @@ import { GameService } from '../../services/game-service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-view-game',
-  imports: [CommonModule, DatePipe, FormsModule],
   imports: [CommonModule, DatePipe, FormsModule],
   templateUrl: './view-game.html',
   styleUrl: './view-game.css',
@@ -31,28 +28,13 @@ export class ViewGame {
     seconds: 0
   });
 
-  isAddingEvent = signal(false);
-
-  newEvent = signal({
-    event_number: 0,
-    period: 1,
-    clock_seconds: 0,
-    event_type: '',
-    situation: '',
-    team_id: -1,
-    minutes: 0,
-    seconds: 0
-  });
-
   home_team: WritableSignal<string> = signal("");
   away_team: WritableSignal<string> = signal("");
   home_team_id: WritableSignal<number> = signal(-1);
   away_team_id: WritableSignal<number> = signal(-1);
   start_time: WritableSignal<string> = signal("");
   game_events: WritableSignal<GameEvent[]> = signal([]);
-
-  errorMessage: WritableSignal<string> = signal('');
-  isFading = signal(false);
+  is_finished: WritableSignal<boolean> = signal(false);
 
   errorMessage: WritableSignal<string> = signal('');
   isFading = signal(false);
@@ -78,31 +60,13 @@ export class ViewGame {
         this.away_team_id.set(responseData.game.away_team_id);
         this.start_time.set(responseData.game.start_time);
         this.game_events.set(responseData.game.game_events);
+        this.is_finished.set(responseData.game.is_finished);
         console.log(this.game_events);
       },
       error: (err) => {
         console.log(err);
       }
     })
-  }
-
-  onAddEvent() {
-    this.isAddingEvent.set(true);
-  
-    this.newEvent.set({
-      event_number: this.game_events().length + 1,
-      period: 1,
-      clock_seconds: 0,
-      event_type: '',
-      situation: '',
-      team_id: this.home_team_id(),
-      minutes: 0,
-      seconds: 0
-    });
-  }
-  
-  onCancelAdd() {
-    this.isAddingEvent.set(false);
   }
 
   onAddEvent() {
@@ -192,6 +156,20 @@ export class ViewGame {
     .subscribe({
       next: (responseData) => {
         console.log(responseData.game);
+        this.is_finished.set(true);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  onMarkIncomplete() {
+    this.gameService.patchGameIncomplete(Number(this.game_id))
+    .subscribe({
+      next: (responseData) => {
+        console.log(responseData.game);
+        this.is_finished.set(false);
       },
       error: (err) => {
         console.log(err);

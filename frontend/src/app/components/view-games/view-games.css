@@ -110,3 +110,31 @@ hr {
         grid-template-columns: 1fr;
     }
 }
+
+.top-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-self: stretch;
+    gap: 12px;
+    margin-top: 12px;
+    margin-bottom: 20px;
+    margin-right: 30px;
+}
+
+/* Smaller, subtle base */
+.action-button {
+    padding: 6px 14px;
+    height: auto;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+/* Subtle outlined Edit */
+.edit-button {
+    color: #27AE60;
+    border: 1px solid #27AE60;
+}

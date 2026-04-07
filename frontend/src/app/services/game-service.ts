@@ -41,5 +41,14 @@ export class GameService {
 
     return this.httpClient.patch<{ game: GameData }>(`${this.baseUrl}/${id}`, body);
   }
+
+  patchGameIncomplete(id: number) {
+
+    const body = {
+      "is_finished": false
+    }
+
+    return this.httpClient.patch<{ game: GameData }>(`${this.baseUrl}/${id}`, body);
+  }
   
 }

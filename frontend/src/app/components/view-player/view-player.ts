@@ -2,6 +2,7 @@ import { Component, signal, WritableSignal } from '@angular/core';
 import { PlayerService } from '../../services/player-service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
+import { PlayerData } from '../../interfaces/player-data';
 
 @Component({
   selector: 'app-view-player',
@@ -21,6 +22,7 @@ export class ViewPlayer {
   shoots_catches: WritableSignal<string> = signal("");
   team_full_name: WritableSignal<string> = signal("");
   team_short_name: WritableSignal<string> = signal("");
+  player_stats: WritableSignal<PlayerData | null> = signal(null)
   avatarUrl: WritableSignal<string> = signal("https://a.espncdn.com/combiner/i?img=/i/headshots/nhl/players/full/5149125.png&w=350&h=254");
 
   constructor(private playerService: PlayerService, private route: ActivatedRoute, private router: Router) {}

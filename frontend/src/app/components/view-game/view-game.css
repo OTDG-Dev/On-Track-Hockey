@@ -508,3 +508,21 @@ select option {
 .complete-button:active {
     transform: scale(0.96);
 }
+
+/* Smaller, subtle base */
+.edit-button {
+    padding: 6px 14px;
+    height: auto;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+/* Subtle outlined Edit */
+.edit-button {
+    color: #27AE60;
+    border: 1px solid #27AE60;
+}

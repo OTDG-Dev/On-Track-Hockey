@@ -152,11 +152,21 @@
       </tbody>
     </table>
 
-    <div class="bottom-actions">
-      <button class="complete-button" (click)="onMarkComplete()">
-        Mark as Complete
-      </button>
-    </div>
+    @if (!is_finished()) {
+      <div class="bottom-actions">
+        <button class="complete-button" (click)="onMarkComplete()">
+          Mark as Complete
+        </button>
+      </div>
+    }
+    @else {
+      <div class="bottom-actions">
+        <button class="edit-button" (click)="onMarkIncomplete()">
+          Edit
+        </button>
+      </div>
+    }
+
 
     @if (errorMessage()) {
       <div class="error-message" [class.fade-out]="isFading()">
@@ -167,4 +177,3 @@
   </div>
 </div>
 
-</div>
