@@ -1,5 +1,9 @@
 # Games
 
+`is_finished`: when a game is set to `true` with either via a `POST` or `PATCH` it currently triggers a full rebuild of the player stats.
+
+Temporarily this can also be manually triggered via `GET /v0/updateStats`.
+
 ## Create a game
 
 `POST /games`

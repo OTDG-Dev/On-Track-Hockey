@@ -10,9 +10,9 @@ Hockey SMS (Sports Management System)
 - On-Track-Hockey is a sports management system for organizing and managing hockey data including players, teams, and leagues.  
 - The project is designed as a modern, containerized application with a clean separation between frontend, backend, and database layers.
 
-![1](docs/resources/1.png)
+![1](docs/resources/example.png)
 
-> `v0.10` _screenshot of players list_
+> `v0.21` _screenshot of game event creation_
 
 ## Stack
 
