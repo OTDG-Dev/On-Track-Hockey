@@ -37,6 +37,7 @@ export class ViewGame {
   is_finished: WritableSignal<boolean> = signal(false);
 
   errorMessage: WritableSignal<string> = signal('');
+  completeOrEditMessage: WritableSignal<string> = signal('');
   isFading = signal(false);
 
   constructor(private gameService: GameService, private route: ActivatedRoute) {}
@@ -147,28 +148,26 @@ export class ViewGame {
         }
       }
     )
-
     this.isAddingEvent.set(false);
   }
 
   onMarkComplete() {
     this.gameService.patchGameComplete(Number(this.game_id))
-    .subscribe({
-      next: (responseData) => {
-        console.log(responseData.game);
-        this.is_finished.set(true);
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    })
+      .subscribe({
+        next: () => {
+          this.completeOrEditMessage.set('Completed');
+          this.is_finished.set(true);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      });
   }
 
   onMarkIncomplete() {
     this.gameService.patchGameIncomplete(Number(this.game_id))
     .subscribe({
-      next: (responseData) => {
-        console.log(responseData.game);
+      next: () => {
         this.is_finished.set(false);
       },
       error: (err) => {

@@ -17,6 +17,7 @@ export class ViewGames {
   constructor(private gameService: GameService) {}
 
   ngOnInit(){
+
     this.gameService.getGames()
     .subscribe(
       {

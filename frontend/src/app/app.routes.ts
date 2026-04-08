@@ -1,4 +1,5 @@
-import { Routes } from '@angular/router';
+import { provideRouter, Router, Routes, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { Login } from './components/login/login';
 import { Register } from './components/register/register';
 import { CreatePlayer } from './components/create-player/create-player';
@@ -21,84 +22,38 @@ import { ViewGame } from './components/view-game/view-game';
 import { ViewGames } from './components/view-games/view-games';
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: Login
-    },
-    {
-        path: 'register',
-        component: Register
-    },
-    {
-        path: 'create-player',
-        component: CreatePlayer
-    },
-    {
-        path: 'view-players',
-        component: ViewPlayers
-    },
-    {
-        path: 'create-team',
-        component: CreateTeam
-    },
-    {
-        path: 'create-division',
-        component: CreateDivision
-    },
-    {
-        path: 'create-league',
-        component: CreateLeague
-    },
-    {
-        path: 'view-player/:id',
-        component: ViewPlayer
-    },
-    {
-        path: 'edit-player/:id',
-        component: EditPlayer
-    },
-    {
-        path: 'view-teams',
-        component: ViewTeams
-    },
-    {
-        path: 'view-team/:id',
-        component: ViewTeam
-    },
-    {
-        path: 'edit-team/:id',
-        component: EditTeam
-    },
-    {
-        path: 'view-divisions',
-        component: ViewDivisions
-    },
-    {
-        path: 'view-division/:id',
-        component: ViewDivision
-    },
-    {
-        path: 'edit-division/:id',
-        component: EditDivision
-    },
-    {
-        path: 'view-leagues',
-        component: ViewLeagues
-    },
-    {
-        path: 'view-league/:id',
-        component: ViewLeague
-    },
-    {
-        path: 'edit-league/:id',
-        component: EditLeague
-    },
-    {
-        path: 'view-game/:id',
-        component: ViewGame
-    },
-    {
-        path: 'view-games',
-        component: ViewGames
-    }
+  { path: '', component: Login },
+  { path: 'register', component: Register },
+  { path: 'create-player', component: CreatePlayer },
+  { path: 'view-players', component: ViewPlayers },
+  { path: 'create-team', component: CreateTeam },
+  { path: 'create-division', component: CreateDivision },
+  { path: 'create-league', component: CreateLeague },
+  { path: 'view-player/:id', component: ViewPlayer },
+  { path: 'edit-player/:id', component: EditPlayer },
+  { path: 'view-teams', component: ViewTeams },
+  { path: 'view-team/:id', component: ViewTeam },
+  { path: 'edit-team/:id', component: EditTeam },
+  { path: 'view-divisions', component: ViewDivisions },
+  { path: 'view-division/:id', component: ViewDivision },
+  { path: 'edit-division/:id', component: EditDivision },
+  { path: 'view-leagues', component: ViewLeagues },
+  { path: 'view-league/:id', component: ViewLeague },
+  { path: 'edit-league/:id', component: EditLeague },
+  { path: 'view-game/:id', component: ViewGame },
+  { path: 'view-games', component: ViewGames },
 ];
+
+// Provide router for standalone bootstrap
+export const appRouterProviders = [
+  provideRouter(routes),
+];
+
+// Optional helper to scroll to top on navigation
+export function setupRouterScroll(router: Router) {
+  router.events
+    .pipe(filter(event => event instanceof NavigationEnd))
+    .subscribe(() => {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    });
+}
