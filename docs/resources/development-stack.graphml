@@ -16,19 +16,18 @@
     <data key="d0" xml:space="preserve"/>
     <node id="n0" yfiles.foldertype="group">
       <data key="d4" xml:space="preserve"/>
-      <data key="d5"/>
       <data key="d6">
         <y:ProxyAutoBoundsNode>
           <y:Realizers active="0">
             <y:GroupNode>
-              <y:Geometry height="116.39997482299805" width="328.1202319335938" x="-43.160000000000025" y="-29.559864044189453"/>
+              <y:Geometry height="119.53611077880862" width="328.1202319335938" x="-43.160000000000025" y="-15.0"/>
               <y:Fill hasColor="false" transparent="false"/>
-              <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#00000007" borderDistance="0.0" fontFamily="JetBrainsMono NF Medium" fontSize="8" fontStyle="plain" hasLineColor="false" height="14.559864044189453" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000D6" verticalTextPosition="bottom" visible="true" width="328.1202319335938" x="0.0" xml:space="preserve" y="0.0">development stack</y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
+              <y:BorderStyle hasColor="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#00000049" borderDistance="0.0" fontFamily="JetBrainsMono NF Medium" fontSize="8" fontStyle="plain" hasLineColor="false" height="14.559864044189453" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#FFFFFF" verticalTextPosition="bottom" visible="false" width="328.1202319335938" x="0.0" xml:space="preserve" y="0.0">development stack</y:NodeLabel>
+              <y:Shape type="rectangle"/>
               <y:State closed="false" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
               <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
-              <y:BorderInsets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
+              <y:BorderInsets bottom="18" bottomF="17.696000000000026" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
             </y:GroupNode>
             <y:GroupNode>
               <y:Geometry height="50.0" width="50.0" x="-49.94260480000008" y="-81.65433599999996"/>
@@ -51,7 +50,7 @@
               <y:Geometry height="40.0" width="100.0" x="73.80023193359375" y="27.840110778808594"/>
               <y:Fill color="#CCCCFF" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="JetBrainsMono NF" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="19.840110778808594" horizontalTextPosition="center" iconTextGap="4" modelName="sandwich" modelPosition="n" textColor="#000000" verticalTextPosition="bottom" visible="true" width="25.600173950195312" x="37.199913024902344" xml:space="preserve" y="-23.840110778808594">api</y:NodeLabel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#00000049" fontFamily="JetBrainsMono NF" fontSize="12" fontStyle="plain" hasLineColor="false" height="19.840110778808594" horizontalTextPosition="center" iconTextGap="4" modelName="sandwich" modelPosition="n" textColor="#FFFFFF" verticalTextPosition="bottom" visible="true" width="25.600173950195312" x="37.199913024902344" xml:space="preserve" y="-23.840110778808594">api</y:NodeLabel>
               <y:SVGNodeProperties usingVisualBounds="true"/>
               <y:SVGModel svgBoundsPolicy="0">
                 <y:SVGContent refid="1"/>
@@ -66,7 +65,7 @@
               <y:Geometry height="48.0" width="48.0" x="221.96023193359378" y="23.840110778808594"/>
               <y:Fill color="#CCCCFF" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="JetBrainsMono NF" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="19.840110778808594" horizontalTextPosition="center" iconTextGap="4" modelName="sandwich" modelPosition="n" textColor="#000000" verticalTextPosition="bottom" visible="true" width="18.400115966796875" x="14.799942016601562" xml:space="preserve" y="-23.840110778808594">db</y:NodeLabel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#00000049" fontFamily="JetBrainsMono NF" fontSize="12" fontStyle="plain" hasLineColor="false" height="19.840110778808594" horizontalTextPosition="center" iconTextGap="4" modelName="sandwich" modelPosition="n" textColor="#FFFFFF" verticalTextPosition="bottom" visible="true" width="18.400115966796875" x="14.799942016601562" xml:space="preserve" y="-23.840110778808594">db</y:NodeLabel>
               <y:SVGNodeProperties usingVisualBounds="true"/>
               <y:SVGModel svgBoundsPolicy="0">
                 <y:SVGContent refid="2"/>
@@ -81,7 +80,7 @@
               <y:Geometry height="48.0" width="46.0" x="-20.359768066406275" y="23.840110778808594"/>
               <y:Fill color="#CCCCFF" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="JetBrainsMono NF" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="19.840110778808594" horizontalTextPosition="center" iconTextGap="4" modelName="sandwich" modelPosition="n" textColor="#000000" verticalTextPosition="bottom" visible="true" width="61.6004638671875" x="-7.80023193359375" xml:space="preserve" y="-23.840110778808594">frontend</y:NodeLabel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#00000049" fontFamily="JetBrainsMono NF" fontSize="12" fontStyle="plain" hasLineColor="false" height="19.840110778808594" horizontalTextPosition="center" iconTextGap="4" modelName="sandwich" modelPosition="n" textColor="#FFFFFF" verticalTextPosition="bottom" visible="true" width="61.6004638671875" x="-7.80023193359375" xml:space="preserve" y="-23.840110778808594">frontend</y:NodeLabel>
               <y:SVGNodeProperties usingVisualBounds="true"/>
               <y:SVGModel svgBoundsPolicy="0">
                 <y:SVGContent refid="3"/>
@@ -92,7 +91,6 @@
       </graph>
     </node>
     <edge id="n0::e0" source="n0::n2" target="n0::n0">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="22.03125" sy="0.0" tx="-43.2798479335938" ty="0.0"/>
@@ -103,7 +101,6 @@
       </data>
     </edge>
     <edge id="n0::e1" source="n0::n0" target="n0::n1">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="50.0" sy="-0.0" tx="-22.03125" ty="0.0"/>
