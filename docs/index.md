@@ -7,11 +7,13 @@ Hockey SMS (Sports Management System)
 
 ![screenshot](resources/example.png)
 
-> `v0.10` _screenshot of players list_
+> `v0.21` _screenshot of game event creation_
 
 ## Stack
 
-![1](resources/development-stack.png)
+![1](resources/development-stack.svg)
+
+![2](resources/production-stack.svg)
 
 ## Status
 

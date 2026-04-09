@@ -14,15 +14,22 @@ Hockey SMS (Sports Management System)
 
 > `v0.21` _screenshot of game event creation_
 
-## Stack
+## Diagrams
 
-![2](docs/resources/development-stack.png)
+Build stack:
 
-## Status
+![2](docs/resources/development-stack.svg)
 
-Active development
+Example production deployment:
+
+![2](docs/resources/production-stack.svg)
+
 
 ## Getting Started
+
+
+> [!WARNING]
+> Active development: API/DB schema subject to change
 
 Prerequisites
 
