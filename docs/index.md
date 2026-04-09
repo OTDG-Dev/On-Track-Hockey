@@ -13,6 +13,8 @@ Hockey SMS (Sports Management System)
 
 ![1](resources/development-stack.svg)
 
+![2](resources/production-stack.svg)
+
 ## Status
 
 Active development
