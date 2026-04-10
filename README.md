@@ -18,12 +18,11 @@ Hockey SMS (Sports Management System)
 
 Build stack:
 
-![2](docs/resources/development-stack.svg)
+<p align="center"><img src="docs/resources/development-stack.svg" alt="2"></p>
 
 Example production deployment:
 
-![2](docs/resources/production-stack.svg)
-
+<p align="center"><img src="docs/resources/production-stack.svg" alt="2"> </p>
 
 ## Getting Started
 
