@@ -19,7 +19,7 @@ Roles:
 - scorer
 - assist_primary
 - assist_secondary
-- penalty_take
+- penalty_taker
 
 Response:
 

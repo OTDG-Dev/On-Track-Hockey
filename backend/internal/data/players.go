@@ -30,8 +30,8 @@ type Player struct {
 	Headshot      string        `json:"headshot,omitzero"`
 	ShootsCatches ShootsCatches `json:"shoots_catches,omitzero"`
 
-	SkaterStats *stats.SkaterStatSet `json:"skater_stats,omitzero"`
-	GoalieStats *stats.GoalieStatSet `json:"goalie_stats,omitzero"`
+	SkaterStats *stats.SkaterStatSet `json:"skater_stats"`
+	GoalieStats *stats.GoalieStatSet `json:"goalie_stats"`
 }
 
 // wrap a sql.DB connection pool
@@ -326,6 +326,14 @@ func (m PlayerModel) GetView(id int) (*PlayerWithTeam, error) {
 		if err := json.Unmarshal([]byte(goalieStatsJSON.String), p.GoalieStats); err != nil {
 			return nil, err
 		}
+	}
+
+	// Default to zero-value stats when none exist
+	if p.Position != "G" && p.SkaterStats == nil {
+		p.SkaterStats = &stats.SkaterStatSet{}
+	}
+	if p.Position == "G" && p.GoalieStats == nil {
+		p.GoalieStats = &stats.GoalieStatSet{}
 	}
 
 	return &p, nil
