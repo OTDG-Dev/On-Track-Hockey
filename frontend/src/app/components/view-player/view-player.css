@@ -169,3 +169,65 @@
 .action-button:active {
     transform: scale(0.96);
 }
+
+/* ---------- Table ---------- */
+table {
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto;
+
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+    table-layout: fixed;
+}
+
+thead {
+    background-color: #f9fafb;
+}
+
+th, td {
+    padding: 16px 26px;
+    font-size: 14px;
+    color: #111827;
+    text-align: center;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+th {
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+td:not(:last-child),
+th:not(:last-child) {
+    border-right: 1px solid #f1f1f1;
+}
+
+tbody tr:hover {
+    background-color: rgba(39, 174, 96, 0.05);
+}
+
+/* ---------- Empty State ---------- */
+.empty-state {
+    text-align: center;
+    color: #6b7280;
+    padding: 20px;
+}
+
+.stats-wrapper {
+    margin-top: 50px;
+}
+
+.stats-table {
+    margin-top: 20px;
+}
+
+.career-stats {
+    margin-top: 50px;
+}

@@ -1,9 +1,12 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, computed, signal, WritableSignal } from '@angular/core';
 import { GameEvent } from '../../interfaces/game-event';
 import { GameService } from '../../services/game-service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PlayerData } from '../../interfaces/player-data';
+import { RosterService } from '../../services/roster-service';
+import { RosterData } from '../../interfaces/roster-data';
 
 @Component({
   selector: 'app-view-game',
@@ -25,7 +28,8 @@ export class ViewGame {
     situation: '',
     team_id: -1,
     minutes: 0,
-    seconds: 0
+    seconds: 0,
+    player: ""
   });
 
   home_team: WritableSignal<string> = signal("");
@@ -35,12 +39,32 @@ export class ViewGame {
   start_time: WritableSignal<string> = signal("");
   game_events: WritableSignal<GameEvent[]> = signal([]);
   is_finished: WritableSignal<boolean> = signal(false);
+  home_roster: WritableSignal<RosterData | null> = signal(null);
+  away_roster: WritableSignal<RosterData | null> = signal(null);
+  all_players = computed<PlayerData[]>(() => {
+    const home = this.home_roster();
+    const away = this.away_roster();
+
+    const players = [
+      ...(home?.forwards ?? []),
+      ...(home?.defensemen ?? []),
+      ...(home?.goalies ?? []),
+      ...(away?.forwards ?? []),
+      ...(away?.defensemen ?? []),
+      ...(away?.goalies ?? [])
+    ];
+
+    return players.sort((a, b) =>
+      a.last_name.localeCompare(b.last_name)
+    );
+  });
+
 
   errorMessage: WritableSignal<string> = signal('');
   completeOrEditMessage: WritableSignal<string> = signal('');
   isFading = signal(false);
 
-  constructor(private gameService: GameService, private route: ActivatedRoute) {}
+  constructor(private gameService: GameService, private rosterService: RosterService, private route: ActivatedRoute) {}
 
   ngOnInit()
   {
@@ -62,12 +86,47 @@ export class ViewGame {
         this.start_time.set(responseData.game.start_time);
         this.game_events.set(responseData.game.game_events);
         this.is_finished.set(responseData.game.is_finished);
+
+        this.getPlayers();
+
         console.log(this.game_events);
       },
       error: (err) => {
         console.log(err);
       }
     })
+  }
+
+  getPlayers()
+  {
+    this.rosterService.getRoster(this.home_team_id())
+    .subscribe(
+      {
+        next: (responseData) => 
+        {
+          this.home_roster.set(responseData.roster);
+          console.log(this.home_roster());
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      }
+    )
+
+    this.rosterService.getRoster(this.away_team_id())
+    .subscribe(
+      {
+        next: (responseData) => 
+        {
+          this.away_roster.set(responseData.roster);
+          console.log(this.away_roster());
+        },
+        error: (err) => {
+          console.log(err)
+        }
+      }
+    )
+
   }
 
   onAddEvent() {
@@ -81,7 +140,8 @@ export class ViewGame {
       situation: '',
       team_id: this.home_team_id(),
       minutes: 0,
-      seconds: 0
+      seconds: 0,
+      player: ''
     });
   }
   
