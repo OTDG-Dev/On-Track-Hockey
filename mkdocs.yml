@@ -13,3 +13,4 @@ nav:
       - Roster: api/roster.md
       - Games: api/games.md
       - Game Events: api/game_events.md
+      - Game Event Participants: api/game_event_participants.md
