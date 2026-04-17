@@ -49,3 +49,36 @@ func (m *GameEventParticipantModel) Insert(part GameEventParticipant) error {
 
 	return m.DB.QueryRowContext(ctx, query, part.Role, part.EventID, part.PlayerID).Scan(&part.ID)
 }
+
+func (m *GameEventParticipantModel) GetByEvent(eventID int) ([]*GameEventParticipant, error) {
+	query := /* sql */ `
+		SELECT id, role, event_id, player_id
+		FROM game_event_participants
+		WHERE event_id = $1`
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.DB.QueryContext(ctx, query, eventID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var participants []*GameEventParticipant
+
+	for rows.Next() {
+		var p GameEventParticipant
+		err := rows.Scan(&p.ID, &p.Role, &p.EventID, &p.PlayerID)
+		if err != nil {
+			return nil, err
+		}
+		participants = append(participants, &p)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return participants, nil
+}

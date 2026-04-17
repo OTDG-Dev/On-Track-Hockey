@@ -51,7 +51,8 @@ func (app *Application) Routes() http.Handler {
 	router.HandlerFunc(http.MethodPost, "/v1/games/:game_id/events", app.createGameEventHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/events/:id", app.showGameEventHandler)
 
-	router.HandlerFunc(http.MethodPost, "/v1/events/:event_id/participants", app.createGameEventParticipantHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/events/:id/participants", app.listGameEventParticipantsHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/events/:id/participants", app.createGameEventParticipantHandler)
 
 	return app.cors(app.recoverPanic(app.rateLimit(router)))
 }
