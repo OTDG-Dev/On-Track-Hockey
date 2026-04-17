@@ -8,7 +8,7 @@
     <title>Game Event Participants - OnTrack Hockey</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
     
       <script>
         // Current page data
@@ -17,11 +17,12 @@
         var mkdocs_page_url = null;
       </script>
     
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
     <!--[if lt IE 9]>
       <script src="../../js/html5shiv.min.js"></script>
     <![endif]-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-      <script>hljs.highlightAll();</script> 
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -33,7 +34,7 @@
           <a href="../.." class="icon icon-home"> OnTrack Hockey
         </a><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
@@ -59,8 +60,10 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../game_events/">Game Events</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Game Event Participants</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Game Event Participants</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#list-participants-for-a-game-event">List participants for a game event</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#create-a-game-event-participant">Create a game event participant</a>
     </li>
     </ul>
@@ -79,9 +82,9 @@
       <div class="wy-nav-content">
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">API</li>
-      <li class="breadcrumb-item active">Game Event Participants</li>
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>API &raquo;</li>
+      <li>Game Event Participants</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -91,6 +94,26 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="game-event-participants">Game Event Participants</h1>
+<h2 id="list-participants-for-a-game-event">List participants for a game event</h2>
+<p><code>GET /events/{event_id}/participants</code></p>
+<p>Response:</p>
+<pre><code class="language-json">{
+    &quot;game_event_participants&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;role&quot;: &quot;scorer&quot;,
+            &quot;event_id&quot;: 1,
+            &quot;player_id&quot;: 1
+        },
+        {
+            &quot;id&quot;: 2,
+            &quot;role&quot;: &quot;assist_primary&quot;,
+            &quot;event_id&quot;: 1,
+            &quot;player_id&quot;: 2
+        }
+    ]
+}
+</code></pre>
 <h2 id="create-a-game-event-participant">Create a game event participant</h2>
 <p><code>POST /events/{event_id}/participants</code></p>
 <p>Request:</p>
@@ -147,15 +170,14 @@
     
   </span>
 </div>
-    <script src="../../js/jquery-3.6.0.min.js"></script>
-    <script>var base_url = "../..";</script>
-    <script src="../../js/theme_extra.js"></script>
-    <script src="../../js/theme.js"></script>
-      <script src="../../search/main.js"></script>
-    <script>
-        jQuery(function () {
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
             SphinxRtdTheme.Navigation.enable(true);
-        });
+        };
     </script>
 
 </body>
