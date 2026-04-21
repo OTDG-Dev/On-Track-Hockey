@@ -1,0 +1,128 @@
+<div class="page-container view-player-container">
+
+    <h1>Game Event</h1>
+    <hr>
+  
+    <!-- Event Info -->
+    <div class="info-columns">
+  
+      <!-- Left Column -->
+      <div class="column">
+        <p class="section-label">Event Info</p>
+  
+        <div class="field">
+          <p>Event Number</p>
+          <div class="value-pill">{{ event_number() }}</div>
+        </div>
+  
+        <div class="field">
+          <p>Period</p>
+          <div class="value-pill">{{ period() }}</div>
+        </div>
+  
+        <div class="field">
+          <p>Clock</p>
+          <div class="value-pill">{{ clockDisplay() }}</div>
+        </div>
+      </div>
+  
+      <!-- Right Column -->
+      <div class="column">
+        <p class="section-label">Details</p>
+  
+        <div class="field">
+          <p>Event Type</p>
+          <div class="value-pill">{{ event_type() | titlecase }}</div>
+        </div>
+  
+        <div class="field">
+          <p>Situation</p>
+          <div class="value-pill">{{ situation() }}</div>
+        </div>
+  
+        <div class="field">
+          <p>Team</p>
+          <div class="value-pill">{{ team_name() }}</div>
+        </div>
+      </div>
+  
+    </div>
+  
+    <!-- Participants Table -->
+    <div class="stats-wrapper">
+      <p class="section-label">Participants</p>
+  
+      <table>
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Player</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+  
+          <!-- Existing Participants -->
+          @for (p of participants(); track $index) {
+            <tr>
+              <td>{{ p.role | titlecase }}</td>
+              <td>{{ p.player_id }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="2" class="empty-state">
+                No participants yet
+              </td>
+            </tr>
+          }
+  
+          
+          @if (isAddingParticipant()) {
+            <tr class="edit-row">
+  
+              <td>
+                <select [(ngModel)]="newParticipant().role">
+                  <option value="" disabled>Select</option>
+                  <option value="scorer">Scorer</option>
+                  <option value="assist_primary">Primary Assist</option>
+                  <option value="assist_secondary">Secondary Assist</option>
+                  <option value="penalty_taker">Penalty Taker</option>
+                </select>
+              </td>
+  
+              <td>
+                <select [(ngModel)]="newParticipant().player_id">
+                  <option [ngValue]="null" disabled>
+                    Select a player
+                  </option>
+              
+                  @for (player of all_players(); track player.id) {
+                    <option [ngValue]="player.id">
+                      {{ player.first_name }} {{ player.last_name }}
+                    </option>
+                  }
+                </select>
+              </td>
+  
+            </tr>
+          }
+  
+          <tr class="add-row">
+            <td colspan="2">
+              @if (!isAddingParticipant()) {
+                <button class="add-button" (click)="onAddParticipant()">
+                  + Add Participant
+                </button>
+              } @else {
+                <div class="edit-actions">
+                  <button class="save-button" (click)="onSaveParticipant()">Save</button>
+                  <button class="cancel-button" (click)="onCancelParticipant()">Cancel</button>
+                </div>
+              }
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+  </div>
