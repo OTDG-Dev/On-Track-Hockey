@@ -1,7 +1,7 @@
 import { Component, computed, signal, WritableSignal } from '@angular/core';
 import { GameEvent } from '../../interfaces/game-event';
 import { GameService } from '../../services/game-service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PlayerData } from '../../interfaces/player-data';
@@ -10,7 +10,7 @@ import { RosterData } from '../../interfaces/roster-data';
 
 @Component({
   selector: 'app-view-game',
-  imports: [CommonModule, DatePipe, FormsModule],
+  imports: [CommonModule, DatePipe, FormsModule, RouterLink, RouterModule],
   templateUrl: './view-game.html',
   styleUrl: './view-game.css',
 })

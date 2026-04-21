@@ -44,7 +44,11 @@
         <!-- Existing Events -->
         @for (event of game_events(); track event.id) {
           <tr>
-            <td>{{ event.event_number }}</td>
+            <td>
+              <a [routerLink]="['/view-event', event.id]">
+              {{ event.event_number }}
+              </a>
+            </td>
             <td>{{ event.period }}</td>
             <td>{{ formatClock(event.clock_seconds) }}</td>
 

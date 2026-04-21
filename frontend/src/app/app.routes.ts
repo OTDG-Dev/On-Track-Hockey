@@ -20,6 +20,7 @@ import { ViewLeague } from './components/view-league/view-league';
 import { EditLeague } from './components/edit-league/edit-league';
 import { ViewGame } from './components/view-game/view-game';
 import { ViewGames } from './components/view-games/view-games';
+import { ViewEvent } from './components/view-event/view-event';
 
 export const routes: Routes = [
   { path: '', component: Login },
@@ -42,6 +43,7 @@ export const routes: Routes = [
   { path: 'edit-league/:id', component: EditLeague },
   { path: 'view-game/:id', component: ViewGame },
   { path: 'view-games', component: ViewGames },
+  { path: 'view-event/:id', component: ViewEvent}
 ];
 
 // Provide router for standalone bootstrap
