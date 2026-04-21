@@ -13,7 +13,7 @@ func (app *Application) createGameEventParticipantHandler(w http.ResponseWriter,
 		PlayerID int    `json:"player_id"`
 	}
 
-	eventID, err := app.readIDParam(r, "event_id")
+	eventID, err := app.readIDParam(r)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
@@ -46,4 +46,22 @@ func (app *Application) createGameEventParticipantHandler(w http.ResponseWriter,
 		app.serverErrorResponse(w, r, err)
 	}
 
+}
+
+func (app *Application) listGameEventParticipantsHandler(w http.ResponseWriter, r *http.Request) {
+	eventID, err := app.readIDParam(r)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	participants, err := app.Models.GameEventParticipants.GetByEvent(eventID)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	if err := app.writeJSON(w, http.StatusOK, envelope{"game_event_participants": participants}, nil); err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
 }
