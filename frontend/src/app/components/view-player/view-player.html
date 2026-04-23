@@ -54,4 +54,65 @@
       </div>
     </div>
   </div>
+
+  <div class="stats-wrapper">
+    <div class="current-stats">
+      <!-- Player Stats Table -->
+      <p class="section-label">Current Season</p>
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th>Games Played</th>
+            <th>Goals</th>
+            <th>Assists</th>
+            <th>Points</th>
+            <th>Penalty Minutes</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+        <tr>
+            <td>{{ player_stats()?.current_season?.games_played }}</td>
+            <td>{{ player_stats()?.current_season?.goals }}</td>
+            <td>{{ player_stats()?.current_season?.assists }}</td>
+            <td>{{ player_stats()?.current_season?.points }}</td>
+            <td>{{ player_stats()?.current_season?.pim }}</td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="career-stats">
+      <!-- Player Stats Table -->
+      <p class="section-label">Career</p>
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th>Games Played</th>
+            <th>Goals</th>
+            <th>Assists</th>
+            <th>Points</th>
+            <th>Penalty Minutes</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+        <tr>
+            <td>{{ player_stats()?.career_totals?.games_played }}</td>
+            <td>{{ player_stats()?.career_totals?.goals }}</td>
+            <td>{{ player_stats()?.career_totals?.assists }}</td>
+            <td>{{ player_stats()?.career_totals?.points }}</td>
+            <td>{{ player_stats()?.career_totals?.pim }}</td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+  
+
 </div>

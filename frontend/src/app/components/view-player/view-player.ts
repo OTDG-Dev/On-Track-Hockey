@@ -2,6 +2,8 @@ import { Component, signal, WritableSignal } from '@angular/core';
 import { PlayerService } from '../../services/player-service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
+import { PlayerData } from '../../interfaces/player-data';
+import { SkaterStats } from '../../interfaces/skater-stats';
 
 @Component({
   selector: 'app-view-player',
@@ -21,6 +23,7 @@ export class ViewPlayer {
   shoots_catches: WritableSignal<string> = signal("");
   team_full_name: WritableSignal<string> = signal("");
   team_short_name: WritableSignal<string> = signal("");
+  player_stats: WritableSignal<SkaterStats | null> = signal(null)
   avatarUrl: WritableSignal<string> = signal("https://a.espncdn.com/combiner/i?img=/i/headshots/nhl/players/full/5149125.png&w=350&h=254");
 
   constructor(private playerService: PlayerService, private route: ActivatedRoute, private router: Router) {}
@@ -46,6 +49,7 @@ export class ViewPlayer {
           this.shoots_catches.set(responseData.player.shoots_catches);
           this.team_full_name.set(responseData.player.team_full_name);
           this.team_short_name.set(responseData.player.team_short_name);
+          this.player_stats.set(responseData.player.skater_stats);
         },
         error: (err) => {
           console.log(err);
