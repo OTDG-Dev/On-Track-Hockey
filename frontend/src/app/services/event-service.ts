@@ -18,7 +18,7 @@ export class EventService {
   }
   
   getParticipants(id: number){
-    return this.httpClient.get<{ game_event_participant: ParticipantData[]  }>(`${this.baseUrl}/${id}/participants`);
+    return this.httpClient.get<{ game_event_participants: ParticipantData[]  }>(`${this.baseUrl}/${id}/participants`);
   }
 
   postParticipant(id: number, role: string, player_id: number){

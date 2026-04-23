@@ -29,13 +29,12 @@
     <table>
       <thead>
         <tr>
-          <th>#</th>
+          <th>Event</th>
           <th>Period</th>
           <th>Time</th>
           <th>Event</th>
           <th>Team</th>
           <th>Situation</th>
-          <th>Player</th>
         </tr>
       </thead>
 
@@ -66,7 +65,6 @@
             </td>
 
             <td>{{ event.situation }}</td>
-            <td>player</td>
           </tr>
         } @empty {
           <tr>
@@ -134,19 +132,12 @@
                 <option value="EN">EN</option>
               </select>
             </td>
-            <td>
-              <select [(ngModel)]="newEvent().player">
-                @for (player of all_players(); track $index) {
-                  <option [value]="player.id"> {{player.first_name}} {{player.last_name}}</option>
-                }
-              </select>
-            </td>
           </tr>
         }
 
         <!-- Bottom Action Row -->
         <tr class="add-row">
-          <td colspan="7">
+          <td colspan="6">
             @if (!isAddingEvent()) {
               <button class="add-button" (click)="onAddEvent()">
                 + Add Event

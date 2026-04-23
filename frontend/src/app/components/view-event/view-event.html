@@ -65,8 +65,8 @@
           <!-- Existing Participants -->
           @for (p of participants(); track $index) {
             <tr>
-              <td>{{ p.role | titlecase }}</td>
-              <td>{{ p.player_id }}</td>
+              <td>{{ p.role.replaceAll('_', ' ') | titlecase }}</td>
+              <td>{{ getPlayer(p.player_id) }}</td>
             </tr>
           } @empty {
             <tr>

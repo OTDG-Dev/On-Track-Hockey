@@ -8,6 +8,7 @@ import { PlayerData } from '../../interfaces/player-data';
 import { ParticipantData } from '../../interfaces/participant-data';
 import { RosterService } from '../../services/roster-service';
 import { RosterData } from '../../interfaces/roster-data';
+import { PlayerService } from '../../services/player-service';
 
 @Component({
   selector: 'app-view-event',
@@ -52,7 +53,7 @@ export class ViewEvent {
 
   isAddingParticipant = signal(false);
 
-  constructor(private eventService: EventService, private teamService: TeamService, private rosterService: RosterService, private route: ActivatedRoute){}
+  constructor(private eventService: EventService, private teamService: TeamService, private rosterService: RosterService, private playerService: PlayerService, private route: ActivatedRoute){}
 
   ngOnInit()
   {
@@ -104,7 +105,9 @@ export class ViewEvent {
       {
         next: (responseData) =>
         {
-          this.participants.set(responseData.game_event_participant)
+          this.participants.set(responseData.game_event_participants ?? []);
+          console.log(responseData);
+          console.log(this.participants());
         },
         error: (err) => 
         {
@@ -129,6 +132,12 @@ export class ViewEvent {
         }
       }
     )
+  }
+
+  getPlayer(player_id: number)
+  {
+    const player = this.all_players().find(p => p.id === player_id);
+    return player ? `${player.first_name} ${player.last_name}` : 'Unknown';
   }
 
   onAddParticipant(){
