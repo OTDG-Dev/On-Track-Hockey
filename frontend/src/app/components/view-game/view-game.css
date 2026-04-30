@@ -5,8 +5,7 @@
 
 /* ---------- Page Layout ---------- */
 .page-container {
-    padding: 32px;
-    padding-top: 40px;
+    padding: 32px 32px 32px 32px;
 }
 
 h1 {
@@ -28,14 +27,12 @@ hr {
     margin: 0 auto;
 }
 
-/* ---------- Scoreboard ---------- */
+/* ---------- Game Cards / Scoreboard ---------- */
 .game-card {
     margin-bottom: 30px;
     padding: 24px;
-
     background-color: #ffffff;
     border-radius: 12px;
-
     box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
 }
 
@@ -51,7 +48,8 @@ hr {
     text-align: center;
 }
 
-.team h2 {
+.team h2,
+.team h3 {
     font-size: 18px;
     font-weight: 600;
     color: #111827;
@@ -85,58 +83,40 @@ hr {
 table {
     width: 100%;
     border-collapse: collapse;
-
     background-color: #ffffff;
     border-radius: 12px;
     overflow: hidden;
-
     box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
     table-layout: fixed;
 }
 
-/* Header */
 thead {
     background-color: #f9fafb;
 }
 
-th {
-    text-align: left;
+th, td {
     padding: 16px 26px;
+    font-size: 14px;
+    color: #111827;
+    text-align: center;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+th {
     font-size: 13px;
     font-weight: 500;
     text-transform: uppercase;
     color: #6b7280;
-
     border-bottom: 1px solid #e5e7eb;
 }
 
-/* Rows */
-td {
-    padding: 18px 26px;
-    font-size: 14px;
-    color: #111827;
-    border-bottom: 1px solid #f1f1f1;
-}
-
-/* Hover */
-tbody tr:hover {
-    background-color: rgba(39, 174, 96, 0.05);
-}
-
-/* Column alignment */
-th:nth-child(1),
-td:nth-child(1),
-th:nth-child(2),
-td:nth-child(2),
-th:nth-child(3),
-td:nth-child(3) {
-    text-align: center;
-}
-
-/* Column separators */
 td:not(:last-child),
 th:not(:last-child) {
     border-right: 1px solid #f1f1f1;
+}
+
+tbody tr:hover {
+    background-color: rgba(39, 174, 96, 0.05);
 }
 
 /* ---------- Pills ---------- */
@@ -155,11 +135,12 @@ th:not(:last-child) {
 
 /* ---------- Edit Row ---------- */
 .edit-row input,
-.edit-row select {
+.edit-row select,
+select {
     width: 100%;
     padding: 6px 8px;
+    font-family: inherit;
     font-size: 13px;
-
     border: 1px solid #d1d5db;
     border-radius: 6px;
     background-color: #fff;
@@ -168,10 +149,12 @@ th:not(:last-child) {
 }
 
 .edit-row input:focus,
-.edit-row select:focus {
+.edit-row select:focus,
+select:focus {
     border-color: #27AE60;
     outline: none;
     box-shadow: 0 0 4px rgba(39, 174, 96, 0.3);
+    background-color: #fff;
 }
 
 /* ---------- Clock Input (MM:SS) ---------- */
@@ -195,12 +178,6 @@ th:not(:last-child) {
     color: #111827;
 }
 
-.clock-input input:focus {
-    border-color: #27AE60;
-    outline: none;
-    box-shadow: 0 0 4px rgba(39, 174, 96, 0.3);
-}
-
 .clock-input .colon {
     font-size: 14px;
     font-weight: 600;
@@ -218,12 +195,10 @@ th:not(:last-child) {
 .add-button {
     padding: 8px 16px;
     font-size: 14px;
-
     color: #27AE60;
     background: transparent;
     border: 1px solid #27AE60;
     border-radius: 8px;
-
     cursor: pointer;
 }
 
@@ -240,7 +215,6 @@ th:not(:last-child) {
 .save-button {
     padding: 6px 14px;
     font-size: 13px;
-
     color: white;
     background-color: #27AE60;
     border: none;
@@ -250,18 +224,99 @@ th:not(:last-child) {
 .cancel-button {
     padding: 6px 14px;
     font-size: 13px;
-
     color: #6b7280;
     background: transparent;
     border: 1px solid #d1d5db;
     border-radius: 6px;
 }
 
-/* ---------- Empty ---------- */
+/* ---------- Empty States ---------- */
 .empty-state {
     text-align: center;
     color: #6b7280;
     padding: 20px;
+}
+
+/* ---------- Bottom Actions ---------- */
+.bottom-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+/* ---------- Complete Button ---------- */
+.complete-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    background-color: #27AE60;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.complete-button:hover {
+    background-color: #219150;
+}
+
+.complete-button:active {
+    transform: scale(0.96);
+}
+
+/* ---------- Edit Button ---------- */
+.edit-button {
+    padding: 6px 14px;
+    height: auto;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    color: #27AE60;
+    border: 1px solid #27AE60;
+}
+
+/* ---------- Complete / Edit Message ---------- */
+.completeOrEdit-message {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    padding: 14px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 6px 16px;
+    z-index: 1000;
+
+    background-color: #fdecea;
+    border: 1px solid #dc2626;
+    color: #b91c1c;
+
+    opacity: 0; /* start hidden */
+}
+
+.slide-in {
+    animation: slideDown 0.2s ease forwards;
+}
+
+.fade-out {
+    animation: slideUp 0.25s ease forwards;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translate(-50%, -10px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 1; transform: translate(-50%, 0); }
+    to   { opacity: 0; transform: translate(-50%, -10px); }
 }
 
 /* ---------- Responsive ---------- */
@@ -280,85 +335,4 @@ th:not(:last-child) {
     .score {
         font-size: 40px;
     }
-}
-
-/* ---------- Styled Selects ---------- */
-.edit-row select,
-select {
-    width: 100%;
-    padding: 6px 8px;
-    font-family: inherit;
-    font-size: 13px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background-color: #fff;
-    cursor: pointer;
-    box-sizing: border-box;
-    transition: all 0.15s ease;
-}
-
-.edit-row select:focus,
-select:focus {
-    border-color: #27AE60;
-    outline: none;
-    box-shadow: 0 0 4px rgba(39, 174, 96, 0.3);
-}
-
-select option {
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.error-message {
-    position: fixed;
-    top: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    width: 320px;
-    padding: 14px 18px;
-
-    font-size: 14px;
-    font-weight: 500;
-    text-align: center;
-
-    border-radius: 8px;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 6px 16px;
-
-    z-index: 1000;
-
-    animation: slideDown 0.2s ease;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -10px);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, 0);
-    }
-}
-
-.fade-out {
-    animation: slideUp 0.25s ease forwards;
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 1;
-        transform: translate(-50%, 0);
-    }
-    to {
-        opacity: 0;
-        transform: translate(-50%, -10px);
-    }
-}
-
-/* Error */
-.error-message {
-    background-color: #fdecea;   /* solid light red */
-    border: 1px solid #dc2626;
-    color: #b91c1c;
 }

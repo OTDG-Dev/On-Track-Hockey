@@ -1,7 +1,5 @@
 <div class="page-container">
 
-  <h1>Game</h1>
-  <hr>
 
   <div class="content-container">
 
@@ -31,7 +29,7 @@
     <table>
       <thead>
         <tr>
-          <th>#</th>
+          <th>Event</th>
           <th>Period</th>
           <th>Time</th>
           <th>Event</th>
@@ -45,7 +43,11 @@
         <!-- Existing Events -->
         @for (event of game_events(); track event.id) {
           <tr>
-            <td>{{ event.event_number }}</td>
+            <td>
+              <a [routerLink]="['/view-event', event.id]">
+              {{ event.event_number }}
+              </a>
+            </td>
             <td>{{ event.period }}</td>
             <td>{{ formatClock(event.clock_seconds) }}</td>
 
@@ -152,11 +154,27 @@
       </tbody>
     </table>
 
+    @if (!is_finished()) {
+      <div class="bottom-actions">
+        <button class="complete-button" (click)="onMarkComplete()">
+          Mark as Complete
+        </button>
+      </div>
+    }
+    @else {
+      <div class="bottom-actions">
+        <button class="edit-button" (click)="onMarkIncomplete()">
+          Edit
+        </button>
+      </div>
+    }
+
     @if (errorMessage()) {
       <div class="error-message" [class.fade-out]="isFading()">
         {{ errorMessage() }}
       </div>
-      }
+    }
 
   </div>
 </div>
+

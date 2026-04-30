@@ -7,5 +7,6 @@ export interface GameData {
     home_team_id: number,
     away_team_id: number,
     start_time: string,
+    is_finished: boolean,
     game_events: GameEvent[]
 }
